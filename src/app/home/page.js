@@ -6,6 +6,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
+import HijamaCard from "@/components/HijamaCard";
+import RuqyahCard from "@/components/RuqyahCard";
 
 const homeSlides = [
   {
@@ -56,7 +58,11 @@ export default function HomePage() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
-  
+
+  // Detail Modal state
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedDetailItem, setSelectedDetailItem] = useState(null);
+
   // Slider ref for Hijama cards scroll
   const sliderRef = useRef(null);
 
@@ -170,21 +176,59 @@ export default function HomePage() {
   const ruqyahServices = [
     {
       id: "rq-1",
-      title: "Spiritual Affliction Session",
-      bengaliTitle: "রুকইয়াহ আধ্যাত্মিক সেশন",
-      category: "Spiritual",
-      price: "৳১,৫০০",
-      desc: "In-depth treatment for Ayn (evil eye), Sihr (black magic), and spiritual blockages.",
-      duration: "90 Mins"
+      title: "Basic Package (Short Session)",
+      bengaliTitle: "বেসিক প্যাকেজ (সংক্ষিপ্ত সেশন)",
+      category: "Basic",
+      price: "৳২,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600",
+      desc: "Perfect for quick consultation, addressing minor issues, and single-topic spiritual/wellness discussions.",
+      benefits: "Quick consultation, minor issues, single-topic discussion",
+      whyTake: "Sunnah-compliant spiritual guidance and quick theological advice.",
+      forWhom: "Individuals experiencing minor wellness blockages or seeking immediate prophetic counsel.",
+      cups: 0
     },
     {
       id: "rq-2",
-      title: "Mental Peace & Anxiety Relief",
-      bengaliTitle: "মানসিক প্রশান্তি ও দুশ্চিন্তা মুক্তি",
-      category: "Mental",
-      price: "৳১,০০০",
-      desc: "Therapeutic Quranic recitation and psychological counseling based on Islamic principles.",
-      duration: "60 Mins"
+      title: "Diagnosis Package",
+      bengaliTitle: "ডায়াগনসিস প্যাকেজ",
+      category: "Diagnosis",
+      price: "৳৩,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=600",
+      desc: "Comprehensive diagnostic session offering full problem analysis, initial spiritual assessment, and detailed analysis.",
+      benefits: "Full problem analysis, initial assessment, detailed diagnosis",
+      whyTake: "Deep spiritual diagnostic recitation by senior qualified Raqis.",
+      forWhom: "Those seeking to understand the root causes of unexplained spiritual or somatic struggles.",
+      cups: 0
+    },
+    {
+      id: "rq-3",
+      title: "Follow-up Package",
+      bengaliTitle: "ফলো-আপ প্যাকেজ",
+      category: "Follow-up",
+      price: "৳২,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600",
+      desc: "Dedicated monitoring session best for progress review, recovery updates, and treatment adjustments after diagnosis.",
+      benefits: "Progress review, updates, adjustments after diagnosis",
+      whyTake: "Ensures therapeutic continuity and adjustment of water/oil recitation shields.",
+      forWhom: "Patients undergoing active treatment who need verification of spiritual progress.",
+      cups: 0
+    },
+    {
+      id: "rq-4",
+      title: "Premium Package (Long Session)",
+      bengaliTitle: "প্রিমিয়াম প্যাকেজ (দীর্ঘ সেশন)",
+      category: "Premium",
+      price: "৳৫,০০০",
+      duration: "3 hours",
+      image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=80&w=600",
+      desc: "Intensive therapy designed for deep dive work, addressing complex spiritual issues, and full end-to-end solutions.",
+      benefits: "Deep dive work, complex issues, full end-to-end solution",
+      whyTake: "Extended diagnostic recitation, business/home purification advice, and intensive self-ruqyah training.",
+      forWhom: "Individuals dealing with heavy chronic distress, deep-rooted blockages, or severe affliction.",
+      cups: 0
     }
   ];
 
@@ -198,6 +242,31 @@ export default function HomePage() {
     if (!card) return;
     const cardWidth = card.offsetWidth + 24; // card width + gap-6
     shopSliderRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+  };
+
+  const handleDragStart = (e, ref) => {
+    const slider = ref.current;
+    if (!slider) return;
+    slider.isDown = true;
+    slider.startX = e.pageX - slider.offsetLeft;
+    slider.scrollLeftStart = slider.scrollLeft;
+    slider.style.scrollBehavior = 'auto';
+  };
+
+  const handleDragEnd = (ref) => {
+    const slider = ref.current;
+    if (!slider) return;
+    slider.isDown = false;
+    slider.style.scrollBehavior = 'smooth';
+  };
+
+  const handleDragMove = (e, ref) => {
+    const slider = ref.current;
+    if (!slider || !slider.isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - slider.startX) * 1.5;
+    slider.scrollLeft = slider.scrollLeftStart - walk;
   };
 
   const shopProducts = [
@@ -300,7 +369,7 @@ export default function HomePage() {
       <Header />
 
       <main className="flex-grow">
-        
+
         {/* BANNER HERO */}
         <BannerCarousel slides={homeSlides} />
 
@@ -356,7 +425,7 @@ export default function HomePage() {
                 setShopIndex(newIndex);
                 scrollSlider(newIndex);
               }}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
               aria-label="Previous"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -365,87 +434,27 @@ export default function HomePage() {
             </button>
 
             {/* Cards Viewport */}
-            <div className="overflow-x-hidden mx-6" ref={sliderRef}>
+            <div
+              className="overflow-x-auto scrollbar-none snap-x snap-mandatory mx-6 scroll-smooth select-none cursor-grab active:cursor-grabbing"
+              ref={sliderRef}
+              onMouseDown={(e) => handleDragStart(e, sliderRef)}
+              onMouseLeave={() => handleDragEnd(sliderRef)}
+              onMouseUp={() => handleDragEnd(sliderRef)}
+              onMouseMove={(e) => handleDragMove(e, sliderRef)}
+            >
               <div className="flex gap-6">
                 {hijamaPackages.map((pkg) => (
-                  <div
+                  <HijamaCard
                     key={pkg.id}
+                    pkg={pkg}
                     data-card
-                    style={{ width: 'calc(33.333% - 16px)', flexShrink: 0 }}
-                    className="bg-gradient-to-b from-white via-white to-emerald-50/15 border border-slate-200/60 rounded-3xl p-5 hover:shadow-[0_30px_60px_-15px_rgba(4,120,87,0.12)] hover:border-emerald-500/25 hover:-translate-y-2.5 transition-all duration-500 flex flex-col justify-between relative overflow-hidden group"
-                  >
-                    <div>
-                      {/* Package Cover Image with badges */}
-                      <div className="h-44 w-full overflow-hidden rounded-2xl relative mb-5 border border-slate-100 shadow-inner">
-                        <img
-                          src={pkg.image}
-                          alt={pkg.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
-
-                        {/* Floating Badge Tag over Image */}
-                        <div className={`absolute top-3.5 right-3.5 text-[9px] font-mono font-black uppercase px-2.5 py-1 rounded-full border shadow-sm backdrop-blur-sm ${
-                          pkg.id === "hj-1"
-                            ? "bg-emerald-50/90 text-emerald-800 border-emerald-100"
-                            : pkg.id === "hj-2"
-                              ? "bg-amber-50/90 text-amber-850 border-amber-200"
-                              : "bg-teal-50/90 text-teal-850 border-teal-200"
-                        }`}>
-                          {pkg.badge}
-                        </div>
-
-                        {/* SVG Icon Circle over Image */}
-                        <div className="absolute bottom-3.5 left-3.5 w-8.5 h-8.5 rounded-xl bg-white/95 backdrop-blur-sm border border-slate-200/40 flex items-center justify-center shadow-md">
-                          <span className="text-emerald-700">
-                            {pkg.id === "hj-1" ? (
-                              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <circle cx="12" cy="14" r="5" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 9V4m-2 0h4" />
-                              </svg>
-                            ) : pkg.id === "hj-2" ? (
-                              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                              </svg>
-                            ) : (
-                              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499c.196-.393.74-.393.936 0l1.792 3.6A1 1 0 0 0 15 7.62l3.968.324c.438.036.613.58.28.877l-2.99 2.663a1 1 0 0 0-.293.902l.85 3.916c.094.436-.37.772-.75.549l-3.32-1.921a1 1 0 0 0-.96 0l-3.32 1.921c-.38.223-.844-.113-.75-.549l.85-3.916a1 1 0 0 0-.293-.902l-2.99-2.663c-.333-.297-.158-.841.28-.877L7.62 7.62a1 1 0 0 0 .73-.504l1.79-3.6Z" />
-                              </svg>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-
-                      <h3 className="font-black text-lg sm:text-xl text-slate-800 group-hover:text-emerald-800 transition-colors duration-300">{pkg.title}</h3>
-                      <p className="text-xs text-emerald-700 font-extrabold mt-1 tracking-wide">{pkg.bengaliTitle}</p>
-                      <p className="text-xs sm:text-sm text-slate-500 mt-3.5 leading-relaxed font-medium">{pkg.desc}</p>
-
-                      <ul className="mt-5 space-y-3">
-                        {pkg.features.map((feat, idx) => (
-                          <li key={idx} className="flex items-center gap-3 text-xs text-slate-655 font-semibold">
-                            <span className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-600">
-                                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                              </svg>
-                            </span>
-                            <span>{feat}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <span className="text-[11px] text-slate-400 font-bold line-through block leading-none tracking-wide">{pkg.originalPrice}</span>
-                        <span className="text-2xl font-black text-emerald-800 tracking-tight">{pkg.price}</span>
-                      </div>
-                      <button
-                        onClick={() => openBooking(pkg)}
-                        className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-5 py-3.5 rounded-xl transition-all duration-300 shadow-[0_4px_15px_rgba(4,120,87,0.15)] hover:shadow-[0_6px_20px_rgba(4,120,87,0.25)] active:scale-[0.97] uppercase tracking-wider"
-                      >
-                        Quick Book
-                      </button>
-                    </div>
-                  </div>
+                    onCardClick={() => {
+                      setSelectedDetailItem({ ...pkg, type: 'package' });
+                      setDetailModalOpen(true);
+                    }}
+                    onBookClick={openBooking}
+                    className="w-[250px] sm:w-[320px] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start"
+                  />
                 ))}
               </div>
             </div>
@@ -453,11 +462,11 @@ export default function HomePage() {
             {/* Right Arrow */}
             <button
               onClick={() => {
-                const newIndex = shopIndex === 2 ? 0 : shopIndex + 1;
+                const newIndex = shopIndex >= 2 ? 0 : shopIndex + 1;
                 setShopIndex(newIndex);
                 scrollSlider(newIndex);
               }}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
               aria-label="Next"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -466,23 +475,30 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Dot Indicators — 3 positions */}
+          {/* Dot Indicators */}
           <div className="flex justify-center gap-2 mt-8">
-            {[0, 1, 2].map((i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  setShopIndex(i);
-                  scrollSlider(i);
-                }}
-                className={`rounded-full transition-all duration-300 ${
-                  shopIndex === i
+            {[0, 1, 2].map((i) => {
+              const targetIndex = i === 0 ? 0 : i === 1 ? 2 : 4;
+              const isActive = i === 0
+                ? shopIndex <= 1
+                : i === 1
+                  ? shopIndex === 2 || shopIndex === 3
+                  : shopIndex >= 4;
+              return (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setShopIndex(targetIndex);
+                    scrollSlider(targetIndex);
+                  }}
+                  className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
                     ? "w-6 h-2 bg-emerald-700"
-                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-400"
-                }`}
-                aria-label={`Go to position ${i + 1}`}
-              />
-            ))}
+                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
+                    }`}
+                  aria-label={`Go to position ${i + 1}`}
+                />
+              );
+            })}
           </div>
         </section>
 
@@ -507,11 +523,10 @@ export default function HomePage() {
                   <button
                     key={concern.id}
                     onClick={() => setSelectedConcern(concern.id)}
-                    className={`w-full text-left px-5 py-4 rounded-2xl text-xs font-black transition-all flex items-center gap-3 border ${
-                      selectedConcern === concern.id
-                        ? "bg-emerald-800 text-white border-emerald-800 shadow-md shadow-emerald-950/20 translate-x-1"
-                        : "bg-white text-slate-700 border-slate-150 hover:bg-slate-50"
-                    }`}
+                    className={`w-full text-left px-5 py-4 rounded-2xl text-xs font-black transition-all flex items-center gap-3 border ${selectedConcern === concern.id
+                      ? "bg-emerald-800 text-white border-emerald-800 shadow-md shadow-emerald-950/20 translate-x-1"
+                      : "bg-white text-slate-700 border-slate-150 hover:bg-slate-50"
+                      }`}
                   >
                     <span className="text-lg">{concern.icon}</span>
                     <span>{concern.label}</span>
@@ -522,7 +537,7 @@ export default function HomePage() {
               {/* Right Result Card */}
               <div className="md:col-span-8 bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-50 rounded-full blur-3xl -z-10 translate-x-6 -translate-y-6"></div>
-                
+
                 <div>
                   <span className="text-[10px] bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
                     {concernsData[selectedConcern].title}
@@ -530,7 +545,7 @@ export default function HomePage() {
                   <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-3">
                     {concernsData[selectedConcern].bengaliTitle}
                   </h3>
-                  
+
                   <div className="mt-5 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/60">
                     <span className="text-[10px] font-black text-emerald-850 uppercase tracking-widest block mb-1">Recommended Solution</span>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-semibold font-sans">
@@ -568,28 +583,12 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {ruqyahServices.map((rq) => (
-                <div key={rq.id} className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col justify-between">
-                  <div>
-                    <div className="flex justify-between items-start">
-                      <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">
-                        {rq.category}
-                      </span>
-                      <span className="text-xs text-slate-400 font-medium">Duration: {rq.duration}</span>
-                    </div>
-                    <h3 className="font-bold text-base sm:text-lg text-slate-800 mt-3">{rq.title}</h3>
-                    <p className="text-xs text-emerald-700 font-semibold mt-0.5">{rq.bengaliTitle}</p>
-                    <p className="text-xs sm:text-sm text-slate-550 mt-3 leading-relaxed">{rq.desc}</p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-slate-200/50 flex justify-between items-center">
-                    <span className="text-base font-black text-emerald-800">{rq.price}</span>
-                    <button
-                      onClick={() => openBooking(rq)}
-                      className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2 rounded-lg"
-                    >
-                      Book Session
-                    </button>
-                  </div>
-                </div>
+                <RuqyahCard
+                  key={rq.id}
+                  session={rq}
+                  onCardClick={() => openBooking(rq)}
+                  onBookClick={openBooking}
+                />
               ))}
             </div>
           </div>
@@ -613,7 +612,7 @@ export default function HomePage() {
                 setShopScrollIndex(newIndex);
                 scrollShopSlider(newIndex);
               }}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
               aria-label="Previous"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -622,25 +621,36 @@ export default function HomePage() {
             </button>
 
             {/* Cards Viewport */}
-            <div className="overflow-x-hidden mx-6" ref={shopSliderRef}>
+            <div
+              className="overflow-x-auto scrollbar-none snap-x snap-mandatory mx-6 scroll-smooth select-none cursor-grab active:cursor-grabbing"
+              ref={shopSliderRef}
+              onMouseDown={(e) => handleDragStart(e, shopSliderRef)}
+              onMouseLeave={() => handleDragEnd(shopSliderRef)}
+              onMouseUp={() => handleDragEnd(shopSliderRef)}
+              onMouseMove={(e) => handleDragMove(e, shopSliderRef)}
+            >
               <div className="flex gap-6">
                 {shopProducts.map((p) => (
                   <div
                     key={p.id}
                     data-shop-card
-                    style={{ width: 'calc(33.333% - 16px)', flexShrink: 0 }}
-                    className="bg-white rounded-3xl p-4.5 border border-slate-200/60 shadow-[0_5px_20px_rgba(15,23,42,0.02)] hover:shadow-[0_20px_40px_rgba(4,120,87,0.07)] hover:-translate-y-1.5 transition-all duration-350 flex flex-col justify-between group"
+                    onClick={() => {
+                      setSelectedDetailItem({ ...p, type: 'product' });
+                      setDetailModalOpen(true);
+                    }}
+                    className="w-[210px] sm:w-[300px] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-3xl p-3 sm:p-4.5 border border-slate-200/60 shadow-[0_5px_20px_rgba(15,23,42,0.02)] hover:shadow-[0_20px_40px_rgba(4,120,87,0.07)] hover:-translate-y-1.5 transition-all duration-350 flex flex-col justify-between group cursor-pointer"
                   >
                     <div>
                       {/* Visual Image container with Category badge & rating overlay */}
-                      <div className="h-44 w-full overflow-hidden rounded-2xl relative mb-4 border border-slate-150 shadow-inner">
+                      <div className="h-28 sm:h-44 w-full overflow-hidden rounded-2xl relative mb-3 sm:mb-4 border border-slate-150 shadow-inner">
                         <img
                           src={p.image}
                           alt={p.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          draggable="false"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
                         />
                         {/* Floating emoji circle overlay */}
-                        <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-base">
+                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 w-7 sm:w-8 h-7 sm:h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-sm sm:text-base">
                           {p.emoji}
                         </div>
 
@@ -659,29 +669,30 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <h3 className="font-extrabold text-sm sm:text-base text-slate-800 leading-tight group-hover:text-emerald-800 transition-colors">
+                      <h3 className="font-extrabold text-xs sm:text-base text-slate-800 leading-tight group-hover:text-emerald-800 transition-colors">
                         {p.name}
                       </h3>
 
                       {/* Brief description tag */}
-                      <p className="text-[11px] text-slate-450 line-clamp-2 mt-2 leading-relaxed font-medium">
+                      <p className="hidden sm:block text-[11px] text-slate-450 line-clamp-2 mt-2 leading-relaxed font-medium">
                         {p.desc}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3.5 border-t border-slate-100/80 flex items-center justify-between">
+                    <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-slate-100/80 flex items-center justify-between">
                       <div>
-                        <span className="text-[9px] text-slate-400 font-bold block uppercase tracking-wider">Price</span>
-                        <span className="text-lg font-black text-slate-900 tracking-tight">{p.price}</span>
+                        <span className="text-[8px] sm:text-[9px] text-slate-400 font-bold block uppercase tracking-wider">Price</span>
+                        <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">{p.price}</span>
                       </div>
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           addToCart({ id: p.id, name: p.name, price: p.price, unit: p.weight });
                           addNotification(`Added ${p.name} to cart.`);
                         }}
-                        className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow-[0_4px_12px_rgba(4,120,87,0.14)] hover:shadow-[0_6px_16px_rgba(4,120,87,0.22)] active:scale-[0.97]"
+                        className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black transition-all shadow-[0_4px_12px_rgba(4,120,87,0.14)] hover:shadow-[0_6px_16px_rgba(4,120,87,0.22)] active:scale-[0.97]"
                       >
-                        + Add to Cart
+                        + Cart
                       </button>
                     </div>
                   </div>
@@ -692,11 +703,11 @@ export default function HomePage() {
             {/* Right Arrow */}
             <button
               onClick={() => {
-                const newIndex = shopScrollIndex === 2 ? 0 : shopScrollIndex + 1;
+                const newIndex = shopScrollIndex >= 2 ? 0 : shopScrollIndex + 1;
                 setShopScrollIndex(newIndex);
                 scrollShopSlider(newIndex);
               }}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
               aria-label="Next"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -705,23 +716,30 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Dot Indicators — 3 positions */}
+          {/* Dot Indicators */}
           <div className="flex justify-center gap-2 mt-8">
-            {[0, 1, 2].map((i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  setShopScrollIndex(i);
-                  scrollShopSlider(i);
-                }}
-                className={`rounded-full transition-all duration-300 ${
-                  shopScrollIndex === i
+            {[0, 1, 2].map((i) => {
+              const targetIndex = i === 0 ? 0 : i === 1 ? 2 : 4;
+              const isActive = i === 0
+                ? shopScrollIndex <= 1
+                : i === 1
+                  ? shopScrollIndex === 2 || shopScrollIndex === 3
+                  : shopScrollIndex >= 4;
+              return (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setShopScrollIndex(targetIndex);
+                    scrollShopSlider(targetIndex);
+                  }}
+                  className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
                     ? "w-6 h-2 bg-emerald-700"
-                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-400"
-                }`}
-                aria-label={`Go to position ${i + 1}`}
-              />
-            ))}
+                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
+                    }`}
+                  aria-label={`Go to position ${i + 1}`}
+                />
+              );
+            })}
           </div>
         </section>
 
@@ -828,6 +846,127 @@ export default function HomePage() {
                 </form>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ITEM DETAIL MODAL */}
+      {detailModalOpen && selectedDetailItem && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-lg w-full overflow-hidden relative text-slate-850 max-h-[90vh] flex flex-col">
+            {/* Close button */}
+            <button
+              onClick={() => setDetailModalOpen(false)}
+              className="absolute top-4 right-4 text-white bg-slate-900/50 hover:bg-slate-900/80 backdrop-blur-sm rounded-full p-2 z-10 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Image Header */}
+            <div className="h-56 sm:h-64 w-full relative shrink-0">
+              <img
+                src={selectedDetailItem.image}
+                alt={selectedDetailItem.title || selectedDetailItem.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+              <div className="absolute bottom-5 left-6 right-6 text-white">
+                <span className="text-[10px] bg-amber-400 text-emerald-950 font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                  {selectedDetailItem.badge || selectedDetailItem.category}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black mt-2">
+                  {selectedDetailItem.title || selectedDetailItem.name}
+                </h3>
+                {selectedDetailItem.bengaliTitle && (
+                  <p className="text-xs text-emerald-300 font-extrabold mt-0.5">{selectedDetailItem.bengaliTitle}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Scrollable Content */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-5">
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Description</span>
+                <p className="text-sm text-slate-600 leading-relaxed font-semibold">
+                  {selectedDetailItem.desc}
+                </p>
+              </div>
+
+              {/* Hijama Specific Features */}
+              {selectedDetailItem.type === 'package' && selectedDetailItem.features && (
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What's Included</span>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {selectedDetailItem.features.map((feat, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-xs text-slate-650 font-bold">
+                        <span className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-600">
+                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Product Rating and Weight Info */}
+              {selectedDetailItem.type === 'product' && (
+                <div className="flex gap-4">
+                  {selectedDetailItem.weight && (
+                    <div className="bg-slate-50 border border-slate-200/60 p-3 rounded-xl flex-1 text-center">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase block mb-0.5">Quantity / Size</span>
+                      <span className="text-sm font-black text-slate-800">{selectedDetailItem.weight}</span>
+                    </div>
+                  )}
+                  {selectedDetailItem.rating && (
+                    <div className="bg-amber-50/50 border border-amber-150/40 p-3 rounded-xl flex-1 text-center">
+                      <span className="text-[9px] font-bold text-amber-800 uppercase block mb-0.5">Rating</span>
+                      <span className="text-sm font-black text-amber-850">★ {selectedDetailItem.rating}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Action Bar */}
+            <div className="p-6 border-t border-slate-100 flex items-center justify-between shrink-0 bg-slate-50">
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold leading-none">Price</span>
+                <span className="text-2xl font-black text-emerald-800">{selectedDetailItem.price}</span>
+              </div>
+
+              {selectedDetailItem.type === 'package' ? (
+                <button
+                  onClick={() => {
+                    setDetailModalOpen(false);
+                    openBooking(selectedDetailItem);
+                  }}
+                  className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all duration-300 shadow-md active:scale-[0.97] uppercase tracking-wider"
+                >
+                  Book Appointment
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    addToCart({
+                      id: selectedDetailItem.id,
+                      name: selectedDetailItem.name,
+                      price: selectedDetailItem.price,
+                      unit: selectedDetailItem.weight
+                    });
+                    addNotification(`Added ${selectedDetailItem.name} to cart.`);
+                    setDetailModalOpen(false);
+                  }}
+                  className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all duration-300 shadow-md active:scale-[0.97] uppercase tracking-wider"
+                >
+                  + Add to Cart
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

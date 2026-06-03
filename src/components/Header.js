@@ -90,14 +90,16 @@ export default function Header() {
             <div className="flex items-center justify-between h-18 sm:h-20">
 
               {/* Brand Logo with Squircle Border & Glow */}
-              <Link href="/home" className="flex-shrink-0 flex items-center gap-3 group relative">
-                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-2.5 rounded-[18px] shadow-lg shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
-                  <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" width={50} height={50} /> 
+              <Link href="/home" className="flex-shrink-0 flex items-center gap-2 sm:gap-3 group relative">
+                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-1.5 sm:p-2.5 rounded-[12px] sm:rounded-[18px] shadow-lg shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
+                  <div className="relative w-8 h-8 sm:w-[50px] sm:h-[50px]">
+                    <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
+                  </div>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   {/* Cursive premium brand name */}
                   <span
-                    className={`${playfair.className} text-[30px] italic font-black leading-none tracking-tight`}
+                    className={`${playfair.className} text-[24px] sm:text-[32px] lg:text-[40px] italic font-black leading-none tracking-tight`}
                     style={{
                       background: "linear-gradient(135deg, #065f46 0%, #0f766e 40%, #047857 75%, #b45309 100%)",
                       WebkitBackgroundClip: "text",
@@ -113,7 +115,7 @@ export default function Header() {
                   {/* Decorative tagline with dot separators */}
                   <span className="flex items-center gap-1.5 leading-none">
                     <span className="w-3 h-px bg-gradient-to-r from-transparent to-amber-500/70 rounded-full" />
-                    <span className="text-[8px] text-amber-600 font-extrabold uppercase tracking-[0.2em]">
+                    <span className="text-[7.5px] sm:text-[9px] lg:text-[10px] text-amber-600 font-extrabold uppercase tracking-[0.2em]">
                       Islamic Wellness
                     </span>
                     <span className="w-3 h-px bg-gradient-to-l from-transparent to-amber-500/70 rounded-full" />
@@ -149,9 +151,8 @@ export default function Header() {
                 <div className="relative">
                   <button
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className={`relative py-2 px-3.5 rounded-2xl transition-all duration-300 flex flex-col items-center hover:bg-emerald-500/5 ${
-                      moreMenuOpen ? "bg-emerald-500/5" : ""
-                    }`}
+                    className={`relative py-2 px-3.5 rounded-2xl transition-all duration-300 flex flex-col items-center hover:bg-emerald-500/5 ${moreMenuOpen ? "bg-emerald-500/5" : ""
+                      }`}
                   >
                     <span className="text-[12.5px] font-extrabold tracking-wide leading-none text-slate-655 hover:text-emerald-750 flex items-center gap-1">
                       More
@@ -167,7 +168,7 @@ export default function Header() {
                     <>
                       {/* Click outside overlay */}
                       <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setMoreMenuOpen(false)} />
-                      
+
                       <div className="absolute top-full right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl border border-emerald-100/60 rounded-2xl shadow-[0_20px_40px_-10px_rgba(4,78,56,0.12)] py-2 z-50 animate-fadeIn">
                         {moreItems.map((item) => {
                           const active = pathname === item.href;
@@ -176,12 +177,11 @@ export default function Header() {
                               key={item.name}
                               href={item.href}
                               onClick={() => setMoreMenuOpen(false)}
-                              className={`flex items-center justify-between px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-200 group ${
-                                active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
-                              }`}
+                              className={`flex items-center justify-between px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-200 group ${active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
+                                }`}
                             >
                               <span className="text-xs font-extrabold">{item.name}</span>
-                              <span className={`text-[9px] font-bold ${ active ? "text-amber-600" : "text-slate-400 group-hover:text-emerald-650"}`}>{item.label}</span>
+                              <span className={`text-[9px] font-bold ${active ? "text-amber-600" : "text-slate-400 group-hover:text-emerald-650"}`}>{item.label}</span>
                             </Link>
                           );
                         })}
@@ -195,7 +195,7 @@ export default function Header() {
               <div className="flex items-center gap-3">
 
                 {/* iOS Glassmorphic Action Capsule */}
-                <div className="flex items-center gap-1.5 bg-slate-100/40 backdrop-blur-md border border-slate-200/50 p-1.5 rounded-full shadow-inner hover:shadow-emerald-950/5 transition-all">
+                <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100/40 backdrop-blur-md border border-slate-200/50 p-1 sm:p-1.5 rounded-full shadow-inner hover:shadow-emerald-950/5 transition-all">
 
                   {/* Cart Toggle Button */}
                   <button
@@ -328,12 +328,25 @@ export default function Header() {
                         )}
                       </div>
                     ) : (
-                      <button
-                        onClick={() => setShowLoginModal(true)}
-                        className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-850 hover:to-teal-850 text-white px-5 py-2.5 rounded-full text-xs font-black shadow-md hover:shadow-lg hover:shadow-emerald-700/10 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
-                      >
-                        Login / Register
-                      </button>
+                      <>
+                        {/* Desktop Login Button */}
+                        <button
+                          onClick={() => setShowLoginModal(true)}
+                          className="hidden sm:block bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-850 hover:to-teal-850 text-white px-5 py-2.5 rounded-full text-xs font-black shadow-md hover:shadow-lg hover:shadow-emerald-700/10 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap"
+                        >
+                          Login / Register
+                        </button>
+                        {/* Mobile Login Button (Icon) */}
+                        <button
+                          onClick={() => setShowLoginModal(true)}
+                          className="sm:hidden p-2 rounded-full text-slate-600 hover:text-emerald-750 hover:bg-white transition-all flex items-center justify-center"
+                          aria-label="Login"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5.5 h-5.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                          </svg>
+                        </button>
+                      </>
                     )}
                   </div>
 

@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
+import HijamaCard from "@/components/HijamaCard";
 
 const hijamaSlides = [
   {
@@ -47,6 +48,10 @@ export default function HijamaPage() {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  // Detail Modal state
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedDetailItem, setSelectedDetailItem] = useState(null);
+
   // Points Guide State
   const [activePoint, setActivePoint] = useState("kahil");
 
@@ -69,9 +74,9 @@ export default function HijamaPage() {
       price: "৳১,২০০",
       originalPrice: "৳১,৫০০",
       desc: "Perfect for beginners. Focuses on key wellness and detox points on the upper back.",
-      benefits: "Deep tissue detox, stimulates blood circulation, eases back tension.",
-      whyTake: "Uses top-grade clinical pumps, double sterilization, and original black seed oil care.",
-      forWhom: "First-timers, general well-being seekers.",
+      badge: "Popular",
+      image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+      features: ["6 Sterile Cups", "Disposable Blades", "Organic Olive Oil Massage", "Sunnah Consultation"],
       cups: 6
     },
     {
@@ -82,9 +87,9 @@ export default function HijamaPage() {
       price: "৳১,৮০০",
       originalPrice: "৳২,২০০",
       desc: "Comprehensive cleansing for back, shoulders, and legs. Relieves pain and chronic fatigue.",
-      benefits: "Removes lactic acids, purifies heavy metals in tissues, alleviates muscle knots.",
-      whyTake: "Complete clinical hygiene checklist. Zero scarring method.",
-      forWhom: "Desk workers, physically active athletes, chronic exhaustion sufferers.",
+      badge: "Best Seller",
+      image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+      features: ["10 Sterile Cups", "Disposable Blades", "Prophetic Herb Sanitization", "Blood Pressure Check"],
       cups: 10
     },
     {
@@ -92,39 +97,39 @@ export default function HijamaPage() {
       title: "Executive Wellness (15 Cups)",
       bengaliTitle: "এক্সিকিউটিভ ওয়েলনেস (১৫টি কাপ)",
       category: "Executive",
-      price: "৳২,৫ ০০",
+      price: "৳২,৫০০",
       originalPrice: "৳৩,০০০",
       desc: "Full-body Sunnah points coverage. Highly recommended for complete metabolic revitalization.",
-      benefits: "Boosts immune cells, regulates blood pressure, triggers deep neurological relaxation.",
-      whyTake: "Session includes raw honey hydration and private consultation with Senior Practitioner.",
-      forWhom: "Aged individuals, executives with highly stressful routines.",
+      badge: "Premium",
+      image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+      features: ["15 Sterile Cups", "Comprehensive Detox Points", "Black Seed Oil Treatment", "Post-Hijama Energizer Drink"],
       cups: 15
     },
     {
       id: "hj-4",
-      title: "Fire Cup Therapy (Special)",
-      bengaliTitle: "ফায়ার কাপ থেরাপী (বিশেষ সেশন)",
-      category: "Pain Relief",
-      price: "৳১,৫০০",
-      originalPrice: "৳২,০০০",
-      desc: "Traditional sliding fire cupping. Uses thermal suction to relax deep muscle tissues.",
-      benefits: "Frees myofascial limits, alleviates severe nerve compression, relieves spasms.",
-      whyTake: "Handled strictly by certified dry/fire cupping specialists.",
-      forWhom: "Chronic back stiffness, gym professionals, sports injury recovery.",
-      cups: 8
+      title: "Home Service Hijama",
+      bengaliTitle: "হোম সার্ভিস হিজামা",
+      category: "Home Visit",
+      price: "৳৩,৫০০",
+      originalPrice: "৳৪,০০০",
+      desc: "Certified therapist visits your home with full clinical equipment. Maximum comfort, zero travel.",
+      badge: "Home Visit",
+      image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=600",
+      features: ["Full Clinical Kit", "Therapist Home Visit", "Pre & Post Consultation", "Sterile Disposable Set"],
+      cups: 15
     },
     {
       id: "hj-5",
-      title: "Chronic Pain Relief (12 Cups)",
-      bengaliTitle: "ক্রনিক পেইন রিলিফ (১২টি কাপ)",
-      category: "Pain Relief",
-      price: "৳২,০০০",
-      originalPrice: "৳২,৫০০",
-      desc: "Targets specific joint pains, sciatica, migraine points, and lower back strains.",
-      benefits: "Decreases uric acid, releases endorphins, increases localized joint mobility.",
-      whyTake: "Precision suction on targeted trigger points based on clinical scans.",
-      forWhom: "Sciatica patients, migraine sufferers, persistent arthritic joint issues.",
-      cups: 12
+      title: "Women's Hijama Special",
+      bengaliTitle: "মহিলা হিজামা স্পেশাল",
+      category: "Sisters Only",
+      price: "৳১,৫০০",
+      originalPrice: "৳২,০০০",
+      desc: "Performed exclusively by certified female therapists in a fully private and comfortable setting.",
+      badge: "Sisters Only",
+      image: "https://images.unsplash.com/photo-1643297654416-05795d62e39c?q=80&w=600",
+      features: ["Female Therapist Only", "Private Room Session", "8 Sterile Cups", "Hormone Balance Points"],
+      cups: 8
     }
   ];
 
@@ -253,33 +258,15 @@ export default function HijamaPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {hijamaPackages.map((pkg) => (
-              <div key={pkg.id} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-start gap-2">
-                    <span className="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">
-                      {pkg.category}
-                    </span>
-                    <div className="flex flex-col text-right">
-                      <span className="text-xs text-slate-400 line-through">{pkg.originalPrice}</span>
-                      <span className="text-base font-black text-emerald-800">{pkg.price}</span>
-                    </div>
-                  </div>
-                  <h3 className="font-bold text-lg text-slate-900 mt-3">{pkg.title}</h3>
-                  <p className="text-xs text-emerald-700 font-semibold mt-1">{pkg.bengaliTitle}</p>
-                  <p className="text-xs text-slate-550 leading-relaxed mt-3">{pkg.desc}</p>
-                </div>
-                <div className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-between">
-                  <span className="text-[10px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded">
-                    {pkg.cups} sterile cups
-                  </span>
-                  <button
-                    onClick={() => openBookingModal(pkg)}
-                    className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors"
-                  >
-                    Details & Book
-                  </button>
-                </div>
-              </div>
+              <HijamaCard
+                key={pkg.id}
+                pkg={pkg}
+                onCardClick={() => {
+                  setSelectedDetailItem({ ...pkg, type: 'package' });
+                  setDetailModalOpen(true);
+                }}
+                onBookClick={openBookingModal}
+              />
             ))}
           </div>
         </section>
@@ -647,6 +634,91 @@ export default function HijamaPage() {
                 </form>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ITEM DETAIL MODAL */}
+      {detailModalOpen && selectedDetailItem && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-lg w-full overflow-hidden relative text-slate-850 max-h-[90vh] flex flex-col">
+            {/* Close button */}
+            <button
+              onClick={() => setDetailModalOpen(false)}
+              className="absolute top-4 right-4 text-white bg-slate-900/50 hover:bg-slate-900/80 backdrop-blur-sm rounded-full p-2 z-10 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Image Header */}
+            <div className="h-56 sm:h-64 w-full relative shrink-0">
+              <img
+                src={selectedDetailItem.image}
+                alt={selectedDetailItem.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+              <div className="absolute bottom-5 left-6 right-6 text-white">
+                <span className="text-[10px] bg-amber-400 text-emerald-950 font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                  {selectedDetailItem.badge}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black mt-2">
+                  {selectedDetailItem.title}
+                </h3>
+                {selectedDetailItem.bengaliTitle && (
+                  <p className="text-xs text-emerald-300 font-extrabold mt-0.5">{selectedDetailItem.bengaliTitle}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Scrollable Content */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-5">
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Description</span>
+                <p className="text-sm text-slate-600 leading-relaxed font-semibold">
+                  {selectedDetailItem.desc}
+                </p>
+              </div>
+
+              {/* Hijama Specific Features */}
+              {selectedDetailItem.features && (
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What's Included</span>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {selectedDetailItem.features.map((feat, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-xs text-slate-655 font-bold">
+                        <span className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-600">
+                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {/* Action Bar */}
+            <div className="p-6 border-t border-slate-100 flex items-center justify-between shrink-0 bg-slate-50">
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold leading-none">Price</span>
+                <span className="text-2xl font-black text-emerald-800">{selectedDetailItem.price}</span>
+              </div>
+
+              <button
+                onClick={() => {
+                  setDetailModalOpen(false);
+                  openBookingModal(selectedDetailItem);
+                }}
+                className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all duration-300 shadow-md active:scale-[0.97] uppercase tracking-wider"
+              >
+                Book Appointment
+              </button>
+            </div>
           </div>
         </div>
       )}

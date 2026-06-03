@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
+import RuqyahCard from "@/components/RuqyahCard";
 
 const ruqyahSlides = [
   {
@@ -57,67 +58,58 @@ export default function RuqyahPage() {
   const ruqyahSessions = [
     {
       id: "rq-1",
-      title: "Spiritual Affliction Session",
-      bengaliTitle: "আধ্যাত্মিক রুকইয়াহ (জাদুটোনা ও বদনজর)",
-      category: "Spiritual",
-      price: "৳১,৫০০",
-      duration: "90 Mins",
-      desc: "Detailed audio session targeting Sihr (magic), Ayn (evil eye), and Jinn affliction. Includes diagnostic recitation and oil/water treatment package.",
-      benefits: "Removes negative spiritual blocks, relieves heavy shoulders, cures unexplained blockages.",
-      whyTake: "Strictly Sunnah-compliant. Performed by expert Raqi with years of theological practice.",
-      forWhom: "Anyone experiencing sudden unexplained failures, severe nightmares, or spiritual blockages.",
+      title: "Basic Package (Short Session)",
+      bengaliTitle: "বেসিক প্যাকেজ (সংক্ষিপ্ত সেশন)",
+      category: "Basic",
+      price: "৳২,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600",
+      desc: "Perfect for quick consultation, addressing minor issues, and single-topic spiritual/wellness discussions.",
+      benefits: "Quick consultation, minor issues, single-topic discussion",
+      whyTake: "Sunnah-compliant spiritual guidance and quick theological advice.",
+      forWhom: "Individuals experiencing minor wellness blockages or seeking immediate prophetic counsel.",
       cups: 0
     },
     {
       id: "rq-2",
-      title: "Mental Peace & Anxiety Relief",
-      bengaliTitle: "মানসিক প্রশান্তি ও দুশ্চিন্তা মুক্তি",
-      category: "Mental",
-      price: "৳১,০০০",
-      duration: "60 Mins",
-      desc: "Calming Quranic sound therapy combined with counseling. Focuses on anxiety, panic attacks, depression, and mental exhaustion.",
-      benefits: "Instantly lowers stress, increases devotion in Salah, helps stabilize emotional swings.",
-      whyTake: "Aligns modern mental health relief with authentic prophet healing traditions.",
-      forWhom: "For individuals suffering from chronic stress, panic attacks, depression, and sleep distress.",
+      title: "Diagnosis Package",
+      bengaliTitle: "ডায়াগনসিস প্যাকেজ",
+      category: "Diagnosis",
+      price: "৳৩,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=600",
+      desc: "Comprehensive diagnostic session offering full problem analysis, initial spiritual assessment, and detailed analysis.",
+      benefits: "Full problem analysis, initial assessment, detailed diagnosis",
+      whyTake: "Deep spiritual diagnostic recitation by senior qualified Raqis.",
+      forWhom: "Those seeking to understand the root causes of unexplained spiritual or somatic struggles.",
       cups: 0
     },
     {
       id: "rq-3",
-      title: "Physical Healing & Shifa",
-      bengaliTitle: "শারীরিক নিরাময় ও শিফা সেশন",
-      category: "Physical",
-      price: "৳১,২০০",
-      duration: "75 Mins",
-      desc: "Focused recitation for bodily pain, organic chronic illnesses, and recovery. Involves recitation over pain-points and herbal advice.",
-      benefits: "Alleviates persistent bodily pain, invokes barakah in medicine and healing.",
-      whyTake: "Sunnah-compliant medical integration, following the prophet's actions on physical ailments.",
-      forWhom: "Those facing chronic physical pain, cancer recovery support, or recurring physical weaknesses.",
+      title: "Follow-up Package",
+      bengaliTitle: "ফলো-আপ প্যাকেজ",
+      category: "Follow-up",
+      price: "৳২,০০০",
+      duration: "1.5 hours",
+      image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600",
+      desc: "Dedicated monitoring session best for progress review, recovery updates, and treatment adjustments after diagnosis.",
+      benefits: "Progress review, updates, adjustments after diagnosis",
+      whyTake: "Ensures therapeutic continuity and adjustment of water/oil recitation shields.",
+      forWhom: "Patients undergoing active treatment who need verification of spiritual progress.",
       cups: 0
     },
     {
       id: "rq-4",
-      title: "House & Business Purification",
-      bengaliTitle: "ঘর ও ব্যবসা প্রতিষ্ঠান শোধন",
-      category: "Spiritual",
-      price: "৳৩,০০০",
-      duration: "120 Mins",
-      desc: "Specialized service involving a physical visit to spray Ruqyah water, recite Surah Al-Baqarah, and locate/dismantle hidden amulets.",
-      benefits: "Purges negative energies, improves business barakah, brings harmony to home environments.",
-      whyTake: "Thorough physical and spiritual inspection by two trained practitioners.",
-      forWhom: "Homes experiencing strange noises, recurring family disputes, or businesses with sudden heavy loss.",
-      cups: 0
-    },
-    {
-      id: "rq-5",
-      title: "Family Harmony & Bonding",
-      bengaliTitle: "পারিবারিক বন্ধন ও মেলবন্ধন রুকইয়াহ",
-      category: "Spiritual",
-      price: "৳১,৮০০",
-      duration: "90 Mins",
-      desc: "Recitation focused on removing marital discord, severe internal family hatred, and enabling mutual mercy between couples.",
-      benefits: "Bridges emotional distance caused by external spiritual triggers, restores family peace.",
-      whyTake: "Safe, supportive environment combining Quranic advice and focused counseling.",
-      forWhom: "Couples facing sudden intense hatred or families with continuous chaotic disputes.",
+      title: "Premium Package (Long Session)",
+      bengaliTitle: "প্রিমিয়াম প্যাকেজ (দীর্ঘ সেশন)",
+      category: "Premium",
+      price: "৳৫,০০০",
+      duration: "3 hours",
+      image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=80&w=600",
+      desc: "Intensive therapy designed for deep dive work, addressing complex spiritual issues, and full end-to-end solutions.",
+      benefits: "Deep dive work, complex issues, full end-to-end solution",
+      whyTake: "Extended diagnostic recitation, business/home purification advice, and intensive self-ruqyah training.",
+      forWhom: "Individuals dealing with heavy chronic distress, deep-rooted blockages, or severe affliction.",
       cups: 0
     }
   ];
@@ -291,31 +283,12 @@ export default function RuqyahPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {ruqyahSessions.map((session) => (
-              <div key={session.id} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-start gap-2">
-                    <span className="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">
-                      {session.category}
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">{session.duration}</span>
-                  </div>
-                  <h3 className="font-bold text-lg text-slate-900 mt-3">{session.title}</h3>
-                  <p className="text-xs text-emerald-700 font-semibold mt-1">{session.bengaliTitle}</p>
-                  <p className="text-xs text-slate-550 leading-relaxed mt-3">{session.desc}</p>
-                </div>
-                <div className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-slate-450 uppercase block font-medium">Session Charge</span>
-                    <span className="text-base font-black text-emerald-800">{session.price}</span>
-                  </div>
-                  <button
-                    onClick={() => openBookingModal(session)}
-                    className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors"
-                  >
-                    Details & Book
-                  </button>
-                </div>
-              </div>
+              <RuqyahCard
+                key={session.id}
+                session={session}
+                onCardClick={() => openBookingModal(session)}
+                onBookClick={openBookingModal}
+              />
             ))}
           </div>
         </section>

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://echosunnah.com
+
+# Sitemaps
+Sitemap: https://echosunnah.com/sitemap.xml

@@ -34,10 +34,41 @@ export default function BannerCarousel({ slides }) {
     setTimeout(() => setIsAnimating(false), 500);
   };
 
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+    const diffX = touchStartX - touchEndX;
+    if (diffX > 50) {
+      // Swiped left
+      handleNext();
+    } else if (diffX < -50) {
+      // Swiped right
+      handlePrev();
+    }
+    // Reset values
+    setTouchStartX(0);
+    setTouchEndX(0);
+  };
+
   if (!slides || slides.length === 0) return null;
 
   return (
-    <div className="w-full h-[320px] sm:h-[400px] md:h-[480px] relative overflow-hidden group bg-slate-900">
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      className="w-full h-[320px] sm:h-[400px] md:h-[480px] relative overflow-hidden group bg-slate-900"
+    >
       {/* Slides Container */}
       <div className="w-full h-full relative">
         {slides.map((slide, index) => (
@@ -141,14 +172,14 @@ export default function BannerCarousel({ slides }) {
       {/* Navigation Arrows */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
         aria-label="Previous Slide"
       >
         ←
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
         aria-label="Next Slide"
       >
         →
