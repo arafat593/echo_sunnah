@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: new URL('https://echosunnah.com'),
   title: {
-    default: "Echo Sunnah - Islamic Wellness & Theology Portal",
+    default: "Echo Sunnah - Ruqyah & Hijama Center",
     template: "%s | Echo Sunnah"
   },
   description: "Reviving the Sunnah, Nurturing Wellness. Hijama cupping therapy, Ruqyah Shariah healing, organic prophetic supplements, and certified training courses.",
   keywords: [
-    "Hijama", "Cupping Therapy", "Ruqyah Shariah", "Islamic Wellness", "Prophetic Medicine", 
+    "Hijama", "Cupping Therapy", "Ruqyah Shariah", "Islamic Wellness", "Prophetic Medicine",
     "Tibb An-Nabawi", "Sunnah", "Black Seed Oil", "Sidr Honey", "Quran Healing", "Dhaka Cupping"
   ],
   authors: [{ name: "Echo Sunnah Team", url: "https://echosunnah.com" }],
@@ -30,7 +30,7 @@ export const metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Echo Sunnah - Islamic Wellness & Theology Portal",
+    title: "Echo Sunnah - Ruqyah & Hijama Center",
     description: "Reviving the Sunnah, Nurturing Wellness. Hijama cupping therapy, Ruqyah Shariah healing, organic prophetic supplements, and certified training courses.",
     url: 'https://echosunnah.com',
     siteName: 'Echo Sunnah',
@@ -47,7 +47,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Echo Sunnah - Islamic Wellness & Theology Portal",
+    title: "Echo Sunnah - Ruqyah & Hijama Center",
     description: "Reviving the Sunnah, Nurturing Wellness. Hijama cupping therapy, Ruqyah Shariah healing, organic prophetic supplements, and certified training courses.",
     images: ['/echo_sunnah_logo.png'],
   },
