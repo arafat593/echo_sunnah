@@ -1,17 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function BannerCarousel({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      handleNext();
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [activeIndex]);
 
   const handleNext = () => {
     if (isAnimating) return;
@@ -19,6 +12,18 @@ export default function BannerCarousel({ slides }) {
     setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     setTimeout(() => setIsAnimating(false), 500);
   };
+
+  const handleNextRef = useRef(handleNext);
+  useEffect(() => {
+    handleNextRef.current = handleNext;
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNextRef.current();
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [activeIndex]);
 
   const handlePrev = () => {
     if (isAnimating) return;

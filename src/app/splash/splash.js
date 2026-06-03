@@ -9,26 +9,26 @@ export default function SplashScreen() {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    // Increment loading progress bar
+    // Increment loading progress bar (reach 100% in 1 second)
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        return prev + 4;
+        return prev + 10;
       });
-    }, 80);
+    }, 100);
 
     // Trigger fade-out animation right before redirecting
     const fadeTimeout = setTimeout(() => {
       setFade(true);
-    }, 2200);
+    }, 700);
 
-    // Redirect to home screen after 2.6 seconds
+    // Redirect to home screen after exactly 1.0 second
     const redirectTimeout = setTimeout(() => {
       router.push("/home");
-    }, 2600);
+    }, 1000);
 
     return () => {
       clearInterval(progressInterval);

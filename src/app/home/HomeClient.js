@@ -11,23 +11,7 @@ import RuqyahCard from "@/components/RuqyahCard";
 
 const homeSlides = [
   {
-    image: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?q=80&w=1600",
-    badge: "Reviving Prophetic Wellness",
-    title: "Echo Sunnah (একো সুন্নাহ)",
-    desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
-    buttonText: "Explore Hijama (হিজামা)",
-    buttonLink: "/hijama"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?q=80&w=1600",
-    badge: "100% Pure Organic Shifa",
-    title: "Natural Prophetic Remedies",
-    desc: "Order organic raw Sidr honey, premium cold-pressed black seed oil, pure Palestinian extra virgin olive oil, and premium dates directly from our shop.",
-    buttonText: "Visit Sunnah Shop",
-    buttonLink: "/shop"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1609599006353-e629dbacfeae?q=80&w=1600",
     badge: "Strict Sunnah Principles",
     title: "Quranic Ruqyah Shariah",
     desc: "Seek complete spiritual healing from Sihr, evil eye, Jinn afflictions, and somatic panic blocks through authentic Quranic recitation by verified Raqis.",
@@ -35,7 +19,7 @@ const homeSlides = [
     buttonLink: "/ruqyah"
   },
   {
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1600",
+    image: "https://www.tadawi.me/wp-content/uploads/2022/09/hijama-cupping.jpg",
     badge: "Hygienic & Certified Therapy",
     title: "Clinical Wet Cupping",
     desc: "Hijama therapy carried out under strict clinical hygiene protocols using premium single-use disposable kits to cleanse blood toxins and ease muscle tension.",
@@ -43,12 +27,28 @@ const homeSlides = [
     buttonLink: "/hijama"
   },
   {
-    image: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?q=80&w=1600",
+    badge: "100% Pure Organic Shifa",
+    title: "Natural Prophetic Remedies",
+    desc: "Order organic raw Sidr honey, premium cold-pressed black seed oil, pure Palestinian extra virgin olive oil, and premium dates directly from our shop.",
+    buttonText: "Visit Sunnah Shop",
+    buttonLink: "/shop"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1600",
     badge: "Study & Prophetic Diploma",
     title: "Sunnah Wellness Academy",
     desc: "Enroll in our certified diploma and training programs to learn the prophetic science of cupping therapy, organic medicine, and holistic clinical anatomy.",
     buttonText: "Join The Academy",
     buttonLink: "/academy"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1519823551278-64ac9283ca48?q=80&w=1600",
+    badge: "Reviving Prophetic Wellness",
+    title: "Echo Sunnah (একো সুন্নাহ)",
+    desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
+    buttonText: "Explore Hijama (হিজামা)",
+    buttonLink: "/hijama"
   }
 ];
 
@@ -390,17 +390,17 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-center md:justify-end w-full md:w-auto">
+              <div className="flex flex-wrap gap-2 sm:gap-4 justify-center md:justify-end w-full md:w-auto">
                 {[
                   { day: "17th", name: "Jumada I", date: "June 3, 2026", status: "Highly Recommended" },
                   { day: "19th", name: "Jumada I", date: "June 5, 2026", status: "Detox Window" },
                   { day: "21st", name: "Jumada I", date: "June 7, 2026", status: "Sunnah Peak" }
                 ].map((item, index) => (
-                  <div key={index} className="bg-white border border-emerald-150 hover:border-amber-405 hover:shadow-md transition-all duration-300 p-5 rounded-2xl text-center w-36 sm:w-44 shadow-sm group">
-                    <span className="text-[10px] text-amber-600 font-extrabold uppercase tracking-wider block">{item.status}</span>
-                    <span className="text-4xl font-black text-emerald-800 mt-1 block group-hover:scale-105 transition-transform">{item.day}</span>
-                    <span className="text-xs text-slate-500 mt-1 block font-semibold">{item.name}</span>
-                    <span className="text-[10px] text-slate-600 mt-2 block bg-slate-50 py-1 rounded-lg border border-slate-100">{item.date}</span>
+                  <div key={index} className="bg-white border border-emerald-150 hover:border-amber-405 hover:shadow-md transition-all duration-300 p-3 sm:p-5 rounded-2xl text-center w-[105px] sm:w-36 md:w-44 shadow-sm group">
+                    <span className="text-[8px] sm:text-[10px] text-amber-600 font-extrabold uppercase tracking-wider block leading-tight truncate">{item.status}</span>
+                    <span className="text-2xl sm:text-4xl font-black text-emerald-800 mt-0.5 sm:mt-1 block group-hover:scale-105 transition-transform">{item.day}</span>
+                    <span className="text-[9px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 block font-semibold">{item.name}</span>
+                    <span className="text-[8px] sm:text-[10px] text-slate-600 mt-1.5 sm:mt-2 block bg-slate-50 py-0.5 sm:py-1 rounded-lg border border-slate-100">{item.date}</span>
                   </div>
                 ))}
               </div>
