@@ -169,7 +169,7 @@ export default function Header() {
                 href="/home"
                 className="flex-shrink-0 flex items-center gap-1.5 sm:gap-3 group z-10"
               >
-                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-1 rounded-[10px] sm:p-2 sm:rounded-[14px] lg:p-2.5 lg:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
+                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-0 rounded-[10px] sm:rounded-[14px] lg:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
                   <div className="relative w-6 h-6 sm:w-8 sm:h-8 lg:w-[50px] lg:h-[50px]">
                     <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
                   </div>
@@ -843,7 +843,7 @@ export default function Header() {
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <div className="bg-gradient-to-br from-emerald-600 to-teal-850 text-white p-1.5 rounded-lg">
+                  <div className="bg-gradient-to-br from-emerald-600 to-teal-850 text-white p-0 rounded-lg">
                     <div className="relative w-6 h-6">
                       <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
                     </div>

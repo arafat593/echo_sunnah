@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useApp } from "@/context/AppContext";
 
 export default function Footer() {
@@ -44,10 +45,8 @@ export default function Footer() {
           {/* Column 1: Brand & About Panel */}
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md shadow-2xl space-y-6 hover:border-emerald-500/30 transition-colors duration-300">
             <Link href="/home" className="flex items-center gap-3 group">
-              <div className="bg-emerald-800 text-amber-400 p-2.5 rounded-2xl shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582" />
-                </svg>
+              <div className="bg-emerald-800 p-1.5 rounded-2xl shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 relative w-12 h-12 flex items-center justify-center shrink-0">
+                <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" width={38} height={38} className="object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-black text-white tracking-wider leading-tight">ECHO SUNNAH</span>
