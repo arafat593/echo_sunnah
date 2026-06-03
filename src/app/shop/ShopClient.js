@@ -8,7 +8,7 @@ import BannerCarousel from "@/components/BannerCarousel";
 
 const shopSlides = [
   {
-    image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?q=80&w=1600",
     badge: "ECHO SUNNAH SHOP (প্রাকৃতিক পণ্য বিপণি)",
     title: "Prophetic Medicine & Health Products",
     desc: "Premium, organic, and clinically-packed Islamic remedies and hijama cupping kits sourced under absolute quality standards."
@@ -71,7 +71,7 @@ export default function ShopPage() {
       weight: "500g",
       rating: 4.9,
       emoji: "🍯",
-      image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=500",
       desc: "Harvested directly from the deep mangrove forests of the Sundarbans. 100% pure and unprocessed.",
       benefits: "Boosts immune system, aids digestion, serves as natural energy source.",
       usage: "Mix 1-2 teaspoons in lukewarm water and drink on an empty stomach in the morning.",

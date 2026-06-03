@@ -89,9 +89,8 @@ export default function BannerCarousel({ slides }) {
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-900/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" />
 
-            {/* Slide Content */}
             <div className="absolute inset-0 flex items-center">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div className="max-w-7xl mx-auto px-12 sm:px-6 lg:px-8 w-full">
                 <div className="max-w-2xl text-white">
                   {slide.badge && (
                     <span className="inline-block bg-amber-400 text-emerald-950 text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase mb-4 shadow-sm animate-slideUp">

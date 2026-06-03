@@ -278,7 +278,7 @@ export default function HomePage() {
       weight: "500g",
       rating: 4.9,
       emoji: "🍯",
-      image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=500",
       desc: "Harvested directly from the deep mangrove forests of the Sundarbans. 100% pure and unprocessed."
     },
     {

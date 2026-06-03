@@ -27,12 +27,13 @@ export default function Header() {
   } = useApp();
 
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [mobileMoreMenuOpen, setMobileMoreMenuOpen] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const menuItems = [
     { name: "Home", label: "হোম", href: "/home" },
@@ -44,6 +45,22 @@ export default function Header() {
   ];
 
   const moreItems = [
+    { name: "Health", label: "হেলথ", href: "/health" },
+    { name: "Blog", label: "ব্লগ", href: "/blog" },
+    { name: "Community", label: "কমিউনিটি", href: "/community" },
+    { name: "Jobs", label: "চাকরি", href: "/jobs" }
+  ];
+
+  const mobileMenuItems = [
+    { name: "Home", label: "হোম", href: "/home" },
+    { name: "Ruqyah", label: "রুকইয়াহ", href: "/ruqyah" },
+    { name: "Hijama", label: "হিজামা", href: "/hijama" },
+    { name: "Shop", label: "শপ", href: "/shop" },
+    { name: "Academy", label: "একাডেমি", href: "/academy" }
+  ];
+
+  const mobileMoreItems = [
+    { name: "Charity", label: "চ্যারিটি", href: "/charity" },
     { name: "Health", label: "হেলথ", href: "/health" },
     { name: "Blog", label: "ব্লগ", href: "/blog" },
     { name: "Community", label: "কমিউনিটি", href: "/community" },
@@ -62,20 +79,20 @@ export default function Header() {
   return (
     <>
       {/* Premium Top Announcement / Info Bar */}
-      <div className="bg-gradient-to-r from-emerald-950 via-teal-950 to-emerald-950 text-emerald-100 text-[10px] sm:text-xs font-semibold py-2.5 px-4 border-b border-amber-500/20 z-50 relative">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-800 text-[9px] uppercase tracking-widest text-amber-400 font-extrabold shadow-sm">
+      <div className="bg-gradient-to-r from-emerald-950 via-teal-950 to-emerald-950 text-emerald-100 text-[10px] sm:text-xs font-semibold py-1.5 px-4 border-b border-amber-500/20 z-50 relative">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1.5 text-center sm:text-left">
+          <div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-2 sm:gap-3">
+            <span className="flex items-center gap-1.5 bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-800 text-[9px] uppercase tracking-widest text-amber-400 font-extrabold shadow-sm shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
               Prophetic Shifa
             </span>
-            <span className="text-emerald-250 font-medium tracking-wide">Reviving Clinical Theology & Wellness Routines</span>
+            <span className="text-emerald-250 font-medium tracking-wide">Reviving Clinical Theology</span>
           </div>
-          <div className="flex items-center gap-4 text-[10px] sm:text-xs">
+          <div className="flex justify-between sm:justify-center items-center w-full sm:w-auto gap-2 sm:gap-4 text-[10px] sm:text-xs">
             <span className="flex items-center gap-1 text-emerald-300 font-medium">
               📍 Uttara Clinic, Dhaka
             </span>
-            <span className="text-emerald-800/60">|</span>
+            <span className="text-emerald-800/60 hidden sm:inline">|</span>
             <a href="tel:+8801999999999" className="hover:text-amber-400 transition-colors flex items-center gap-1">
               📞 +880 1999-999999
             </a>
@@ -87,19 +104,33 @@ export default function Header() {
       <div className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-4 pb-2 pointer-events-none">
         <header className="max-w-7xl mx-auto bg-white/80 backdrop-blur-xl border border-emerald-500/10 shadow-[0_20px_40px_-15px_rgba(4,78,56,0.12)] rounded-3xl pointer-events-auto transition-all duration-300">
           <div className="px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-18 sm:h-20">
+            <div className="relative flex items-center justify-between h-13 lg:h-20">
 
-              {/* Brand Logo with Squircle Border & Glow */}
-              <Link href="/home" className="flex-shrink-0 flex items-center gap-2 sm:gap-3 group relative">
-                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-1.5 sm:p-2.5 rounded-[12px] sm:rounded-[18px] shadow-lg shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
-                  <div className="relative w-8 h-8 sm:w-[50px] sm:h-[50px]">
+              {/* Mobile Menu Button on Left */}
+              <button
+                onClick={() => setMobileDrawerOpen(true)}
+                className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-emerald-850 transition-all border border-slate-200/50 shadow-sm pointer-events-auto shrink-0 z-10"
+                aria-label="Open Sidebar Menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
+
+              {/* Brand Logo & Name Centered on Mobile */}
+              <Link
+                href="/home"
+                className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex-shrink-0 flex items-center gap-1.5 sm:gap-3 group z-10"
+              >
+                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-1 rounded-[10px] sm:p-2 sm:rounded-[14px] lg:p-2.5 lg:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
+                  <div className="relative w-6 h-6 sm:w-8 sm:h-8 lg:w-[50px] lg:h-[50px]">
                     <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
                   </div>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   {/* Cursive premium brand name */}
                   <span
-                    className={`${playfair.className} text-[24px] sm:text-[32px] lg:text-[40px] italic font-black leading-none tracking-tight`}
+                    className={`${playfair.className} text-[18px] sm:text-[22px] lg:text-[40px] italic font-black leading-none tracking-tight`}
                     style={{
                       background: "linear-gradient(135deg, #065f46 0%, #0f766e 40%, #047857 75%, #b45309 100%)",
                       WebkitBackgroundClip: "text",
@@ -114,11 +145,11 @@ export default function Header() {
 
                   {/* Decorative tagline with dot separators */}
                   <span className="flex items-center gap-1.5 leading-none">
-                    <span className="w-3 h-px bg-gradient-to-r from-transparent to-amber-500/70 rounded-full" />
-                    <span className="text-[7.5px] sm:text-[9px] lg:text-[10px] text-amber-600 font-extrabold uppercase tracking-[0.2em]">
+                    <span className="w-2 h-px lg:w-3 bg-gradient-to-r from-transparent to-amber-500/70 rounded-full" />
+                    <span className="text-[6.5px] sm:text-[7.5px] lg:text-[10px] text-amber-600 font-extrabold uppercase tracking-[0.2em]">
                       Islamic Wellness
                     </span>
-                    <span className="w-3 h-px bg-gradient-to-l from-transparent to-amber-500/70 rounded-full" />
+                    <span className="w-2 h-px lg:w-3 bg-gradient-to-l from-transparent to-amber-500/70 rounded-full" />
                   </span>
                 </div>
               </Link>
@@ -204,7 +235,7 @@ export default function Header() {
                       setNotificationsOpen(false);
                       setUserProfileOpen(false);
                     }}
-                    className={`p-2 rounded-full transition-all duration-300 relative ${cartOpen
+                    className={`hidden lg:inline-flex p-2 rounded-full transition-all duration-300 relative ${cartOpen
                       ? "bg-gradient-to-br from-emerald-700 to-teal-800 text-white shadow-md shadow-emerald-700/10 scale-105"
                       : "text-slate-600 hover:text-emerald-700 hover:bg-white"
                       }`}
@@ -339,7 +370,7 @@ export default function Header() {
                         {/* Mobile Login Button (Icon) */}
                         <button
                           onClick={() => setShowLoginModal(true)}
-                          className="sm:hidden p-2 rounded-full text-slate-600 hover:text-emerald-750 hover:bg-white transition-all flex items-center justify-center"
+                          className="sm:hidden p-2 rounded-full text-slate-655 hover:text-emerald-750 hover:bg-white transition-all flex items-center justify-center"
                           aria-label="Login"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5.5 h-5.5">
@@ -352,67 +383,79 @@ export default function Header() {
 
                 </div>
 
-                {/* Hamburger Button for Mobile */}
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden p-2.5 rounded-2xl text-slate-650 hover:bg-slate-100 hover:text-emerald-750 transition-all border border-slate-200/50 shadow-sm"
-                  aria-label="Toggle menu"
-                >
-                  {mobileMenuOpen ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5.5 h-5.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5.5 h-5.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                  )}
-                </button>
-
               </div>
             </div>
-          </div>
 
-          {/* Mobile Menu Drawer */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden bg-white border-t border-slate-100 shadow-inner px-4 pt-3 pb-6 space-y-1 animate-slideDown mt-3 rounded-2xl">
-              {menuItems.map((item) => {
-                const active = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${active ? "bg-emerald-50 text-emerald-850" : "text-slate-700 hover:bg-slate-50"
+            {/* Row 2 (Mobile Navigation Row) */}
+            <div className="lg:hidden border-t border-slate-150/40 py-2.5 px-2">
+              <nav className="grid grid-cols-6 gap-0.5 items-center justify-center text-center">
+                {mobileMenuItems.map((item) => {
+                  const active = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`flex flex-col items-center justify-center py-1 transition-all rounded-xl ${active ? "bg-emerald-500/5" : "hover:bg-slate-50"
+                        }`}
+                    >
+                      <span className={`text-[11.5px] sm:text-xs font-black tracking-tight leading-none transition-colors duration-300 ${active ? "text-emerald-850 font-black" : "text-slate-700 font-bold"
+                        }`}>
+                        {item.name}
+                      </span>
+                      <span className={`text-[8px] font-bold mt-0.5 leading-none transition-colors duration-300 ${active ? "text-amber-600" : "text-slate-400"
+                        }`}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  );
+                })}
+
+                {/* More Button on Mobile */}
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileMoreMenuOpen(!mobileMoreMenuOpen)}
+                    className={`w-full flex flex-col items-center justify-center py-1 transition-all rounded-xl focus:outline-none ${mobileMoreMenuOpen ? "bg-emerald-500/5" : "hover:bg-slate-50"
                       }`}
                   >
-                    <span>{item.name}</span>
-                    <span className="text-[10px] text-emerald-600 font-bold tracking-wide">{item.label}</span>
-                  </Link>
-                );
-              })}
-              {isLoggedIn ? (
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-850 hover:bg-slate-50 border-t border-slate-100 mt-2"
-                >
-                  <span>Dashboard (ড্যাশবোর্ড)</span>
-                  <span className="text-[10px] text-emerald-600 font-bold">প্রোফাইল</span>
-                </Link>
-              ) : (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setShowLoginModal(true);
-                  }}
-                  className="w-full text-center bg-gradient-to-r from-emerald-700 to-teal-850 text-white font-extrabold py-2.5 rounded-xl mt-4 shadow-md"
-                >
-                  Login / Registration
-                </button>
-              )}
+                    <span className={`text-[11.5px] sm:text-xs font-black tracking-tight leading-none flex items-center gap-0.5 justify-center transition-colors duration-300 ${mobileMoreMenuOpen ? "text-emerald-850" : "text-slate-700 font-bold"
+                      }`}>
+                      More
+                      <svg xmlns="http://www.w3.org/2005/svg" className={`w-2.5 h-2.5 transition-transform duration-200 ${mobileMoreMenuOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                      </svg>
+                    </span>
+                    <span className="text-[8px] font-bold mt-0.5 leading-none text-slate-400">আরও</span>
+                  </button>
+
+                  {/* Dropdown panel for Mobile More */}
+                  {mobileMoreMenuOpen && (
+                    <>
+                      {/* Click outside overlay */}
+                      <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setMobileMoreMenuOpen(false)} />
+
+                      <div className="absolute top-full right-0 mt-3 w-40 bg-white/95 backdrop-blur-xl border border-emerald-100/60 rounded-2xl shadow-[0_15px_30px_rgba(4,78,56,0.12)] py-2 z-50 animate-fadeIn">
+                        {mobileMoreItems.map((item) => {
+                          const active = pathname === item.href;
+                          return (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => setMobileMoreMenuOpen(false)}
+                              className={`flex items-center justify-between px-3 py-2 mx-1 rounded-xl transition-all duration-200 group ${active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
+                                }`}
+                            >
+                              <span className="text-xs font-extrabold">{item.name}</span>
+                              <span className={`text-[8.5px] font-bold ${active ? "text-amber-600" : "text-slate-400 group-hover:text-emerald-650"}`}>{item.label}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </nav>
             </div>
-          )}
+          </div>
         </header>
       </div>
 
@@ -536,6 +579,109 @@ export default function Header() {
                 </Link>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* MOBILE SIDEBAR DRAWER OVERLAY */}
+      {mobileDrawerOpen && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-start pointer-events-auto">
+          {/* Click outside overlay to close */}
+          <div className="fixed inset-0 z-40 pointer-events-auto" onClick={() => setMobileDrawerOpen(false)} />
+
+          <div className="relative z-50 w-full max-w-[280px] sm:max-w-xs bg-white h-full shadow-2xl flex flex-col justify-between p-6 text-slate-800 animate-slideRight pointer-events-auto">
+            <div>
+              <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <div className="bg-gradient-to-br from-emerald-600 to-teal-850 text-white p-1.5 rounded-lg">
+                    <div className="relative w-6 h-6">
+                      <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
+                    </div>
+                  </div>
+                  <span className="font-black text-emerald-950 text-base">Echo Sunnah Menu</span>
+                </div>
+                <button onClick={() => setMobileDrawerOpen(false)} className="p-1 rounded-full text-slate-400 hover:text-slate-655 hover:bg-slate-50 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* All Menu Links */}
+              <div className="mt-6 space-y-1.5 overflow-y-auto max-h-[70vh] pr-1">
+                {/* Cart link inside Menu */}
+                <button
+                  onClick={() => {
+                    setMobileDrawerOpen(false);
+                    setCartOpen(true);
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold bg-amber-500/10 text-amber-900 border border-amber-500/20 hover:bg-amber-500/25 transition-all text-left"
+                >
+                  <span className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5 text-amber-700">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                    <span>Cart (কার্ট)</span>
+                  </span>
+                  {totalCartQty > 0 && (
+                    <span className="bg-amber-500 text-emerald-950 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
+                      {totalCartQty} Items
+                    </span>
+                  )}
+                </button>
+
+                {[...menuItems, ...moreItems].map((item) => {
+                  const active = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
+                        active ? "bg-emerald-50 text-emerald-850" : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      <span className="tracking-tight">{item.name}</span>
+                      <span className="text-[10px] text-emerald-650 font-extrabold">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Actions inside drawer */}
+            <div className="border-t border-slate-100 pt-4 mt-auto">
+              {isLoggedIn ? (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2.5 px-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-650 to-teal-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                      {user.name[0].toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-black text-slate-800 leading-none">{user.name}</span>
+                      <span className="text-[9px] text-slate-400 font-bold mt-1">Logged In</span>
+                    </div>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileDrawerOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-emerald-50/50 text-emerald-850 font-black py-3 rounded-2xl text-xs border border-slate-200 transition-all mt-2"
+                  >
+                    Go to Dashboard
+                  </Link>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setMobileDrawerOpen(false);
+                    setShowLoginModal(true);
+                  }}
+                  className="w-full text-center bg-gradient-to-r from-emerald-700 to-teal-850 text-white font-black py-3 rounded-2xl text-xs shadow-md transition-all"
+                >
+                  Login / Register
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
