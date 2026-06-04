@@ -172,23 +172,6 @@ export default function BannerCarousel({ slides }) {
           </div>
         ))}
       </div>
-
-      {/* Navigation Arrows */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
-        aria-label="Previous Slide"
-      >
-        ←
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:text-amber-400 font-bold transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
-        aria-label="Next Slide"
-      >
-        →
-      </button>
-
       {/* Dots Indicator */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-25 flex gap-2.5">
         {slides.map((_, index) => (

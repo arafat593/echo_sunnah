@@ -41,35 +41,35 @@ export default function Header() {
   const [otpCode, setOtpCode] = useState(["1", "2", "3", "4", "5", "6"]);
 
   const menuItems = [
-    { name: "Home", label: "হোম", href: "/home" },
-    { name: "Ruqyah", label: "রুকইয়াহ", href: "/ruqyah" },
-    { name: "Hijama", label: "হিজামা", href: "/hijama" },
-    { name: "Shop", label: "শপ", href: "/shop" },
-    { name: "Academy", label: "একাডেমি", href: "/academy" },
-    { name: "Charity", label: "চ্যারিটি", href: "/charity" }
+    { name: "Home", href: "/home" },
+    { name: "Ruqyah", href: "/ruqyah" },
+    { name: "Hijama", href: "/hijama" },
+    { name: "Shop", href: "/shop" },
+    { name: "Academy", href: "/academy" },
+    { name: "Charity", href: "/charity" }
   ];
 
   const moreItems = [
-    { name: "Health", label: "হেলথ", href: "/health" },
-    { name: "Blog", label: "ব্লগ", href: "/blog" },
-    { name: "Community", label: "কমিউনিটি", href: "/community" },
-    { name: "Jobs", label: "চাকরি", href: "/jobs" }
+    { name: "Health", href: "/health" },
+    { name: "Blog", href: "/blog" },
+    { name: "Community", href: "/community" },
+    { name: "Jobs", href: "/jobs" }
   ];
 
   const mobileMenuItems = [
-    { name: "Home", label: "হোম", href: "/home" },
-    { name: "Ruqyah", label: "রুকইয়াহ", href: "/ruqyah" },
-    { name: "Hijama", label: "হিজামা", href: "/hijama" },
-    { name: "Shop", label: "শপ", href: "/shop" },
-    { name: "Academy", label: "একাডেমি", href: "/academy" }
+    { name: "Home", href: "/home" },
+    { name: "Ruqyah", href: "/ruqyah" },
+    { name: "Hijama", href: "/hijama" },
+    { name: "Shop", href: "/shop" },
+    { name: "Academy", href: "/academy" }
   ];
 
   const mobileMoreItems = [
-    { name: "Charity", label: "চ্যারিটি", href: "/charity" },
-    { name: "Health", label: "হেলথ", href: "/health" },
-    { name: "Blog", label: "ব্লগ", href: "/blog" },
-    { name: "Community", label: "কমিউনিটি", href: "/community" },
-    { name: "Jobs", label: "চাকরি", href: "/jobs" }
+    { name: "Charity", href: "/charity" },
+    { name: "Health", href: "/health" },
+    { name: "Blog", href: "/blog" },
+    { name: "Community", href: "/community" },
+    { name: "Jobs", href: "/jobs" }
   ];
 
   const totalCartQty = cart.reduce((acc, item) => acc + item.qty, 0);
@@ -148,7 +148,7 @@ export default function Header() {
       </div>
 
       {/* Floating Premium Header Container */}
-      <div className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-4 pb-2 pointer-events-none">
+      <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4 pb-2 pointer-events-none">
         <header className="max-w-7xl mx-auto bg-white/80 backdrop-blur-xl border border-emerald-500/10 shadow-[0_20px_40px_-15px_rgba(4,78,56,0.12)] rounded-3xl pointer-events-auto transition-all duration-300">
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-13 lg:h-20">
@@ -209,18 +209,16 @@ export default function Header() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`relative py-2 px-3.5 rounded-2xl transition-all duration-300 group flex flex-col items-center hover:bg-emerald-500/5`}
+                      className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 group flex items-center justify-center hover:bg-emerald-500/5`}
                     >
-                      <span className={`text-[12.5px] font-extrabold tracking-wide leading-none transition-colors duration-300 ${active ? "text-emerald-850" : "text-slate-655 hover:text-emerald-750"
-                        }`}>
+                      <span className={`text-[13px] font-extrabold tracking-wide transition-colors duration-300 ${
+                        active ? "text-emerald-850" : "text-slate-655 hover:text-emerald-750"
+                      }`}>
                         {item.name}
                       </span>
-                      <span className={`text-[8.5px] font-bold mt-1 leading-none tracking-wide transition-colors duration-300 ${active ? "text-amber-600" : "text-slate-400 group-hover:text-emerald-650"
-                        }`}>
-                        {item.label}
-                      </span>
-                      <span className={`absolute bottom-0 h-[2px] bg-gradient-to-r from-emerald-600 via-amber-400 to-emerald-700 transition-all duration-300 rounded-full ${active ? "w-2/3 opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-100"
-                        }`}></span>
+                      <span className={`absolute bottom-1 h-[2px] bg-gradient-to-r from-emerald-600 via-amber-400 to-emerald-700 transition-all duration-300 rounded-full ${
+                        active ? "w-2/3 opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-100"
+                      }`}></span>
                     </Link>
                   );
                 })}
@@ -229,16 +227,16 @@ export default function Header() {
                 <div className="relative">
                   <button
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className={`relative py-2 px-3.5 rounded-2xl transition-all duration-300 flex flex-col items-center hover:bg-emerald-500/5 ${moreMenuOpen ? "bg-emerald-500/5" : ""
-                      }`}
+                    className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 flex items-center gap-1 hover:bg-emerald-500/5 ${
+                      moreMenuOpen ? "bg-emerald-500/5" : ""
+                    }`}
                   >
-                    <span className="text-[12.5px] font-extrabold tracking-wide leading-none text-slate-655 hover:text-emerald-750 flex items-center gap-1">
+                    <span className="text-[13px] font-extrabold tracking-wide text-slate-655 hover:text-emerald-750 flex items-center gap-1">
                       More
                       <svg xmlns="http://www.w3.org/2000/svg" className={`w-3 h-3 transition-transform duration-200 ${moreMenuOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
                       </svg>
                     </span>
-                    <span className="text-[8.5px] font-bold mt-1 leading-none tracking-wide text-slate-400">আরও</span>
                   </button>
 
                   {/* Dropdown panel */}
@@ -255,11 +253,11 @@ export default function Header() {
                               key={item.name}
                               href={item.href}
                               onClick={() => setMoreMenuOpen(false)}
-                              className={`flex items-center justify-between px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-200 group ${active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
-                                }`}
+                              className={`flex items-center px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-205 group ${
+                                active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
+                              }`}
                             >
                               <span className="text-xs font-extrabold">{item.name}</span>
-                              <span className={`text-[9px] font-bold ${active ? "text-amber-600" : "text-slate-400 group-hover:text-emerald-650"}`}>{item.label}</span>
                             </Link>
                           );
                         })}
@@ -396,7 +394,7 @@ export default function Header() {
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4 text-emerald-650">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
                                   </svg>
-                                  My Dashboard (ড্যাশবোর্ড)
+                                  My Dashboard
                                 </Link>
                                 <button
                                   onClick={() => {
@@ -408,7 +406,7 @@ export default function Header() {
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4 text-rose-500">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                                   </svg>
-                                  Logout (লগআউট)
+                                  Logout
                                 </button>
                               </div>
                             </div>
@@ -444,7 +442,7 @@ export default function Header() {
             </div>
 
             {/* Row 2 (Mobile Navigation Row) */}
-            <div className="lg:hidden border-t border-slate-150/40 py-2.5 px-2">
+            <div className="lg:hidden border-t border-slate-150/40 py-2 px-2">
               <nav className="grid grid-cols-5 gap-0.5 items-center justify-center text-center">
                 {mobileMenuItems.map((item) => {
                   const active = pathname === item.href;
@@ -452,21 +450,16 @@ export default function Header() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`flex flex-col items-center justify-center py-1 transition-all rounded-xl ${active ? "bg-emerald-500/5" : "hover:bg-slate-50"
-                        }`}
+                      className={`flex flex-col items-center justify-center py-2 transition-all rounded-xl ${
+                        active ? "bg-emerald-500/5 text-emerald-850" : "hover:bg-slate-50 text-slate-700"
+                      }`}
                     >
-                      <span className={`text-[11.5px] sm:text-xs font-black tracking-tight leading-none transition-colors duration-300 ${active ? "text-emerald-850 font-black" : "text-slate-700 font-bold"
-                        }`}>
+                      <span className="text-[12px] sm:text-xs font-extrabold tracking-tight leading-none">
                         {item.name}
-                      </span>
-                      <span className={`text-[8px] font-bold mt-0.5 leading-none transition-colors duration-300 ${active ? "text-amber-600" : "text-slate-400"
-                        }`}>
-                        {item.label}
                       </span>
                     </Link>
                   );
                 })}
-
               </nav>
             </div>
           </div>
@@ -871,7 +864,7 @@ export default function Header() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5 text-amber-700">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                     </svg>
-                    <span>Cart (কার্ট)</span>
+                    <span>Cart</span>
                   </span>
                   {totalCartQty > 0 && (
                     <span className="bg-amber-500 text-emerald-950 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
@@ -892,7 +885,6 @@ export default function Header() {
                       }`}
                     >
                       <span className="tracking-tight">{item.name}</span>
-                      <span className="text-[10px] text-emerald-650 font-extrabold">{item.label}</span>
                     </Link>
                   );
                 })}

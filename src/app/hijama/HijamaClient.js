@@ -65,73 +65,396 @@ export default function HijamaPage() {
   // Active FAQ index
   const [activeFaq, setActiveFaq] = useState(null);
 
-  const hijamaPackages = [
-    {
-      id: "hj-1",
-      title: "Sunnah Basic (6 Cups)",
-      bengaliTitle: "সুন্নাহ বেসিক (৬টি কাপ)",
-      category: "Detox",
-      price: "৳১,২০০",
-      originalPrice: "৳১,৫০০",
-      desc: "Perfect for beginners. Focuses on key wellness and detox points on the upper back.",
-      badge: "Popular",
-      image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
-      features: ["6 Sterile Cups", "Disposable Blades", "Organic Olive Oil Massage", "Sunnah Consultation"],
-      cups: 6
+  // Selected Hijama Category State
+  const [selectedCategory, setSelectedCategory] = useState("wet");
+
+  const hijamaCategories = {
+    dry: {
+      name: "Dry Cupping",
+      desc: "রক্ত বের করা হয় না। শুধু কাপ দিয়ে ভ্যাকুয়াম তৈরি করা হয়। ব্যথা, টান, এবং ব্লাড সার্কুলেশন উন্নত করতে এটি ব্যবহার করা হয়।",
+      icon: "⭕",
+      packages: [
+        {
+          id: "hj-dry-1",
+          title: "Basic Relief Pack",
+          bengaliTitle: "বেসিক রিলিফ প্যাক",
+          price: "৳৬০০",
+          originalPrice: "৳৮০০",
+          desc: "5 cups, 10 min session focusing on pain and muscle tension relief.",
+          badge: "Budget Tier",
+          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          features: ["5 Dry Cups", "10 Minutes Session", "1–2 Target Points", "Pain/Tension Focus", "Surgical Grade Sterilization"],
+          cups: 5,
+          whyTake: "Ideal for quick relief from localized muscle stiffness and mild backaches.",
+          benefits: "Fast localized pain relief, improved regional blood circulation."
+        },
+        {
+          id: "hj-dry-2",
+          title: "Standard Therapy Pack",
+          bengaliTitle: "স্ট্যান্ডার্ড থেরাপি প্যাক",
+          price: "৳১,০০০",
+          originalPrice: "৳১,২০৯",
+          desc: "8 cups, 15 min session focusing on Neck and Shoulder pain relief.",
+          badge: "Mid Low Tier",
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          features: ["8 Dry Cups", "15 Minutes Session", "Neck + Shoulder Focus", "Basic Pain Relief Massage", "Muscle Tone Reset"],
+          cups: 8,
+          whyTake: "Designed specifically for desk workers dealing with chronic neck stiffness and shoulder fatigue.",
+          benefits: "Relieves upper body stress, improves posture stiffness."
+        },
+        {
+          id: "hj-dry-3",
+          title: "Advanced Muscle Care Pack",
+          bengaliTitle: "এডভান্সড মাসল কেয়ার প্যাক",
+          price: "৳১,৫০০",
+          originalPrice: "৳১,৮০০",
+          desc: "12 cups, 20 min session for Back, Shoulder, and Legs. Deep tissue pressure relief.",
+          badge: "Mid Tier",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+          features: ["12 Dry Cups", "20 Minutes Session", "Back + Shoulder + Leg Zones", "Deep Tissue Pressure Relief", "Myofascial Release"],
+          cups: 12,
+          whyTake: "Perfect for active individuals and regular workouts to release lactic acid buildup.",
+          benefits: "Prevents sports injuries, accelerates full-body muscular recovery."
+        },
+        {
+          id: "hj-dry-4",
+          title: "Premium Recovery Pack",
+          bengaliTitle: "প্রিমিয়াম রিকভারি প্যাক",
+          price: "৳২,০০০",
+          originalPrice: "৳২,৫০০",
+          desc: "15 cups, 25 min session covering full back, neck, and legs. Includes hot oil preparation.",
+          badge: "High Tier",
+          image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
+          features: ["15 Dry Cups", "25 Minutes Session", "Full Back + Neck + Legs", "Hot Oil Preparation", "Post-Cupping Light Massage"],
+          cups: 15,
+          whyTake: "A therapeutic session combining the heat of organic oil with vacuum stimulation for total spine care.",
+          benefits: "Soothing nervous system relaxation, profound muscle knot release."
+        },
+        {
+          id: "hj-dry-5",
+          title: "Elite Wellness Pack",
+          bengaliTitle: "এলিট ওয়েলনেস প্যাক",
+          price: "৳২,৮০০",
+          originalPrice: "৳৩,৫০০",
+          desc: "20 cups, 30 min full body session. Advanced physiotherapy style cupping.",
+          badge: "Premium Tier",
+          image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1600",
+          features: ["20 Dry Cups", "30 Minutes Session", "Full Body Coverage", "Physiotherapy Style Techniques", "Comprehensive Orthopedic Consultation"],
+          cups: 20,
+          whyTake: "Our most premium non-invasive session combining deep vacuum therapy with kinetic assessment.",
+          benefits: "Maximizes full-body mobility, resets muscle firing sequences, improves vitality."
+        }
+      ]
     },
-    {
-      id: "hj-2",
-      title: "Sunnah Detox (10 Cups)",
-      bengaliTitle: "সুন্নাহ ডিটক্স (১০টি কাপ)",
-      category: "Detox",
-      price: "৳১,৮০০",
-      originalPrice: "৳২,২০০",
-      desc: "Comprehensive cleansing for back, shoulders, and legs. Relieves pain and chronic fatigue.",
-      badge: "Best Seller",
-      image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
-      features: ["10 Sterile Cups", "Disposable Blades", "Prophetic Herb Sanitization", "Blood Pressure Check"],
-      cups: 10
+    wet: {
+      name: "Wet Cupping",
+      desc: "সামান্য স্ক্র্যাচ করে চামড়ার উপরিভাগ থেকে দূষিত বা নিষ্ক্রিয় রক্ত (toxin/“bad blood”) বের করা হয়। ইসলামিক এবং সুন্নাহ সম্মত হিজামা বলতে মূলত এটিকেই বোঝায়।",
+      icon: "🩸",
+      packages: [
+        {
+          id: "hj-wet-1",
+          title: "Basic Sunnah Pack",
+          bengaliTitle: "বেসিক সুন্নাহ প্যাক",
+          price: "৳১,২০০",
+          originalPrice: "৳১,৫০০",
+          desc: "3–5 Sunnah points, minimal blood letting with 100% sterile disposable blades. 15 mins.",
+          badge: "Entry Level",
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          features: ["3–5 Sunnah Points", "Minimal Blood Letting", "100% Sterile Disposable Blades", "15 Minutes Session", "Al-Kahil Point Coverage"],
+          cups: 5,
+          whyTake: "Perfect for beginners who want to fulfill the blessed prophetic Sunnah with minimal discomfort.",
+          benefits: "Fulfills Islamic Sunnah, initiates blood purification process."
+        },
+        {
+          id: "hj-wet-2",
+          title: "Health Detox Pack",
+          bengaliTitle: "হেলথ ডিটক্স প্যাক",
+          price: "৳১,৮০০",
+          originalPrice: "৳২,২০০",
+          desc: "6–8 points on back and shoulder. Controlled blood removal for systemic detoxification.",
+          badge: "Standard",
+          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          features: ["6–8 Detox Points", "Back + Shoulder Focus", "Controlled Sterile Blood Removal", "20 Minutes Session", "Prophetic Herb Sanitization"],
+          cups: 8,
+          whyTake: "Highly recommended for relieving chronic upper back spasms, high blood pressure symptoms, and brain fog.",
+          benefits: "Flushes heavy metals, stimulates fresh red blood cell production."
+        },
+        {
+          id: "hj-wet-3",
+          title: "Therapeutic Cleanse Pack",
+          bengaliTitle: "থেরাপিউটিক ক্লিন্স প্যাক",
+          price: "৳২,৫০০",
+          originalPrice: "৳৩,০০০",
+          desc: "9–12 points covering liver, head, and back zones. Deep organ detox focus. 25 mins.",
+          badge: "Mid High",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+          features: ["9–12 Therapeutic Points", "Liver + Head + Back Zones", "Deep Systemic Detox Focus", "25 Minutes Session", "Black Seed Oil Treatment"],
+          cups: 12,
+          whyTake: "A powerful metabolic reset targetting major lymphatic filtration zones and detox organs.",
+          benefits: "Improves liver & kidney micro-circulation, relieves migraine and chronic fatigue."
+        },
+        {
+          id: "hj-wet-4",
+          title: "Advanced Healing Pack",
+          bengaliTitle: "এডভান্সড হিলিং প্যাক",
+          price: "৳৩,২০০",
+          originalPrice: "৳৪,০০০",
+          desc: "12–15 points with full therapeutic mapping. Structured to support chronic pain recovery.",
+          badge: "High",
+          image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=600",
+          features: ["12–15 Mapping Points", "Full Therapeutic Body Mapping", "Chronic Pain Target Support", "30 Minutes Session", "Energizer Refreshment"],
+          cups: 15,
+          whyTake: "Best suited for individuals suffering from long-term lower back issues, sciatica, and sleep disorders.",
+          benefits: "Reduces inflammatory markers, balances hormones, decreases localized pressure."
+        },
+        {
+          id: "hj-wet-5",
+          title: "Royal Sunnah Detox Pack",
+          bengaliTitle: "রয়্যাল সুন্নাহ ডিটক্স প্যাক",
+          price: "৳৪,৫০০",
+          originalPrice: "৳৫,৫০০",
+          desc: "15–20 points full body protocol. Includes detailed consultation and recovery advice. 40 mins.",
+          badge: "Premium",
+          image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600",
+          features: ["15–20 Comprehensive Points", "Full Body Structured Protocol", "Senior Raqi/Scholar Consultation", "40 Minutes Intensive Session", "Complete Home Recovery Kit"],
+          cups: 20,
+          whyTake: "Our most complete clinical wet cupping regimen for maximum detox, cellular regeneration, and spiritual barakah.",
+          benefits: "Total blood revitalization, complete physical detoxification, metabolic reset."
+        }
+      ]
     },
-    {
-      id: "hj-3",
-      title: "Executive Wellness (15 Cups)",
-      bengaliTitle: "এক্সিকিউটিভ ওয়েলনেস (১৫টি কাপ)",
-      category: "Executive",
-      price: "৳২,৫০০",
-      originalPrice: "৳৩,০০০",
-      desc: "Full-body Sunnah points coverage. Highly recommended for complete metabolic revitalization.",
-      badge: "Premium",
-      image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
-      features: ["15 Sterile Cups", "Comprehensive Detox Points", "Black Seed Oil Treatment", "Post-Hijama Energizer Drink"],
-      cups: 15
+    moving: {
+      name: "Moving Cupping",
+      desc: "কাপটি ভ্যাকুয়াম অবস্থায় ত্বকের উপরে তেল দিয়ে স্লাইড করানো হয়। এটি মাংসপেশির টান কমাতে এবং মানসিক স্ট্রেস দূর করতে চমৎকার কাজ করে।",
+      icon: "💆‍♂️",
+      packages: [
+        {
+          id: "hj-mov-1",
+          title: "Relax Pack",
+          bengaliTitle: "রিল্যাক্স প্যাক",
+          price: "৳৮০০",
+          originalPrice: "৳১,০০০",
+          desc: "15 min back-only session. Light organic oil massage and smooth cup sliding.",
+          badge: "Budget",
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          features: ["15 Minutes Session", "Back Only Coverage", "Light Organic Olive Oil Massage", "Smooth Cup Sliding Motion", "Stress Buster Focus"],
+          cups: 2,
+          whyTake: "A quick, soothing session to relieve immediate stiffness in the lower and upper back after long sits.",
+          benefits: "Promotes parasympathetic relaxation, releases immediate fascia tightness."
+        },
+        {
+          id: "hj-mov-2",
+          title: "Stress Relief Pack",
+          bengaliTitle: "স্ট্রেস রিলিফ প্যাক",
+          price: "৳১,২০০",
+          originalPrice: "৳১,৫০০",
+          desc: "20 min neck and shoulder session. Moderate pressure therapy for heavy stress relief.",
+          badge: "Low Mid",
+          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          features: ["20 Minutes Session", "Neck + Shoulder Focus", "Moderate Pressure Moving Cups", "Organic Black Seed Oil Blend", "Tension Node Targeting"],
+          cups: 3,
+          whyTake: "Ideal for people experiencing severe shoulder knots, desk fatigue, and stress-related tension headaches.",
+          benefits: "Releases trapezoid tension, increases neck mobility, promotes deep sleep."
+        },
+        {
+          id: "hj-mov-3",
+          title: "Muscle Release Pack",
+          bengaliTitle: "মাসল রিলিজ প্যাক",
+          price: "৳১,৮০০",
+          originalPrice: "৳২,২০০",
+          desc: "30 min back and arms session. Deep muscle relaxation with advanced sliding techniques.",
+          badge: "Mid",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+          features: ["30 Minutes Session", "Back + Arms Coverage", "Deep Muscle Sliding Techniques", "Warm Oil Application", "Trigger Point Therapy"],
+          cups: 4,
+          whyTake: "Designed to targets muscle fibers and deep fascia layers to break down knots and scar tissue.",
+          benefits: "Increases range of motion, alleviates deep muscular aches, resets posture."
+        },
+        {
+          id: "hj-mov-4",
+          title: "Sports Recovery Pack",
+          bengaliTitle: "স্পোর্টস রিকভারি প্যাক",
+          price: "৳২,৫০০",
+          originalPrice: "৳৩,০০০",
+          desc: "40 min back and legs session. Athlete-focused recovery utilizing vacuum dynamics.",
+          badge: "High",
+          image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
+          features: ["40 Minutes Session", "Full Back + Legs Focus", "Athlete-Oriented Vacuum Sliding", "Magnesium Oil Infusion", "Post-Workout Lactic Acid Flush"],
+          cups: 6,
+          whyTake: "Designed for athletes, runners, and weightlifters to speed up recovery times and reduce post-training soreness.",
+          benefits: "Flushes metabolic wastes, improves muscle tissue elasticity, reduces recovery downtime."
+        },
+        {
+          id: "hj-mov-5",
+          title: "Full Body Flow Pack",
+          bengaliTitle: "ফুল বডি ফ্লো প্যাক",
+          price: "৳৩,৫০০",
+          originalPrice: "৳৪,৫০০",
+          desc: "45–60 min full body moving cupping. Advanced relaxation and myofascial flow therapy.",
+          badge: "Premium",
+          image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+          features: ["45–60 Minutes Session", "Full Body Moving Cupping", "Advanced Myofascial Flow Therapy", "Aromatic Herbal Oils", "Total Nervous System Reset"],
+          cups: 8,
+          whyTake: "Our most luxurious non-invasive relaxation therapy combining full body sliding with botanical skin nutrition.",
+          benefits: "Total systemic decompression, complete stress elimination, radiant skin circulation."
+        }
+      ]
     },
-    {
-      id: "hj-4",
-      title: "Home Service Hijama",
-      bengaliTitle: "হোম সার্ভিস হিজামা",
-      category: "Home Visit",
-      price: "৳৩,৫০০",
-      originalPrice: "৳৪,০০০",
-      desc: "Certified therapist visits your home with full clinical equipment. Maximum comfort, zero travel.",
-      badge: "Home Visit",
-      image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=600",
-      features: ["Full Clinical Kit", "Therapist Home Visit", "Pre & Post Consultation", "Sterile Disposable Set"],
-      cups: 15
+    fire: {
+      name: "Fire Cupping",
+      desc: "আগুন দিয়ে কাপের ভেতরের বাতাস পুড়িয়ে ভ্যাকুয়াম তৈরি করা হয়। এটি একটি ঐতিহ্যগত পদ্ধতি যা শরীরে গভীর উষ্ণতা যোগায় এবং রক্ত চলাচল বহুগুণ বাড়িয়ে দেয়।",
+      icon: "🔥",
+      packages: [
+        {
+          id: "hj-fir-1",
+          title: "Traditional Starter Pack",
+          bengaliTitle: "ট্রেডিশনাল স্টার্টার প্যাক",
+          price: "৳৮০০",
+          originalPrice: "৳১,০০০",
+          desc: "5–6 traditional thick glass cups, 10–15 min session to experience the heat therapy.",
+          badge: "Low",
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          features: ["5–6 Traditional Glass Cups", "10–15 Minutes Session", "Basic Thermal Vacuum Placement", "Mild Muscle Warm-up", "Certified Safety Standards"],
+          cups: 6,
+          whyTake: "A perfect introduction to traditional fire cupping therapy. Highly safe and relaxing.",
+          benefits: "Gently warms the meridians, promotes deep cellular relaxation."
+        },
+        {
+          id: "hj-fir-2",
+          title: "Pain Relief Fire Pack",
+          bengaliTitle: "পেইন রিলিফ ফায়ার প্যাক",
+          price: "৳১,৪০০",
+          originalPrice: "৳১,৮০০",
+          desc: "8 cups focusing on shoulder and back. Combines heat with vacuum pressure to release pain.",
+          badge: "Mid Low",
+          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          features: ["8 Heavy Duty Glass Cups", "Shoulder + Back Special Focus", "Thermal Pain Relief Placement", "15 Minutes Session", "Herbal Oil Base Application"],
+          cups: 8,
+          whyTake: "Specifically designed for acute shoulder and thoracic back pains, expelling cold from the body.",
+          benefits: "Relieves muscle spasms, expands blood vessels, decreases localized aches."
+        },
+        {
+          id: "hj-fir-3",
+          title: "Deep Heat Therapy Pack",
+          bengaliTitle: "ডিপ হিট থেরাপি প্যাক",
+          price: "৳২,০০০",
+          originalPrice: "৳২,৫০০",
+          desc: "10–12 cups targeting muscle stiffness. Expels internal dampness and cold from tissues.",
+          badge: "Mid",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+          features: ["10–12 Fire Glass Cups", "Muscle Stiffness Targeting", "Internal Dampness Expulsion", "20 Minutes Session", "Therapeutic Warming Balm"],
+          cups: 12,
+          whyTake: "Recommended for chronic body fatigue, stiffness due to cold weather, and heavy muscle congestion.",
+          benefits: "Enhances lymphatic drainage, warms up deep fascia layers, detoxifies muscles."
+        },
+        {
+          id: "hj-fir-4",
+          title: "Chronic Pain Pack",
+          bengaliTitle: "ক্রনিক পেইন প্যাক",
+          price: "৳২,৮০০",
+          originalPrice: "৳৩,৫০০",
+          desc: "12–15 cups focused on the spine and full back. Provides intense thermal suction for recovery.",
+          badge: "High",
+          image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=600",
+          features: ["12–15 Fire Glass Cups", "Spine + Full Back Segmental Focus", "Intense Thermal Suction Therapy", "25 Minutes Session", "Post-Fire Soothing Gel"],
+          cups: 15,
+          whyTake: "Best for managing persistent sciatica, lumbar stiffness, and chronic spinal tension under safe clinical supervision.",
+          benefits: "Improves spinal column circulation, relieves nerve pressure, eases deep chronic pain."
+        },
+        {
+          id: "hj-fir-5",
+          title: "Heritage Therapy Pack",
+          bengaliTitle: "হেরিটেজ থেরাপি প্যাক",
+          price: "৳৪,০০০",
+          originalPrice: "৳৫,০০০",
+          desc: "15+ cups full traditional fire cupping. A complete therapeutic heat mapping experience.",
+          badge: "Premium",
+          image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600",
+          features: ["15+ Premium Fire Cups", "Full Traditional Heat Mapping", "Spiritual & Somatic Well-being", "30 Minutes Comprehensive Session", "Acupressure Trigger Release"],
+          cups: 18,
+          whyTake: "Our signature fire cupping ritual covering full meridian pathways to restore energy balance and vitality.",
+          benefits: "Complete metabolic activation, deep energetic recharge, profound muscular relaxation."
+        }
+      ]
     },
-    {
-      id: "hj-5",
-      title: "Women's Hijama Special",
-      bengaliTitle: "মহিলা হিজামা স্পেশাল",
-      category: "Sisters Only",
-      price: "৳১,৫০০",
-      originalPrice: "৳২,০০০",
-      desc: "Performed exclusively by certified female therapists in a fully private and comfortable setting.",
-      badge: "Sisters Only",
-      image: "https://images.unsplash.com/photo-1643297654416-05795d62e39c?q=80&w=600",
-      features: ["Female Therapist Only", "Private Room Session", "8 Sterile Cups", "Hormone Balance Points"],
-      cups: 8
+    stationary: {
+      name: "Stationary Cupping",
+      desc: "কাপগুলো ভ্যাকুয়াম তৈরি করে নির্দিষ্ট ব্যথা বা রিফ্লেক্স পয়েন্টে ৫ থেকে ১৫ মিনিট স্থিরভাবে রেখে দেওয়া হয়। এটি সবচেয়ে প্রচলিত কাপিং পদ্ধতিগুলোর একটি।",
+      icon: "🎯",
+      packages: [
+        {
+          id: "hj-sta-1",
+          title: "Basic Set Pack",
+          bengaliTitle: "বেসিক সেট প্যাক",
+          price: "৳৫০০",
+          originalPrice: "৳৭০০",
+          desc: "5 cups kept static for 10 minutes hold. Excellent for localized trigger points.",
+          badge: "Budget",
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          features: ["5 Stationary Cups", "10 Minutes Static Hold", "Localized Trigger Point Target", "Clinical Grade Suction", "Disposable Sanitized Set"],
+          cups: 5,
+          whyTake: "An economical option to target a specific sore spot or localized muscle spasm.",
+          benefits: "Releases static myofascial tension, increases local blood supply."
+        },
+        {
+          id: "hj-sta-2",
+          title: "Standard Hold Pack",
+          bengaliTitle: "স্ট্যান্ডার্ড হোল্ড প্যাক",
+          price: "৳৯০০",
+          originalPrice: "৳১,২০০",
+          desc: "8 cups kept static for 15 minutes hold. Addresses mid-back and shoulder tension.",
+          badge: "Low Mid",
+          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          features: ["8 Stationary Cups", "15 Minutes Static Hold", "Mid-Back + Shoulder Target", "Systematic Suction Mapping", "Pre-Therapy Muscle Warm-up"],
+          cups: 8,
+          whyTake: "Ideal for relieving everyday fatigue, posture fatigue, and tension accumulated at the shoulder blades.",
+          benefits: "Reduces shoulder stiffness, helps clear local metabolic wastes."
+        },
+        {
+          id: "hj-sta-3",
+          title: "Therapeutic Hold Pack",
+          bengaliTitle: "থেরাপিউটিক হোল্ড প্যাক",
+          price: "৳১,৫০০",
+          originalPrice: "৳২,০০০",
+          desc: "10–12 cups kept static for 20 minutes. Designed for deeper muscle layer stimulation.",
+          badge: "Mid",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+          features: ["10–12 Stationary Cups", "20 Minutes Static Hold", "Deep Muscle Layer Stimulation", "Acupoint Suction Alignment", "Organic Oil Prep"],
+          cups: 12,
+          whyTake: "Recommended for individuals with moderate back pain or stiff joints seeking deep tissue decompression.",
+          benefits: "Triggers tissue repair signals, reduces muscular knots, improves range of motion."
+        },
+        {
+          id: "hj-sta-4",
+          title: "Deep Tissue Hold Pack",
+          bengaliTitle: "ডিপ টিস্যু হোল্ড প্যাক",
+          price: "৳২,২০০",
+          originalPrice: "৳৩,০০০",
+          desc: "12–15 cups kept static for 25 minutes. Target-specific deep pressure relief.",
+          badge: "High",
+          image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=600",
+          features: ["12–15 Stationary Cups", "25 Minutes Static Hold", "Target-Specific Deep Pressure Relief", "Sciatica & Lumbar Focus Zones", "Post-Suction Healing Balm"],
+          cups: 15,
+          whyTake: "Great for chronic spinal fatigue, heavy back pain, and releasing deep muscular adhesions.",
+          benefits: "Decompresses tight nerve roots, increases circulation to deep spinal muscles."
+        },
+        {
+          id: "hj-sta-5",
+          title: "Full Therapy Hold Pack",
+          bengaliTitle: "ফুল থেরাপি হোল্ড প্যাক",
+          price: "৳৩,০০০",
+          originalPrice: "৳৪,০০০",
+          desc: "15–20 cups kept static for 30 minutes. Includes post-therapy soothing massage.",
+          badge: "Premium",
+          image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600",
+          features: ["15–20 Stationary Cups", "30 Minutes Static Hold", "Full Back & Limb Suction Map", "Post-Therapy Soothing Massage", "Complete Vitality Consultation"],
+          cups: 20,
+          whyTake: "Our most comprehensive stationary cupping treatment for deep systemic decompression, stress relief, and muscular reset.",
+          benefits: "Complete muscular reset, optimized systemic blood flow, profound full-body relaxation."
+        }
+      ]
     }
-  ];
+  };
 
   const sunnahDates = [
     { date: "June 3, 2026", hijri: "17 Dhul-Hijjah 1447", status: "Highly Recommended (Sunnah Date)" },
@@ -253,11 +576,49 @@ export default function HijamaPage() {
 
         {/* Packages Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-100">
-          <h2 className="text-2xl font-black text-center text-emerald-850">Top Hijama Packages</h2>
-          <p className="text-center text-xs sm:text-sm text-slate-500 mt-2 mb-10">Select a specialized cupping package suited for your health profile</p>
+          <h2 className="text-2xl sm:text-3xl font-black text-center text-emerald-850">Hijama Therapy Packages</h2>
+          <p className="text-center text-xs sm:text-sm text-slate-500 mt-2 mb-8">Select a specialized cupping category and choose a package suited for your health profile</p>
 
+          {/* Interactive Category Selector Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-4 justify-start lg:justify-center mb-8 scrollbar-none snap-x">
+            {Object.keys(hijamaCategories).map((catKey) => {
+              const cat = hijamaCategories[catKey];
+              const isSelected = selectedCategory === catKey;
+              return (
+                <button
+                  key={catKey}
+                  onClick={() => setSelectedCategory(catKey)}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all shrink-0 snap-align-start border ${
+                    isSelected
+                      ? "bg-emerald-800 border-emerald-800 text-white shadow-[0_10px_20px_-5px_rgba(6,95,70,0.3)] scale-[1.03]"
+                      : "bg-white border-slate-200 hover:border-slate-350 text-slate-700 hover:bg-slate-50/50"
+                  }`}
+                >
+                  <span className="text-base">{cat.icon}</span>
+                  <span>{cat.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Category Overview Card */}
+          <div className="bg-gradient-to-r from-emerald-50/60 via-teal-50/30 to-emerald-50/20 border border-emerald-500/10 rounded-3xl p-6 sm:p-8 mb-10 shadow-sm flex flex-col md:flex-row gap-6 items-center">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-md border border-emerald-500/10 flex items-center justify-center text-2xl sm:text-3xl shrink-0">
+              {hijamaCategories[selectedCategory].icon}
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-emerald-950 flex items-center gap-2">
+                {hijamaCategories[selectedCategory].name}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-650 mt-1.5 leading-relaxed font-semibold">
+                {hijamaCategories[selectedCategory].desc}
+              </p>
+            </div>
+          </div>
+
+          {/* Dynamic Packages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {hijamaPackages.map((pkg) => (
+            {hijamaCategories[selectedCategory].packages.map((pkg) => (
               <HijamaCard
                 key={pkg.id}
                 pkg={pkg}
@@ -544,7 +905,10 @@ export default function HijamaPage() {
                     Confirm Hijama Appointment
                   </span>
                   <h3 className="text-lg font-bold text-slate-900 mt-2">{selectedPackage.title}</h3>
-                  <p className="text-xs text-slate-500 mt-1">Cups Quantity: {selectedPackage.cups} cups</p>
+                  <div className="flex items-center justify-between mt-1.5">
+                    <p className="text-xs text-slate-500">Cups Quantity: {selectedPackage.cups} cups</p>
+                    <span className="text-sm font-black text-emerald-850 bg-emerald-50 border border-emerald-100/60 px-2.5 py-0.5 rounded-lg">{selectedPackage.price}</span>
+                  </div>
                 </div>
 
                 <div className="bg-slate-50 p-3 rounded-lg mb-4 text-[11px] text-slate-600 space-y-1">
@@ -677,10 +1041,28 @@ export default function HijamaPage() {
             <div className="p-6 sm:p-8 overflow-y-auto space-y-5">
               <div>
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Description</span>
-                <p className="text-sm text-slate-600 leading-relaxed font-semibold">
+                <p className="text-sm text-slate-650 leading-relaxed font-semibold">
                   {selectedDetailItem.desc}
                 </p>
               </div>
+
+              {selectedDetailItem.whyTake && (
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Why Choose This</span>
+                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                    {selectedDetailItem.whyTake}
+                  </p>
+                </div>
+              )}
+
+              {selectedDetailItem.benefits && (
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Key Benefits</span>
+                  <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                    {selectedDetailItem.benefits}
+                  </p>
+                </div>
+              )}
 
               {/* Hijama Specific Features */}
               {selectedDetailItem.features && (
