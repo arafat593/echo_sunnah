@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
+import ProductCard from "@/components/ProductCard";
 
 const shopSlides = [
   {
@@ -43,6 +44,14 @@ export default function ShopPage() {
   const { cart, addToCart, updateCartQty, createOrder, orders, confirmOrderReceived } = useApp();
 
   const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, activeCategory]);
+
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [activeOrderTab, setActiveOrderTab] = useState("All");
@@ -185,9 +194,17 @@ export default function ShopPage() {
     }
   ];
 
-  const filteredProducts = activeCategory === "All"
-    ? products
-    : products.filter(p => p.category === activeCategory);
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = activeCategory === "All" || p.category === activeCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          p.desc.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
   const cartTotal = cart.reduce((acc, item) => {
     const numericPrice = parseInt(item.price.replace(/[^\d]/g, ""));
@@ -290,96 +307,130 @@ export default function ShopPage() {
         {activeView === "products" && (
           <>
 
-            {/* Categories Bar */}
-            <section className="bg-white border-b border-slate-100 py-4 sticky top-[128px] z-30 shadow-sm overflow-x-auto">
-          <div className="max-w-7xl mx-auto px-4 flex gap-2 shrink-0">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
-                  activeCategory === cat
-                    ? "bg-emerald-700 text-white"
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Product Grid */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((p) => (
-              <div 
-                key={p.id} 
-                className="bg-white rounded-3xl p-4.5 border border-slate-200/60 shadow-[0_5px_20px_rgba(15,23,42,0.02)] hover:shadow-[0_20px_40px_rgba(4,120,87,0.07)] hover:-translate-y-1.5 transition-all duration-350 flex flex-col justify-between group"
-              >
-                <div>
-                  {/* Visual Image container with Category badge & rating overlay */}
-                  <div 
-                    onClick={() => setSelectedProduct(p)}
-                    className="h-44 w-full overflow-hidden rounded-2xl relative mb-4 border border-slate-150 shadow-inner hover:cursor-pointer"
-                  >
-                    <img 
-                      src={p.image} 
-                      alt={p.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-black px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 scale-90 group-hover:scale-100 transition-all duration-300">
-                        👁️ View Details
-                      </span>
-                    </div>
-                    
-                    {/* Floating emoji circle overlay */}
-                    <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-base">
-                      {p.emoji}
-                    </div>
-
-                    {/* Weight / Qty badge */}
-                    <div className="absolute bottom-3 right-3 text-[9px] font-black tracking-wide uppercase px-2.5 py-0.5 rounded-md bg-slate-950/70 text-white backdrop-blur-xs">
-                      {p.weight}
-                    </div>
+            {/* Search & Categories Bar */}
+            <section className="bg-white border-b border-slate-100 py-3.5 sticky top-[110px] sm:top-[128px] z-30 shadow-sm transition-all duration-300">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                
+                {/* Modern Search Field */}
+                <div className="relative flex-grow max-w-md">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-emerald-700/75">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.608 10.608Z" />
+                    </svg>
                   </div>
-
-                  {/* Category and Rating bar */}
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] text-emerald-700 font-extrabold uppercase tracking-widest">{p.category}</span>
-                    <div className="flex items-center gap-1 bg-amber-50/70 border border-amber-150/40 px-2 py-0.5 rounded-md text-[9px] font-extrabold text-amber-800">
-                      <span>★</span>
-                      <span>{p.rating}</span>
-                    </div>
-                  </div>
-
-                  <h3 className="font-extrabold text-sm sm:text-base text-slate-800 leading-tight group-hover:text-emerald-800 transition-colors">
-                    {p.name}
-                  </h3>
-
-                  {/* Brief description tag */}
-                  <p className="text-[11px] text-slate-450 line-clamp-2 mt-2 leading-relaxed font-medium">
-                    {p.desc}
-                  </p>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search prophetic medicines & wellness items..."
+                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-10 pr-10 py-2.5 text-slate-800 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all shadow-inner font-semibold"
+                  />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery("")}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-655 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
 
-                <div className="mt-4 pt-3.5 border-t border-slate-100/80 flex items-center justify-between">
-                  <div>
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase tracking-wider">Price</span>
-                    <span className="text-lg font-black text-slate-900 tracking-tight">{p.price}</span>
-                  </div>
-                  <button
-                    onClick={() => addToCart({ id: p.id, name: p.name, price: p.price, unit: p.weight })}
-                    className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow-[0_4px_12px_rgba(4,120,87,0.14)] hover:shadow-[0_6px_16px_rgba(4,120,87,0.22)] active:scale-[0.97]"
-                  >
-                    + Add to Cart
-                  </button>
+                {/* Categories Bar */}
+                <div className="flex gap-2 overflow-x-auto pb-1.5 md:pb-0 scrollbar-none snap-x smooth-scroll-x">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all shrink-0 snap-align-start border ${
+                        activeCategory === cat
+                          ? "bg-emerald-800 border-emerald-800 text-white shadow-[0_4px_12px_rgba(6,95,70,0.15)] scale-[1.02]"
+                          : "bg-slate-50 border-slate-200/40 text-slate-655 hover:bg-slate-100/80"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
+
+            {/* Product Grid */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+                {paginatedProducts.length > 0 ? (
+                  paginatedProducts.map((p) => (
+                    <ProductCard
+                      key={p.id}
+                      product={p}
+                      onCardClick={() => setSelectedProduct(p)}
+                      onAddToCart={(prod) => addToCart({ id: prod.id, name: prod.name, price: prod.price, unit: prod.weight })}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full py-16 text-center">
+                    <span className="text-4xl">🔍</span>
+                    <h3 className="text-slate-800 font-extrabold mt-3">No products match your search</h3>
+                    <p className="text-slate-500 text-xs sm:text-sm mt-1">Try checking your spelling or selecting a different category</p>
+                    <button 
+                      onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
+                      className="mt-6 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2.5 rounded-xl text-xs transition-all"
+                    >
+                      Reset Filters
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex items-center justify-center gap-2">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.max(prev - 1, 1));
+                      window.scrollTo({ top: 350, behavior: 'smooth' });
+                    }}
+                    className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent transition-all"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      onClick={() => {
+                        setCurrentPage(pageNumber);
+                        window.scrollTo({ top: 350, behavior: 'smooth' });
+                      }}
+                      className={`w-10 h-10 rounded-xl text-xs font-black transition-all ${
+                        currentPage === pageNumber
+                          ? "bg-emerald-800 text-white shadow-md shadow-emerald-800/10 scale-105"
+                          : "bg-white border border-slate-200 text-slate-655 hover:bg-slate-50"
+                      }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                      window.scrollTo({ top: 350, behavior: 'smooth' });
+                    }}
+                    className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent transition-all"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </section>
           </>
         )}
 

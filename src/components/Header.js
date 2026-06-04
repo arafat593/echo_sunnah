@@ -75,6 +75,20 @@ export default function Header() {
   const totalCartQty = cart.reduce((acc, item) => acc + item.qty, 0);
   const unreadNotifsCount = notifications.filter(n => !n.read).length;
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   // Prevent background scroll when overlay is open
   useEffect(() => {
     const isAnyOverlayOpen = mobileDrawerOpen || cartOpen || showLoginModal;
@@ -148,10 +162,13 @@ export default function Header() {
       </div>
 
       {/* Floating Premium Header Container */}
-      <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4 pb-2 pointer-events-none">
-        <header className="max-w-7xl mx-auto bg-white/80 backdrop-blur-xl border border-emerald-500/10 shadow-[0_20px_40px_-15px_rgba(4,78,56,0.12)] rounded-3xl pointer-events-auto transition-all duration-300">
+      <div className={`sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 pointer-events-none ${isScrolled ? "pt-2 pb-1" : "pt-4 pb-2"
+        }`}>
+        <header className={`max-w-7xl mx-auto bg-white/90 backdrop-blur-xl border border-emerald-500/10 shadow-[0_20px_40px_-15px_rgba(4,78,56,0.12)] rounded-3xl pointer-events-auto transition-all duration-300 ${isScrolled ? "shadow-md py-1" : "py-2 sm:py-0"
+          }`}>
           <div className="px-4 sm:px-6 lg:px-8">
-            <div className="relative flex items-center justify-between h-13 lg:h-20">
+            <div className={`relative flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-11 lg:h-14" : "h-13 lg:h-20"
+              }`}>
 
               {/* Mobile Menu Button on Left */}
               <button
@@ -169,17 +186,20 @@ export default function Header() {
                 href="/home"
                 className="flex-shrink-0 flex items-center gap-1.5 sm:gap-3 group z-10"
               >
-                <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-0 rounded-[10px] sm:rounded-[14px] lg:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300">
-                  <div className="relative w-6 h-6 sm:w-8 sm:h-8 lg:w-[50px] lg:h-[50px]">
+                <div className={`bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-0 rounded-[10px] sm:rounded-[18px] lg:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300 ${isScrolled ? "scale-90" : "scale-100"
+                  }`}>
+                  <div className={`relative transition-all duration-300 ${"w-6 h-6 sm:w-8 sm:h-8 lg:w-[50px] lg:h-[50px]"
+                    }`}>
                     <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" fill className="object-contain" />
                   </div>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   {/* Cursive premium brand name */}
                   <span
-                    className={`${playfair.className} text-[18px] sm:text-[22px] lg:text-[40px] italic font-black leading-none tracking-tight`}
+                    className={`${playfair.className} italic font-black leading-none tracking-tight transition-all duration-300 ${"text-[18px] sm:text-[22px] lg:text-[40px]"
+                      }`}
                     style={{
-                      background: "linear-gradient(135deg, #065f46 0%, #0f766e 40%, #047857 75%, #b45309 100%)",
+                      background: "linear-gradient(135deg, #065f46 0%, #0f766e 40%, #047857 75%, #b45309 100%)",   
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
@@ -211,14 +231,12 @@ export default function Header() {
                       href={item.href}
                       className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 group flex items-center justify-center hover:bg-emerald-500/5`}
                     >
-                      <span className={`text-[13px] font-extrabold tracking-wide transition-colors duration-300 ${
-                        active ? "text-emerald-850" : "text-slate-655 hover:text-emerald-750"
-                      }`}>
+                      <span className={`text-[13px] font-extrabold tracking-wide transition-colors duration-300 ${active ? "text-emerald-850" : "text-slate-655 hover:text-emerald-750"
+                        }`}>
                         {item.name}
                       </span>
-                      <span className={`absolute bottom-1 h-[2px] bg-gradient-to-r from-emerald-600 via-amber-400 to-emerald-700 transition-all duration-300 rounded-full ${
-                        active ? "w-2/3 opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-100"
-                      }`}></span>
+                      <span className={`absolute bottom-1 h-[2px] bg-gradient-to-r from-emerald-600 via-amber-400 to-emerald-700 transition-all duration-300 rounded-full ${active ? "w-2/3 opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-100"
+                        }`}></span>
                     </Link>
                   );
                 })}
@@ -227,9 +245,8 @@ export default function Header() {
                 <div className="relative">
                   <button
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 flex items-center gap-1 hover:bg-emerald-500/5 ${
-                      moreMenuOpen ? "bg-emerald-500/5" : ""
-                    }`}
+                    className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 flex items-center gap-1 hover:bg-emerald-500/5 ${moreMenuOpen ? "bg-emerald-500/5" : ""
+                      }`}
                   >
                     <span className="text-[13px] font-extrabold tracking-wide text-slate-655 hover:text-emerald-750 flex items-center gap-1">
                       More
@@ -253,9 +270,8 @@ export default function Header() {
                               key={item.name}
                               href={item.href}
                               onClick={() => setMoreMenuOpen(false)}
-                              className={`flex items-center px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-205 group ${
-                                active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
-                              }`}
+                              className={`flex items-center px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-205 group ${active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
+                                }`}
                             >
                               <span className="text-xs font-extrabold">{item.name}</span>
                             </Link>
@@ -450,9 +466,8 @@ export default function Header() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`flex flex-col items-center justify-center py-2 transition-all rounded-xl ${
-                        active ? "bg-emerald-500/5 text-emerald-850" : "hover:bg-slate-50 text-slate-700"
-                      }`}
+                      className={`flex flex-col items-center justify-center py-2 transition-all rounded-xl ${active ? "bg-emerald-500/5 text-emerald-850" : "hover:bg-slate-50 text-slate-700"
+                        }`}
                     >
                       <span className="text-[12px] sm:text-xs font-extrabold tracking-tight leading-none">
                         {item.name}
@@ -486,7 +501,7 @@ export default function Header() {
               <span className="text-emerald-705 font-extrabold text-[10px] uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-100/50">
                 Echo Sunnah Portal
               </span>
-              
+
               {authMode === "login" && (
                 <>
                   <h3 className="text-xl font-black text-slate-900 mt-3.5 font-sans">Welcome Back</h3>
@@ -880,9 +895,8 @@ export default function Header() {
                       key={item.name}
                       href={item.href}
                       onClick={() => setMobileDrawerOpen(false)}
-                      className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
-                        active ? "bg-emerald-50 text-emerald-850" : "text-slate-700 hover:bg-slate-50"
-                      }`}
+                      className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-all ${active ? "bg-emerald-50 text-emerald-850" : "text-slate-700 hover:bg-slate-50"
+                        }`}
                     >
                       <span className="tracking-tight">{item.name}</span>
                     </Link>

@@ -580,7 +580,7 @@ export default function HijamaPage() {
           <p className="text-center text-xs sm:text-sm text-slate-500 mt-2 mb-8">Select a specialized cupping category and choose a package suited for your health profile</p>
 
           {/* Interactive Category Selector Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-4 justify-start lg:justify-center mb-8 scrollbar-none snap-x">
+          <div className="flex gap-2 overflow-x-auto pb-4 justify-start lg:justify-center mb-8 scrollbar-none snap-x smooth-scroll-x">
             {Object.keys(hijamaCategories).map((catKey) => {
               const cat = hijamaCategories[catKey];
               const isSelected = selectedCategory === catKey;
