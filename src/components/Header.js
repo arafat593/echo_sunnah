@@ -14,6 +14,14 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  const banglaDigits = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+  const englishDigitsStr = String(priceStr).replace(/[০-৯]/g, d => banglaDigits[d]);
+  const cleanedStr = englishDigitsStr.replace(/[^\d]/g, "");
+  return parseInt(cleanedStr) || 0;
+};
+
 export default function Header() {
   const {
     isLoggedIn,
@@ -825,7 +833,7 @@ export default function Header() {
                 <div className="flex justify-between items-center mb-4 px-1">
                   <span className="text-xs font-extrabold text-slate-455 uppercase tracking-wider">Subtotal</span>
                   <span className="text-xl font-black text-emerald-900">
-                    ৳{cart.reduce((acc, item) => acc + item.qty * parseInt(item.price.replace(/[^\d]/g, "")), 0)}
+                    ৳{cart.reduce((acc, item) => acc + item.qty * parsePrice(item.price), 0)}
                   </span>
                 </div>
                 <Link

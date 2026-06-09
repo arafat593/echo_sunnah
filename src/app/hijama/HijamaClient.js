@@ -7,6 +7,14 @@ import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
 import HijamaCard from "@/components/HijamaCard";
 
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  const banglaDigits = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+  const englishDigitsStr = String(priceStr).replace(/[০-৯]/g, d => banglaDigits[d]);
+  const cleanedStr = englishDigitsStr.replace(/[^\d]/g, "");
+  return parseInt(cleanedStr) || 0;
+};
+
 const hijamaSlides = [
   {
     image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600",
@@ -505,7 +513,7 @@ export default function HijamaPage() {
     const serviceOption = e.target.serviceOption.value;
     const paymentOption = e.target.paymentOption.value;
 
-    const basePrice = selectedPackage?.price ? parseInt(selectedPackage.price.replace(/[^\d]/g, "")) : 0;
+    const basePrice = selectedPackage?.price ? parsePrice(selectedPackage.price) : 0;
     const finalPrice = serviceOption === "Home" ? basePrice + 2000 : basePrice;
 
     if (selectedPackage) {

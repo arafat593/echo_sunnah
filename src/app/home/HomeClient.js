@@ -10,6 +10,14 @@ import HijamaCard from "@/components/HijamaCard";
 import RuqyahCard from "@/components/RuqyahCard";
 import ProductCard from "@/components/ProductCard";
 
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  const banglaDigits = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+  const englishDigitsStr = String(priceStr).replace(/[০-৯]/g, d => banglaDigits[d]);
+  const cleanedStr = englishDigitsStr.replace(/[^\d]/g, "");
+  return parseInt(cleanedStr) || 0;
+};
+
 const homeSlides = [
   {
     image: "https://images.unsplash.com/photo-1609599006353-e629dbacfeae?q=80&w=1600",
@@ -272,59 +280,43 @@ export default function HomePage() {
 
   const shopProducts = [
     {
-      id: "prod-1",
-      name: "Organic Raw Sundarban Honey",
-      category: "Honey",
-      price: "৳৯০০",
-      weight: "500g",
-      rating: 4.9,
-      emoji: "🍯",
-      image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?q=80&w=500",
-      desc: "Harvested directly from the deep mangrove forests of the Sundarbans. 100% pure and unprocessed."
+      id: "prod-rosemary-dry-100",
+      name: "শুকনো রোজমেরি (Dry Rosemary - 100g)",
+      category: "ফল ও গাছের পাওয়ার হাউস",
+      price: "৳২৫০",
+      originalPrice: "৳৩১৫",
+      weight: "১০০ গ্রাম",
+      rating: 5.0,
+      emoji: "🪴",
+      image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=500",
+      desc: "আমাদের বেস্ট সেলিং শুকনো রোজমেরি পাতা। চুলের দ্রুত বৃদ্ধিতে এটি একটি শক্তিশালী প্রাকৃতিক উপাদান।",
+      isHot: true
     },
     {
-      id: "prod-2",
-      name: "Cold-Pressed Black Seed Oil",
-      category: "Black Seed",
-      price: "৳৬০০",
-      weight: "250ml",
-      rating: 4.8,
-      emoji: "🫙",
+      id: "prod-rosemary-oil",
+      name: "রোজমেরি অয়েল (Premium Rosemary Oil)",
+      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      price: "৳৩০০",
+      originalPrice: "৳৩৭৮",
+      weight: "১০০ মি.লি.",
+      rating: 5.0,
+      emoji: "🪔",
       image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=500",
-      desc: "Extracted from premium Nigella Sativa seeds using hygienic cold-press methods."
+      desc: "অত্যন্ত শক্তিশালী এবং বিশুদ্ধ রোজমেরি অয়েল যা নারকেল বা অলিভ অয়েলের সাথে ক্যারিয়ার অয়েল হিসেবে চুলে পুষ্টি যোগায়।",
+      isHot: true
     },
     {
-      id: "prod-3",
-      name: "Premium Khalas Dates (Saudi)",
-      category: "Health Supplements",
-      price: "৳৭৫০",
-      weight: "1kg",
-      rating: 4.7,
-      emoji: "🌴",
-      image: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?q=80&w=500",
-      desc: "Soft, sweet, and rich in natural fibers. Sourced directly from farms in Qassim, Saudi Arabia."
-    },
-    {
-      id: "prod-4",
-      name: "Pure Sidr Powder (Prophetic)",
-      category: "Ruqyah Products",
-      price: "৳৩৫০",
-      weight: "150g",
+      id: "prod-rosemary-toner",
+      name: "রোজমেরি হেয়ার টোনার (Rosemary Hair Toner)",
+      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      price: "৳২০০",
+      originalPrice: "৳২৫২",
+      weight: "১০০ মি.লি.",
       rating: 4.9,
-      emoji: "🍃",
-      image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=500",
-      desc: "Finely ground wild Sidr (Lote) leaves, essential for purification rituals and self-ruqyah baths."
-    },
-    {
-      id: "prod-5",
-      name: "Hijama Therapy Starter Pump",
-      category: "Hijama Equipment",
-      price: "৳১,৫০০",
-      weight: "1 Unit",
-      rating: 4.6,
-      emoji: "🔫",
-      image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=500",
-      desc: "Clinical-grade hand-held vacuum suction pump with 12 pieces of assorted sterile cups."
+      emoji: "💧",
+      image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=500",
+      desc: "বিশুদ্ধ রোজমেরি পাতার নির্যাস থেকে প্রস্তুত আমাদের জনপ্রিয় হেয়ার টোনার। এটি নতুন চুল গজাতে বিশ্বব্যাপী সর্বাধিক প্রশংসিত।",
+      isHot: true
     }
   ];
 
@@ -342,7 +334,7 @@ export default function HomePage() {
     const address = e.target.address.value;
     const serviceOption = e.target.serviceOption.value;
 
-    const basePrice = selectedService?.price ? parseInt(selectedService.price.replace(/[^\d]/g, "")) : 0;
+    const basePrice = selectedService?.price ? parsePrice(selectedService.price) : 0;
     const finalPrice = serviceOption === "Home" ? basePrice + 2000 : basePrice;
 
     if (selectedService) {

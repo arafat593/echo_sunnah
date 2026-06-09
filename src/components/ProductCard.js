@@ -21,6 +21,13 @@ export default function ProductCard({ product, onCardClick, onAddToCart, classNa
             {product.emoji}
           </div>
 
+          {/* Discount badge */}
+          {product.originalPrice && (
+            <div className="absolute top-2 sm:top-3 right-2 sm:right-3 text-[9px] font-black tracking-wide uppercase px-2 py-0.5 rounded-lg bg-rose-500 text-white shadow-sm">
+              ২০% ছাড়
+            </div>
+          )}
+
           {/* Weight / Qty badge */}
           <div className="absolute bottom-3 right-3 text-[9px] font-black tracking-wide uppercase px-2.5 py-0.5 rounded-md bg-slate-950/70 text-white backdrop-blur-xs">
             {product.weight}
@@ -30,9 +37,16 @@ export default function ProductCard({ product, onCardClick, onAddToCart, classNa
         {/* Category and Rating bar */}
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[10px] text-emerald-700 font-extrabold uppercase tracking-widest">{product.category}</span>
-          <div className="flex items-center gap-1 bg-amber-50/70 border border-amber-150/40 px-2 py-0.5 rounded-md text-[9px] font-extrabold text-amber-800">
-            <span>★</span>
-            <span>{product.rating}</span>
+          <div className="flex items-center gap-1.5">
+            {product.isHot && (
+              <span className="bg-amber-100 text-amber-900 border border-amber-200 text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-md flex items-center gap-0.5 shrink-0 animate-pulse">
+                🔥 HOT
+              </span>
+            )}
+            <div className="flex items-center gap-1 bg-amber-50/70 border border-amber-150/40 px-2 py-0.5 rounded-md text-[9px] font-extrabold text-amber-800">
+              <span>★</span>
+              <span>{product.rating}</span>
+            </div>
           </div>
         </div>
 
@@ -49,7 +63,12 @@ export default function ProductCard({ product, onCardClick, onAddToCart, classNa
       <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-slate-100/80 flex items-center justify-between">
         <div>
           <span className="text-[8px] sm:text-[9px] text-slate-400 font-bold block uppercase tracking-wider">Price</span>
-          <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">{product.price}</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">{product.price}</span>
+            {product.originalPrice && (
+              <span className="text-[10px] sm:text-xs text-slate-400 line-through font-medium">{product.originalPrice}</span>
+            )}
+          </div>
         </div>
         <button
           onClick={(e) => {
