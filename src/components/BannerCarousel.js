@@ -72,7 +72,7 @@ export default function BannerCarousel({ slides }) {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="w-full h-[200px] min-[360px]:h-[220px] min-[480px]:h-[240px] min-[600px]:h-[270px] min-[720px]:h-[300px] min-[840px]:h-[330px] min-[960px]:h-[360px] min-[1100px]:h-[390px] min-[1280px]:h-[425px] min-[1536px]:h-[460px] relative overflow-hidden group bg-slate-900"
+      className="w-full h-[220px] min-[360px]:h-[240px] min-[480px]:h-[260px] min-[600px]:h-[290px] min-[720px]:h-[320px] min-[840px]:h-[350px] min-[960px]:h-[380px] min-[1100px]:h-[410px] min-[1280px]:h-[440px] min-[1536px]:h-[480px] relative overflow-hidden group bg-slate-900"
     >
       {/* Slides Container */}
       <div className="w-full h-full relative">
@@ -85,7 +85,10 @@ export default function BannerCarousel({ slides }) {
             {/* Slide Background Image */}
             <img
               src={slide.image}
-              alt={slide.title}
+              alt=""
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
               className={`w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${index === activeIndex ? "scale-105" : "scale-100"
                 }`}
             />
@@ -94,18 +97,18 @@ export default function BannerCarousel({ slides }) {
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-900/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" />
 
-            <div className="absolute inset-0 flex items-center">
-              <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 w-full">
+            <div className={`absolute inset-0 flex items-center transition-opacity duration-300 ${index === activeIndex ? "opacity-100 z-20" : "opacity-0 z-0 pointer-events-none"}`}>
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div className="text-white w-full">
                   <div className="max-w-xl md:max-w-2xl text-left">
                     {slide.badge && (
-                      <span className="inline-block bg-amber-400 text-emerald-950 text-[8px] sm:text-[10px] font-black tracking-widest px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase mb-1 sm:mb-4 shadow-sm animate-slideUp">
+                      <span className={`inline-block bg-amber-400 text-emerald-950 text-[8px] sm:text-[10px] font-black tracking-widest px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase mb-1 sm:mb-4 shadow-sm ${index === activeIndex ? "animate-slideUp" : "opacity-0"}`}>
                         {slide.badge}
                       </span>
                     )}
                     {/* Title — Premium brand treatment for Echo Sunnah slide */}
                     {slide.title.includes("Echo Sunnah") ? (
-                      <div className="animate-slideUp">
+                      <div className={index === activeIndex ? "animate-slideUp" : "opacity-0"}>
                         {/* Arabic decorative motif */}
                         <div className="flex items-center gap-3 mb-1 sm:mb-3">
                           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent max-w-[80px]" />
@@ -150,18 +153,18 @@ export default function BannerCarousel({ slides }) {
                         <div className="mt-1 sm:mt-3 mb-1.5 sm:mb-5 h-0.5 w-24 sm:w-32 rounded-full bg-gradient-to-r from-emerald-400 via-amber-400 to-transparent shadow-[0_0_12px_rgba(251,191,36,0.5)]" />
                       </div>
                     ) : (
-                      <h2 className="text-lg sm:text-4xl md:text-5xl font-black text-white leading-tight drop-shadow-md animate-slideUp">
+                      <h2 className={`text-xl sm:text-4xl md:text-5xl font-black text-white leading-tight drop-shadow-md ${index === activeIndex ? "animate-slideUp" : "opacity-0"}`}>
                         {slide.title}
                       </h2>
                     )}
 
-                    <p className="text-[10px] sm:text-sm text-slate-100 mt-0.5 sm:mt-2 leading-relaxed font-medium drop-shadow-sm max-w-xl animate-slideUp line-clamp-2 sm:line-clamp-none">
+                    <p className={`text-xs sm:text-sm text-slate-100 mt-0.5 sm:mt-2 leading-relaxed font-medium drop-shadow-sm max-w-xl line-clamp-2 sm:line-clamp-none ${index === activeIndex ? "animate-slideUp" : "opacity-0"}`}>
                       {slide.desc}
                     </p>
                     {slide.buttonText && slide.buttonLink && (
                       <a
                         href={slide.buttonLink}
-                        className="inline-flex items-center gap-1.5 mt-2.5 min-[360px]:mt-4 sm:mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-emerald-950 font-extrabold text-[10px] sm:text-xs px-4 py-2 sm:px-6 sm:py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/30 active:scale-95 animate-slideUp"
+                        className={`inline-flex items-center gap-1.5 mt-2.5 min-[360px]:mt-4 sm:mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-emerald-950 font-extrabold text-[10px] sm:text-xs px-4 py-2 sm:px-6 sm:py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-emerald-500/30 active:scale-95 ${index === activeIndex ? "animate-slideUp" : "opacity-0"}`}
                       >
                         {slide.buttonText}
                         <span className="text-sm">→</span>

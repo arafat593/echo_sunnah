@@ -11,7 +11,15 @@ export function AppProvider({ children }) {
     name: "Arafat Center",
     email: "arafat.hossain@example.com",
     phone: "+880 1711-223344",
-    address: "Apartment 4A, House 12, Road 7, Sector 3, Uttara, Dhaka",
+    address: "Apartment 4A, House 12, Road 7, Sector 3",
+    area: "Uttara",
+    city: "Dhaka City (North/South)",
+    district: "Dhaka",
+    division: "Dhaka",
+    country: "Bangladesh",
+    birthDate: "",
+    gender: "",
+    avatar: "",
     joinedDate: "May 2026"
   });
 
