@@ -12,7 +12,7 @@ import ProductCard from "@/components/ProductCard";
 
 const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
-  const banglaDigits = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+  const banglaDigits = { '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4', '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9' };
   const englishDigitsStr = String(priceStr).replace(/[০-৯]/g, d => banglaDigits[d]);
   const cleanedStr = englishDigitsStr.replace(/[^\d]/g, "");
   return parseInt(cleanedStr) || 0;
@@ -24,8 +24,6 @@ const homeSlides = [
     badge: "Reviving Prophetic Wellness",
     title: "Echo Sunnah (একো সুন্নাহ)",
     desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
-    buttonText: "Explore Hijama (হিজামা)",
-    buttonLink: "/hijama"
   },
   {
     image: "https://images.unsplash.com/photo-1609599006353-e629dbacfeae?q=80&w=1600",
