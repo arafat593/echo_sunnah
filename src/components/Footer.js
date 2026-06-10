@@ -46,7 +46,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1 bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 backdrop-blur-md shadow-2xl space-y-3 md:space-y-6 hover:border-emerald-500/30 transition-colors duration-300">
             <Link href="/home" className="flex items-center gap-3 group">
               <div className="bg-emerald-800 p-1.5 rounded-2xl shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 relative w-12 h-12 flex items-center justify-center shrink-0">
-                <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" width={38} height={38} className="object-contain" />
+                <Image src="/echo_sunnah_logo.png" alt="Echo Sunnah" width={38} height={38} className="object-contain" style={{ height: "auto" }} />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-black text-white tracking-wider leading-tight">ECHO SUNNAH</span>

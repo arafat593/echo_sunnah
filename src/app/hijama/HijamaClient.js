@@ -670,7 +670,7 @@ export default function HijamaPage() {
             <div className="lg:col-span-5 bg-slate-100 rounded-2xl p-6 border border-slate-200 text-center relative">
               <h3 className="text-sm font-bold text-slate-700 mb-4">Click Point to View Details</h3>
               <div className="w-56 h-72 mx-auto bg-slate-200 rounded-full relative flex items-center justify-center border border-slate-350">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Human Upper Back</span>
+                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-slate-400 font-extrabold uppercase tracking-wider whitespace-nowrap">Human Upper Back</span>
                 
                 {/* Kahil Point */}
                 <button

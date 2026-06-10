@@ -78,6 +78,7 @@ export default function SplashScreen() {
               width={72}
               height={72}
               className="object-contain animate-spin-slow"
+              style={{ height: "auto" }}
             />
           </div>
         </div>

@@ -20,6 +20,14 @@ const parsePrice = (priceStr) => {
 
 const homeSlides = [
   {
+    image: "https://images.unsplash.com/photo-1519823551278-64ac9283ca48?q=80&w=1600",
+    badge: "Reviving Prophetic Wellness",
+    title: "Echo Sunnah (একো সুন্নাহ)",
+    desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
+    buttonText: "Explore Hijama (হিজামা)",
+    buttonLink: "/hijama"
+  },
+  {
     image: "https://images.unsplash.com/photo-1609599006353-e629dbacfeae?q=80&w=1600",
     badge: "Strict Sunnah Principles",
     title: "Quranic Ruqyah Shariah",
@@ -50,14 +58,6 @@ const homeSlides = [
     desc: "Enroll in our certified diploma and training programs to learn the prophetic science of cupping therapy, organic medicine, and holistic clinical anatomy.",
     buttonText: "Join The Academy",
     buttonLink: "/academy"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1519823551278-64ac9283ca48?q=80&w=1600",
-    badge: "Reviving Prophetic Wellness",
-    title: "Echo Sunnah (একো সুন্নাহ)",
-    desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
-    buttonText: "Explore Hijama (হিজামা)",
-    buttonLink: "/hijama"
   }
 ];
 
@@ -81,6 +81,18 @@ export default function HomePage() {
     if (!card) return;
     const cardWidth = card.offsetWidth + 24; // card width + gap-6
     sliderRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+  };
+
+  // Slider ref for Ruqyah cards scroll
+  const [ruqyahIndex, setRuqyahIndex] = useState(0);
+  const ruqyahSliderRef = useRef(null);
+
+  const scrollRuqyahSlider = (index) => {
+    if (!ruqyahSliderRef.current) return;
+    const card = ruqyahSliderRef.current.querySelector('[data-ruqyah-card]');
+    if (!card) return;
+    const cardWidth = card.offsetWidth + 24; // card width + gap-6
+    ruqyahSliderRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
   };
 
   // Slide Index for shop products
@@ -144,7 +156,7 @@ export default function HomePage() {
       originalPrice: "৳২,২০০",
       desc: "Comprehensive cleansing for back, shoulders, and legs. Relieves pain and chronic fatigue.",
       badge: "Best Seller",
-      image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+      image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
       features: ["10 Sterile Cups", "Disposable Blades", "Prophetic Herb Sanitization", "Blood Pressure Check"]
     },
     {
@@ -155,7 +167,7 @@ export default function HomePage() {
       originalPrice: "৳৩,০০০",
       desc: "Full-body Sunnah points coverage. Highly recommended for complete metabolic revitalization.",
       badge: "Premium",
-      image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
+      image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=600",
       features: ["15 Sterile Cups", "Comprehensive Detox Points", "Black Seed Oil Treatment", "Post-Hijama Energizer Drink"]
     },
     {
@@ -372,7 +384,7 @@ export default function HomePage() {
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-100/40 rounded-full blur-3xl translate-x-20 translate-y-20"></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col xl:flex-row items-center justify-between gap-8">
               <div className="max-w-xl">
                 <span className="text-emerald-800 font-extrabold text-xs uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full border border-emerald-200">
                   Prophetic Calendar (সুন্নাহ দিনপঞ্জি)
@@ -383,7 +395,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-2 sm:gap-4 justify-center md:justify-end w-full md:w-auto">
+              <div className="flex flex-wrap gap-2 sm:gap-4 justify-center xl:justify-end w-full xl:w-auto">
                 {[
                   { day: "17th", name: "Jumada I", date: "June 3, 2026", status: "Highly Recommended" },
                   { day: "19th", name: "Jumada I", date: "June 5, 2026", status: "Detox Window" },
@@ -574,15 +586,89 @@ export default function HomePage() {
               <p className="text-xs sm:text-sm text-slate-500 mt-2">Treat Sihr, Ayn, nightmares, and chronic panic attacks using prophetic recitations.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {ruqyahServices.map((rq) => (
-                <RuqyahCard
-                  key={rq.id}
-                  session={rq}
-                  onCardClick={() => openBooking(rq)}
-                  onBookClick={openBooking}
-                />
-              ))}
+            {/* Slider Controls */}
+            <div className="relative">
+              {/* Left Arrow */}
+              <button
+                onClick={() => {
+                  const newIndex = ruqyahIndex === 0 ? 2 : ruqyahIndex - 1;
+                  setRuqyahIndex(newIndex);
+                  scrollRuqyahSlider(newIndex);
+                }}
+                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+                aria-label="Previous"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+
+              {/* Cards Viewport */}
+              <div
+                className="overflow-x-auto scrollbar-none snap-x snap-mandatory mx-6 scroll-smooth select-none cursor-grab active:cursor-grabbing smooth-scroll-x"
+                ref={ruqyahSliderRef}
+                onMouseDown={(e) => handleDragStart(e, ruqyahSliderRef)}
+                onMouseLeave={() => handleDragEnd(ruqyahSliderRef)}
+                onMouseUp={() => handleDragEnd(ruqyahSliderRef)}
+                onMouseMove={(e) => handleDragMove(e, ruqyahSliderRef)}
+              >
+                <div className="flex gap-6">
+                  {ruqyahServices.map((rq) => (
+                    <RuqyahCard
+                      key={rq.id}
+                      session={rq}
+                      data-ruqyah-card
+                      onCardClick={() => {
+                        setSelectedDetailItem({ ...rq, type: 'ruqyah' });
+                        setDetailModalOpen(true);
+                      }}
+                      onBookClick={openBooking}
+                      className="w-[250px] sm:w-[320px] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Arrow */}
+              <button
+                onClick={() => {
+                  const newIndex = ruqyahIndex >= 2 ? 0 : ruqyahIndex + 1;
+                  setRuqyahIndex(newIndex);
+                  scrollRuqyahSlider(newIndex);
+                }}
+                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center text-slate-600 hover:text-emerald-700 hover:border-emerald-300 hover:shadow-emerald-100 transition-all duration-200"
+                aria-label="Next"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Dot Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {[0, 1, 2].map((i) => {
+                const targetIndex = i === 0 ? 0 : i === 1 ? 1 : 2;
+                const isActive = i === 0
+                  ? ruqyahIndex === 0
+                  : i === 1
+                    ? ruqyahIndex === 1
+                    : ruqyahIndex >= 2;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setRuqyahIndex(targetIndex);
+                      scrollRuqyahSlider(targetIndex);
+                    }}
+                    className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
+                      ? "w-6 h-2 bg-emerald-700"
+                      : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
+                      }`}
+                    aria-label={`Go to position ${i + 1}`}
+                  />
+                );
+              })}
             </div>
           </div>
         </section>
@@ -855,6 +941,51 @@ export default function HomePage() {
                 </div>
               )}
 
+              {/* Ruqyah Specific Info */}
+              {selectedDetailItem.type === 'ruqyah' && (
+                <div className="space-y-4">
+                  {selectedDetailItem.duration && (
+                    <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-xs font-bold text-slate-655">
+                      <span>Duration (সময়কাল):</span>
+                      <span className="text-emerald-800">{selectedDetailItem.duration}</span>
+                    </div>
+                  )}
+                  {selectedDetailItem.whyTake && (
+                    <div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Why Take This (কেন করাবেন)</span>
+                      <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                        {selectedDetailItem.whyTake}
+                      </p>
+                    </div>
+                  )}
+                  {selectedDetailItem.forWhom && (
+                    <div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Target Audience (যাদের জন্য)</span>
+                      <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                        {selectedDetailItem.forWhom}
+                      </p>
+                    </div>
+                  )}
+                  {selectedDetailItem.benefits && (
+                    <div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Benefits / Focus (উপকারিতা সমূহ)</span>
+                      <ul className="grid grid-cols-1 gap-2">
+                        {selectedDetailItem.benefits.split(",").map((b, idx) => (
+                          <li key={idx} className="flex items-center gap-3 text-xs text-slate-655 font-bold">
+                            <span className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-emerald-600">
+                                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
+                              </svg>
+                            </span>
+                            <span>{b.trim()}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Product Rating and Weight Info */}
               {selectedDetailItem.type === 'product' && (
                 <div className="flex gap-4">
@@ -881,7 +1012,7 @@ export default function HomePage() {
                 <span className="text-2xl font-black text-emerald-800">{selectedDetailItem.price}</span>
               </div>
 
-              {selectedDetailItem.type === 'package' ? (
+              {selectedDetailItem.type === 'package' || selectedDetailItem.type === 'ruqyah' ? (
                 <button
                   onClick={() => {
                     setDetailModalOpen(false);
