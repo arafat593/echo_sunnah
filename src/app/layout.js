@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/context/AppContext";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,7 @@ export const metadata = {
     ],
     locale: 'en_US',
     type: 'website',
-  },
+    },
   twitter: {
     card: 'summary_large_image',
     title: "Echo Sunnah - Ruqyah & Hijama Center",
@@ -83,6 +84,7 @@ export default function RootLayout({ children }) {
         <AppProvider>
           {children}
           <SpeedInsights />
+          <Analytics />
         </AppProvider>
       </body>
     </html>
