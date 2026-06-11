@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export default function ProductCard({ product, onCardClick, onAddToCart, className = "", ...props }) {
   return (
@@ -10,11 +11,13 @@ export default function ProductCard({ product, onCardClick, onAddToCart, classNa
       <div>
         {/* Visual Image container with Category badge & rating overlay */}
         <div className="h-28 sm:h-44 w-full overflow-hidden rounded-2xl relative mb-3 sm:mb-4 border border-slate-150 shadow-inner">
-          <img
+          <Image
             src={product.image}
             alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
             draggable="false"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
+            className="object-cover group-hover:scale-105 transition-transform duration-500 select-none"
           />
           {/* Floating emoji circle overlay */}
           <div className="absolute top-2 sm:top-3 left-2 sm:left-3 w-7 sm:w-8 h-7 sm:h-8 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-sm sm:text-base">

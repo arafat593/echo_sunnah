@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
@@ -48,44 +49,442 @@ const shopSlides = [
   }
 ];
 
-export default function ShopPage() {
-  const { cart, addToCart, updateCartQty, createOrder, orders, confirmOrderReceived } = useApp();
-
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, activeCategory]);
-
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
-  const [activeOrderTab, setActiveOrderTab] = useState("All");
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [activeView, setActiveView] = useState("products"); // "products", "cart", "orders"
-
-  const categories = [
+// Static constants moved outside the component to optimize rendering performance
+const categories = [
     "All",
-    "ফল ও গাছের পাওয়ার হাউস",
-    "ফ্লোরাল বিউটি বুস্টারস",
-    "হোলিস্টিক হার্বাল হিরোজ",
-    "নতুন ঘরোয়া কেয়ার পণ্য"
+    "Sunnah Products",
+    "Detox Powders",
+    "Personal Care",
+    "Hijama and Therapy instruments",
+    "Herbal Wellness",
+    "Organic and Hand Made Products"
   ];
 
   const products = [
-    // --- Category: ফল ও গাছের পাওয়ার হাউস (Fruit & Plant Powerhouse) ---
+    // --- Category: Sunnah Products ---
+    {
+      id: "prod-honey",
+      name: "খাঁটি সিদর মধু (Premium Sidr Honey)",
+      category: "Sunnah Products",
+      price: "৳১২০০",
+      originalPrice: "৳১৫০০",
+      weight: "৫০০ গ্রাম",
+      rating: 5.0,
+      emoji: "🍯",
+      image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=500",
+      desc: "প্রাকৃতিক উপায়ে সংগৃহীত শতভাগ খাঁটি সুন্দরবনের সিদর (কুল) মধু। এটি সুনাহসম্মত এবং ওষধি গুণে অনন্য।",
+      benefits: "রোগ প্রতিরোধ ক্ষমতা বাড়ায়, তাৎক্ষণিক শক্তি যোগায়, সর্দি-কাশি উপশম করে।",
+      usage: "প্রতিদিন সকালে খালি পেটে এক চামচ কুসুম গরম পানিতে মিশিয়ে সেবন করুন।",
+      origin: "সুন্দরবন, বাংলাদেশ"
+    },
+    {
+      id: "prod-kalo-gira-tel",
+      name: "কালোজিরার তেল (Kalo Gira Tel)",
+      category: "Sunnah Products",
+      price: "৳৩২০",
+      originalPrice: "৳৪০০",
+      weight: "১০০ মি.লি.",
+      rating: 4.9,
+      emoji: "🫗",
+      image: "https://images.unsplash.com/photo-1619994403073-2cec844b8e63?q=80&w=500",
+      desc: "কোল্ড প্রেসড পদ্ধতিতে নিষ্কাশিত ১০০% বিশুদ্ধ কালোজিরার তেল যা সব রোগের মহৌষধ।",
+      benefits: "চুল পড়া রোধ করে, বাতের ব্যথা উপশম করে, রোগ প্রতিরোধ ক্ষমতা বহুগুণ বৃদ্ধি করে।",
+      usage: "রং চায়ের সাথে ১/২ চামচ মিশিয়ে অথবা চুলে ও ব্যথার স্থানে ম্যাসাজ করুন।",
+      origin: "নাটোর, বাংলাদেশ"
+    },
+    {
+      id: "prod-black-seed-oil",
+      name: "ব্ল্যাক সিড অয়েল (Black Seed Oil)",
+      category: "Sunnah Products",
+      price: "৳৬০০",
+      originalPrice: "৳৭৫০",
+      weight: "২৫০ মি.লি.",
+      rating: 5.0,
+      emoji: "🪔",
+      image: "https://images.unsplash.com/photo-1619994403073-2cec844b8e63?q=80&w=500",
+      desc: "Sunnah Product - প্রিমিয়াম কোয়ালিটির ব্ল্যাক সিড বা কালোজিরা বীজ থেকে কোল্ড প্রেসড উপায়ে প্রস্তুত তেল।",
+      benefits: "হৃদরোগের ঝুঁকি কমায়, অ্যাজমা নিয়ন্ত্রণ করে, স্মৃতিশক্তি উন্নত করে।",
+      usage: "খাবারের সাথে অথবা সরাসরি সেবনযোগ্য।",
+      origin: "আমদানিকৃত বীজ (মিশর)"
+    },
+    {
+      id: "prod-olive-oil",
+      name: "এক্সট্রা ভার্জিন অলিভ অয়েল (Olive Oil)",
+      category: "Sunnah Products",
+      price: "৳৭৫০",
+      originalPrice: "৳৯৫০",
+      weight: "৫০০ মি.লি.",
+      rating: 4.8,
+      emoji: "🫒",
+      image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?q=80&w=500",
+      desc: "প্রথম কোল্ড প্রেসড পদ্ধতিতে সংগৃহীত শতভাগ খাঁটি স্প্যানিশ এক্সট্রা ভার্জিন অলিভ অয়েল।",
+      benefits: "কোলেস্টেরল মুক্ত, হার্টের জন্য অত্যন্ত উপকারী, ত্বক ও চুলের জন্য অসাধারণ ময়েশ্চারাইজার।",
+      usage: "রান্নায়, সালাদে অথবা চুল ও ত্বকে ব্যবহারের জন্য উপযোগী।",
+      origin: "আমদানিকৃত (স্পেন)"
+    },
+    {
+      id: "prod-kosturi-ator",
+      name: "কস্তুরী আতর (Kosturi Premium Attar)",
+      category: "Sunnah Products",
+      price: "৳৩৫০",
+      originalPrice: "৳৪৫০",
+      weight: "৩ মি.লি.",
+      rating: 4.9,
+      emoji: "🧪",
+      image: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=500",
+      desc: "মনোমুগ্ধকর সুগন্ধি কস্তুরী আতর যা দীর্ঘস্থায়ী এবং অ্যালকোহল মুক্ত।",
+      benefits: "মনকে প্রফুল্ল রাখে, নামাজের জন্য অত্যন্ত উপযোগী ও সুন্নাহসম্মত।",
+      usage: "শরীরে ও পোশাকে ব্যবহারের জন্য।",
+      origin: "আমদানিকৃত (দুবাই)"
+    },
+    {
+      id: "prod-sidr-leaves-sunnah",
+      name: "সিডর পাতা গুঁড়ো (Sidr Leaves Powder)",
+      category: "Sunnah Products",
+      price: "৳১৫০",
+      originalPrice: "৳১৮০",
+      weight: "১০০ গ্রাম",
+      rating: 4.8,
+      emoji: "🍃",
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500",
+      desc: "বিশুদ্ধ কুল পাতা বা সিডর পাতা গুঁড়ো। এটি রুখইয়াহ এবং গোসলের জন্য অত্যন্ত গুরুত্বপূর্ণ।",
+      benefits: "প্রাকৃতিক ক্লিনজার, ত্বকের চুলকানি দূর করে, রুখইয়াহর কাজে ব্যবহৃত হয়।",
+      usage: "পানির সাথে পেস্ট তৈরি করে গোসল করুন বা ত্বকে ব্যবহার করুন।",
+      origin: "নাটোর, বাংলাদেশ"
+    },
+
+    // --- Category: Detox Powders ---
+    {
+      id: "prod-pink-salt",
+      name: "হিমালয়ান পিঙ্ক সল্ট (Pink Salt)",
+      category: "Detox Powders",
+      price: "৳১৮০",
+      originalPrice: "৳২২০",
+      weight: "৫০০ গ্রাম",
+      rating: 4.8,
+      emoji: "🧂",
+      image: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?q=80&w=500",
+      desc: "খনিজ উপাদানে সমৃদ্ধ হিমালয়ান পিঙ্ক সল্ট। সাধারণ লবণের চেয়ে অনেক বেশি স্বাস্থ্যকর।",
+      benefits: "রক্তচাপ নিয়ন্ত্রণে সাহায্য করে, হজম শক্তি বাড়ায়, শরীরে ইলেক্ট্রোলাইট ব্যালেন্স করে।",
+      usage: "খাবারের লবণের বিকল্প হিসেবে রান্না বা সালাদে সরাসরি ব্যবহার করুন।",
+      origin: "আমদানিকৃত (পাকিস্তান)"
+    },
+    {
+      id: "prod-methi-gura-detox",
+      name: "মেথি গুঁড়ো (Methi Gura)",
+      category: "Detox Powders",
+      price: "৳১২০",
+      originalPrice: "৳১৫০",
+      weight: "১০০ গ্রাম",
+      rating: 4.7,
+      emoji: "🌰",
+      image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=500",
+      desc: "রক্তে সুগার নিয়ন্ত্রণে এবং হজমে অত্যন্ত সাহায্যকারী বিশুদ্ধ মেথি গুঁড়ো।",
+      benefits: "সুগার নিয়ন্ত্রণে রাখে, খুশকি ও চুল পড়া কমায়, হজমে সাহায্য করে।",
+      usage: "রাতে পানিতে ভিজিয়ে রেখে সকালে খালি পেটে পানি পান করুন।",
+      origin: "রাজশাহী, বাংলাদেশ"
+    },
+    {
+      id: "prod-moringa-powder-detox",
+      name: "মোরিঙ্গা পাউডার (Moringa Powder)",
+      category: "Detox Powders",
+      price: "৳১৮০",
+      originalPrice: "৳২২৭",
+      weight: "১০০ গ্রাম",
+      rating: 4.9,
+      emoji: "🥬",
+      image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=500",
+      desc: "সুপারফুড সজনে পাতা গুঁড়ো যা শরীরে শক্তি যোগায় এবং ডিটক্সিফাই করে।",
+      benefits: "রোগ প্রতিরোধ ক্ষমতা বাড়ায়, রক্তস্বল্পতা কমায়, এনার্জি বুস্ট করে।",
+      usage: "১ চা চামচ পাউডার পানিতে গুলিয়ে সকালে খালি পেটে পান করুন।",
+      origin: "কুষ্টিয়া, বাংলাদেশ"
+    },
+    {
+      id: "prod-chia-seed",
+      name: "প্রিমিয়াম চিয়া সিড (Chia Seed)",
+      category: "Detox Powders",
+      price: "৳৩৫০",
+      originalPrice: "৳৪৫০",
+      weight: "২৫০ গ্রাম",
+      rating: 4.9,
+      emoji: "🌾",
+      image: "https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=500",
+      desc: "ওমেগা-৩, ফাইবার ও এন্টি-অক্সিডেন্ট সমৃদ্ধ চিয়া সিড যা ওজন নিয়ন্ত্রণে অত্যন্ত কার্যকরী।",
+      benefits: "ওজন কমাতে সাহায্য করে, কোষ্ঠকাঠিন্য দূর করে, এনার্জি দেয়।",
+      usage: "পানিতে বা ডাবের পানিতে ভিজিয়ে লেবুর রস দিয়ে সকালে সেবন করুন।",
+      origin: "আমদানিকৃত (প্যারাগুয়ে)"
+    },
+    {
+      id: "prod-mehedi-powder-detox",
+      name: "মেহেদি পাউডার (Mehedi Powder)",
+      category: "Detox Powders",
+      price: "৳১৩০",
+      originalPrice: "৳১৬৪",
+      weight: "১০০ গ্রাম",
+      rating: 4.8,
+      emoji: "🌿",
+      image: "https://images.unsplash.com/photo-1601813256819-1fc3f36a06ef?q=80&w=500",
+      desc: "প্রাকৃতিক মেহেদি পাতা থেকে প্রস্তুত খাঁটি পাউডার। এটি স্ক্যাল্প ও চুলে পুষ্টি যোগায়।",
+      benefits: "মাথার তালু ঠান্ডা রাখে, প্রাকৃতিকভাবে কন্ডিশনিং করে, খুশকি কমায়।",
+      usage: "পানির সাথে পেস্ট করে চুলে ১-২ ঘণ্টা রেখে ধুয়ে ফেলুন।",
+      origin: "রাজস্থান, ভারত"
+    },
+    {
+      id: "prod-senna-powder",
+      name: "সোনাপাতা গুঁড়ো (Senna Leaves Powder)",
+      category: "Detox Powders",
+      price: "৳১২০",
+      originalPrice: "৳১৫০",
+      weight: "১০০ গ্রাম",
+      rating: 4.7,
+      emoji: "🍂",
+      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=500",
+      desc: "কোষ্ঠকাঠিন্য দূর করতে এবং পেটের ময়লা পরিষ্কার করতে প্রাকৃতিক ল্যাক্সেটিভ সোনাপাতা গুঁড়ো।",
+      benefits: "কোষ্ঠকাঠিন্য দ্রুত দূর করে, পাকস্থলী ও অন্ত্র পরিষ্কার করে, ওজন হ্রাসে সহায়ক।",
+      usage: "রাতে ১/২ চা চামচ গুঁড়ো কুসুম গরম পানিতে ভিজিয়ে রেখে সকালে পান করুন।",
+      origin: "খুলনা, বাংলাদেশ"
+    },
+    {
+      id: "prod-sidr-leaves-detox",
+      name: "সিডর পাতা গুঁড়ো (Sidr Leaves Powder)",
+      category: "Detox Powders",
+      price: "৳১৫০",
+      originalPrice: "৳১৮০",
+      weight: "১০০ গ্রাম",
+      rating: 4.8,
+      emoji: "🍃",
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500",
+      desc: "বিশুদ্ধ সিডর পাতা যা শরীর ও রক্তের টক্সিন দূর করতে এবং ডার্মাটোলজিক্যাল কেয়ারে সহায়ক।",
+      benefits: "রক্ত পরিষ্কার করে, চর্মরোগ উপশম করে, প্রাকৃতিক অ্যান্টি-সেপ্টিক।",
+      usage: "পানির সাথে পেস্ট করে ত্বকে লাগান অথবা ডাক্তারের পরামর্শে সেবন করুন।",
+      origin: "নাটোর, বাংলাদেশ"
+    },
+
+    // --- Category: Personal Care ---
+    {
+      id: "prod-wooden-comb",
+      name: "নিম কাঠের চিরুনি (Wooden Comb)",
+      category: "Personal Care",
+      price: "৳১৫০",
+      originalPrice: "৳১৮০",
+      weight: "১ টি",
+      rating: 4.9,
+      emoji: "🪮",
+      image: "https://images.unsplash.com/photo-1590156546746-c222e784d38?q=80&w=500",
+      desc: "নিম কাঠ দিয়ে তৈরি ওষধি গুণসম্পন্ন চিরুনি যা চুলে রক্ত সঞ্চালন বাড়ায়।",
+      benefits: "খুশকি ও চুল পড়া কমায়, স্ক্যাল্পের স্বাস্থ্য ভালো রাখে, স্থির তড়িৎ সৃষ্টি করে না।",
+      usage: "প্রতিদিন চুল আঁচড়ানোর জন্য ব্যবহার করুন।",
+      origin: "কুষ্টিয়া, বাংলাদেশ"
+    },
+    {
+      id: "prod-miswak",
+      name: "পিলু গাছের মেসওয়াক (Miswak)",
+      category: "Personal Care",
+      price: "৳৩০",
+      originalPrice: "৳৪০",
+      weight: "১ টি",
+      rating: 4.8,
+      emoji: "🪵",
+      image: "https://images.unsplash.com/photo-1588854692152-cbe660dbde88?q=80&w=500",
+      desc: "সুন্নাহসম্মত প্রাকৃতিক দাঁত পরিষ্কারক পিলু মেসওয়াক।",
+      benefits: "দাঁতের মাড়ি শক্ত করে, মুখের দুর্গন্ধ দূর করে, মুখের ক্ষতিকর ব্যাকটেরিয়া ধ্বংস করে।",
+      usage: "আঁশ তৈরি করে দাঁত পরিষ্কার করতে ব্যবহার করুন।",
+      origin: "আমদানিকৃত (پاکستان)"
+    },
+    {
+      id: "prod-organic-facepack",
+      name: "অর্গানিক ফেসপ্যাক (Organic Facepack)",
+      category: "Personal Care",
+      price: "৳২৫০",
+      originalPrice: "৳৩০০",
+      weight: "১০০ গ্রাম",
+      rating: 4.8,
+      emoji: "🥣",
+      image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=500",
+      desc: "মুলতানি মাটি, নিম, চন্দন ও বন হলুদের নিখুঁত মিশ্রণে তৈরি অর্গানিক ফেসপ্যাক।",
+      benefits: "ত্বকের তৈলাক্ততা দূর করে, উজ্জ্বলতা বাড়ায়, ব্রন ও দাগ কমায়।",
+      usage: "গোলাপ জল বা কাঁচা দুধের সাথে মিশিয়ে মুখে ১০-১৫ মিনিট লাগিয়ে ধুয়ে ফেলুন।",
+      origin: "ইকো সুন্নাহ ল্যাব"
+    },
+    {
+      id: "prod-organic-hair-oil",
+      name: "অর্গানিক হেয়ার অয়েল (Organic Hair Oil)",
+      category: "Personal Care",
+      price: "৳৪৫০",
+      originalPrice: "৳৫৫০",
+      weight: "২০০ মি.লি.",
+      rating: 4.9,
+      emoji: "🧴",
+      image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=500",
+      desc: "২১টি ওষধি গাছের নির্যাস এবং বিশুদ্ধ তেলের মিশ্রণে তৈরি চুলের গোড়ার খাবার।",
+      benefits: "নতুন চুল গজাতে সাহায্য করে, চুল পড়া রোধ করে, চুল কালো ও ঘন করে।",
+      usage: "সপ্তাহে ৩ দিন রাতে ঘুমানোর আগে স্ক্যাল্পে আলতো করে মাসাজ করুন এবং সকালে ধুয়ে ফেলুন।",
+      origin: "ইকো সুন্নাহ ল্যাব"
+    },
+
+    // --- Category: Hijama and Therapy instruments ---
+    {
+      id: "prod-hijama-loose-cups",
+      name: "হিজামা লুজ কাপ (Hijama Loose Cups)",
+      category: "Hijama and Therapy instruments",
+      price: "৳২০",
+      originalPrice: "৳২৫",
+      weight: "১ টি",
+      rating: 4.7,
+      emoji: "🥤",
+      image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=500",
+      desc: "উচ্চ মানের পলিকার্বোনেট লুজ হিজামা কাপ যা ভ্যাকুয়াম চিকিৎসায় ব্যবহৃত হয়।",
+      benefits: "টেকসই, ব্যবহারে নিরাপদ এবং অত্যন্ত শক্তিশালী ভ্যাকুয়াম বজায় রাখে।",
+      usage: "হিজামা থেরাপির কাপ হিসেবে ব্যবহারযোগ্য।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-suction-with-pipe",
+      name: "পাইপসহ সাকশন মেশিন (Suction Machine with pipe)",
+      category: "Hijama and Therapy instruments",
+      price: "৳৮০০",
+      originalPrice: "৳১০০০",
+      weight: "১ টি",
+      rating: 4.8,
+      emoji: "🔌",
+      image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=500",
+      desc: "হিজামা কাপে ভ্যাকুয়াম তৈরির জন্য পাইপযুক্ত শক্তিশালী সাকশন গান/মেশিন।",
+      benefits: "ব্যবহার করা সহজ, পিঠ ও অন্যান্য দুর্গম জায়গায় সহজেই হিজামা করা যায়।",
+      usage: "পাইপের মাধ্যমে কাপের সাথে যুক্ত করে সাকশন করুন।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-suction-without-pipe",
+      name: "পাইপ ছাড়া সাকশন মেশিন (Suction Machine without pipe)",
+      category: "Hijama and Therapy instruments",
+      price: "৳৫০০",
+      originalPrice: "৳৬৫০",
+      weight: "১ টি",
+      rating: 4.7,
+      emoji: "🔫",
+      image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=500",
+      desc: "সরাসরি কাপে লাগিয়ে ব্যবহারের জন্য হ্যান্ড সাকশন গান বা পাম্প।",
+      benefits: "হালকা, পোর্টেবল এবং অত্যন্ত টেকসই।",
+      usage: "সরাসরি হিজামা কাপের মাথায় লক করে ভ্যাকুয়াম তৈরি করুন।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-massage-gel",
+      name: "ম্যাসাজ জেল (Massage Gel)",
+      category: "Hijama and Therapy instruments",
+      price: "৳২৫০",
+      originalPrice: "৳৩০০",
+      weight: "২৫০ মি.লি.",
+      rating: 4.8,
+      emoji: "🧴",
+      image: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?q=80&w=500",
+      desc: "হিজামার আগে বা পরে বডি ম্যাসাজের জন্য প্রশান্তিদায়ক ম্যাসাজ জেল।",
+      benefits: "ত্বকে পিচ্ছিলতা বাড়ায়, পেশির ক্লান্তি দূর করে, ত্বককে হাইড্রেটেড রাখে।",
+      usage: "পরিমাণমতো নিয়ে শরীরে মালিশ করুন।",
+      origin: "ইকো সুন্নাহ ল্যাব"
+    },
+    {
+      id: "prod-massage-roller",
+      name: "বডি ম্যাসাজ রোলার (Body massage roller)",
+      category: "Hijama and Therapy instruments",
+      price: "৳৩৫০",
+      originalPrice: "৳৪৫০",
+      weight: "১ টি",
+      rating: 4.6,
+      emoji: "🌀",
+      image: "https://images.unsplash.com/photo-1519824145371-296894a0daa9?q=80&w=500",
+      desc: "পেশির শক্তভাব ও ব্যথা কমাতে বডি ম্যাসাজ রোলার।",
+      benefits: "রক্ত সঞ্চালন বাড়ায়, স্ট্রেস কমায়, পেশিকে শিথিল করে।",
+      usage: "শরীরের পিঠ, ঘাড় ও পায়ে রোল করে মাসাজ করুন।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-guasha-scrapper",
+      name: "গুয়াশা ম্যাসাজ স্ক্র্যাপার (Guasha Massage Scrapper)",
+      category: "Hijama and Therapy instruments",
+      price: "৳৪০০",
+      originalPrice: "৳৫৫০",
+      weight: "১ টি",
+      rating: 4.8,
+      emoji: "💎",
+      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=500",
+      desc: "প্রাচীন থেরাপিউটিক গুয়াশা স্ক্র্যাপার যা ফেসিয়াল ও বডি টক্সিন দূর করতে সহায়ক।",
+      benefits: "ত্বকের সজীবতা বাড়ায়, রক্ত সঞ্চালন বৃদ্ধি করে, ফোলাভাব কমায়।",
+      usage: "ম্যাসাজ তেল মেখে গুয়াশা স্ক্র্যাপার দিয়ে ত্বক স্ক্র্যাপ করুন।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-hijama-set-12",
+      name: "ফুল হিজামা সেট - ১২ কাপ (Full Hijama Set - 12 Cup)",
+      category: "Hijama and Therapy instruments",
+      price: "৳৭৫০",
+      originalPrice: "৳৯৫০",
+      weight: "১ সেট",
+      rating: 4.9,
+      emoji: "📦",
+      image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=500",
+      desc: "১২টি বিভিন্ন সাইজের প্রিমিয়াম কোয়ালিটির কাপ ও সাকশন গানসহ ফুল হিজামা কিট।",
+      benefits: "বাসায় নিজেই হিজামা করার সম্পূর্ণ প্যাকেজ।",
+      usage: "বক্সের নির্দেশনা অনুযায়ী হিজামা করুন।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-hijama-set-24",
+      name: "ফুল হিজামা সেট - ২৪ কাপ (Full Hijama Set - 24 Cup)",
+      category: "Hijama and Therapy instruments",
+      price: "৳১২০০",
+      originalPrice: "৳১৫০০",
+      weight: "১ সেট",
+      rating: 5.0,
+      emoji: "🎒",
+      image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=500",
+      desc: "২৪টি কাপ, সাকশন গান, পাইপ ও ইউজার ম্যানুয়ালসহ প্রফেশনাল ব্যবহারের হিজামা সেট।",
+      benefits: "দীর্ঘস্থায়ী ও ক্লিনিক্যাল কোয়ালিটি।",
+      usage: "প্রফেশনাল থেরাপির জন্য পারফেক্ট সেট।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-silicon-cup",
+      name: "সিলিকন কাপ (Silicon Cup)",
+      category: "Hijama and Therapy instruments",
+      price: "৳১৫০",
+      originalPrice: "৳২০০",
+      weight: "১ টি",
+      rating: 4.8,
+      emoji: "🥣",
+      image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=500",
+      desc: "মেশিন ছাড়াই ব্যবহারের জন্য সেলফ-ভ্যাকুয়াম সিলিকন হিজামা ও ফেসিয়াল কাপ।",
+      benefits: "নরম সিলিকন বডি, ফেসিয়াল ও স্কিন স্যাগিং চিকিৎসায় দারুণ কার্যকর।",
+      usage: "হালকা চেপে ত্বক লাগালে স্বয়ংক্রিয় ভ্যাকুয়াম তৈরি হবে।",
+      origin: "আমদানিকৃত"
+    },
+    {
+      id: "prod-fire-cup-set",
+      name: "ফুল ফায়ার কাপ সেট (Full Fire Cup Set)",
+      category: "Hijama and Therapy instruments",
+      price: "৳১৮০০",
+      originalPrice: "৳২২০০",
+      weight: "১ সেট",
+      rating: 4.9,
+      emoji: "🔥",
+      image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=500",
+      desc: "ফায়ার থেরাপি বা কাপিং থেরাপির জন্য পুরু কাচের তৈরি প্রফেশনাল ফায়ার কাপ সেট।",
+      benefits: "ডি-টক্সিকেশন, গভীরভাবে পেশির ব্যথা নিরাময়, মেদ ও চর্বি কমাতে সাহায্য করে।",
+      usage: "অ্যালকোহল ও ফায়ার টর্চ ব্যবহার করে ভ্যাকুয়াম তৈরি করুন (শুধুমাত্র ট্রেইন্ড প্রফেশনালদের জন্য)।",
+      origin: "আমদানিকৃত"
+    },
+
+    // --- Category: Herbal Wellness ---
     {
       id: "prod-amla",
-      name: "আমলকি (Premium Amla)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "আমলকি পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৯০",
       originalPrice: "৳১১৩",
       weight: "১০০ গ্রাম",
       rating: 4.8,
       emoji: "🥝",
-      image: "https://images.unsplash.com/photo-1629136578835-f44f91685a7d?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500",
       desc: "ভিটামিন সি সমৃদ্ধ আমলকি ত্বক ও চুলের উজ্জ্বলতা বৃদ্ধি করে এবং হজম শক্তি বাড়ায়।",
       benefits: "চুল পড়া রোধ করে, রোগ প্রতিরোধ ক্ষমতা বাড়ায়, হজমে সাহায্য করে।",
       usage: "কুসুম গরম পানিতে মিশিয়ে অথবা ফেসপ্যাক ও হেয়ারপ্যাক হিসেবে সরাসরি ব্যবহার করা যায়।",
@@ -93,8 +492,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-reetha",
-      name: "রিঠা (Natural Reetha)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "রিঠা পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১০০",
       originalPrice: "৳১২৬",
       weight: "১০০ গ্রাম",
@@ -102,20 +501,20 @@ export default function ShopPage() {
       emoji: "🫧",
       image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=500",
       desc: "চুলের প্রাকৃতিক ক্লিনজার হিসেবে রিঠা অত্যন্ত কার্যকরী। এটি খুশকি দূর করে ও চুলকে রেশমি করে।",
-      benefits: "খুশকি দূর করে, চুলের উজ্জ্বলতা বাড়ায়, কেমিক্যাল-মুক্ত ক্লিনজার।",
+      benefits: "খুшকি দূর করে, চুলের উজ্জ্বলতা বাড়ায়, কেমিক্যাল-মুক্ত ক্লিনজার।",
       usage: "পানিতে ভিজিয়ে রেখে সেই পানি দিয়ে চুল ধুয়ে ফেলুন অথবা শ্যাম্পু হিসেবে ব্যবহার করুন।",
       origin: "চট্টগ্রাম ও হিল ট্র্যাক্টস"
     },
     {
       id: "prod-shikakai",
-      name: "শিকাকাই (Pure Shikakai)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "শিকাকাই পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১১০",
       originalPrice: "৳১৩৯",
       weight: "১০০ গ্রাম",
       rating: 4.7,
       emoji: "🌾",
-      image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=500",
       desc: "প্রাচীনকাল থেকে চুলের যত্নে শিকাকাই ব্যবহৃত হয়ে আসছে। এটি চুলের গোড়া মজবুত ও নরম করে।",
       benefits: "চুলের গোড়া মজবুত করে, অকালপক্বতা রোধ করে, প্রাকৃতিক কন্ডিশনার।",
       usage: "গুঁড়ো করে পানির সাথে মিশিয়ে পেস্ট তৈরি করে স্ক্যাল্পে ২০ মিনিট লাগিয়ে ধুয়ে ফেলুন।",
@@ -123,8 +522,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-bahera",
-      name: "বহেরা পাউডার (Bahera Powder)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "বহেরা পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৬০",
       originalPrice: "৳৭৬",
       weight: "১০০ গ্রাম",
@@ -138,14 +537,14 @@ export default function ShopPage() {
     },
     {
       id: "prod-methi",
-      name: "মেথি পাউডার (Fenugreek Powder)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "মেথি পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৬০",
       originalPrice: "৳৭৬",
       weight: "১০০ গ্রাম",
       rating: 4.8,
       emoji: "🌰",
-      image: "https://images.unsplash.com/photo-1610725664285-7c57e6eeac3f?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=500",
       desc: "চুল পড়া রোধ এবং খুশকি দূর করতে মেথি অসাধারণ কাজ করে। এটি ত্বকের অতিরিক্ত তেল নিয়ন্ত্রণ করে।",
       benefits: "চুল পড়া রাতারাতি কমায়, নতুন চুল গজাতে সাহায্য করে, খুশকি দূর করে।",
       usage: "টক দই বা পানির সাথে মিশিয়ে হেয়ার প্যাক বানিয়ে মাথায় ব্যবহার করুন।",
@@ -153,8 +552,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-flaxseed-raw",
-      name: "তিসি (ফ্ল্যাক্সসিড) (Raw Flaxseeds)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "তিসি (ফ্ল্যাক্সসিড) (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৭০",
       originalPrice: "৳৮৮",
       weight: "১০০ গ্রাম",
@@ -163,13 +562,13 @@ export default function ShopPage() {
       image: "https://images.unsplash.com/photo-1597733336794-12d05021d510?q=80&w=500",
       desc: "তিসি বীজ ওমেগা-৩ ফ্যাটি এসিডে সমৃদ্ধ। এটি চুলের স্বাস্থ্য পুনরুদ্ধার করতে জেল হিসেবে ব্যবহৃত হয়।",
       benefits: "চুল পড়া রোধ করে, ত্বক নরম ও মসৃণ করে, কোলেস্টেরল নিয়ন্ত্রণে সাহায্য করে।",
-      usage: "পানিতে ফুটিয়ে জেল তৈরি করে চুলে লাগান অথবা সামান্য ভেজে প্রতিদিন খেতে পারেন।",
-      origin: "যোর, বাংলাদেশ"
+      usage: "পানিতে ফুটিয়ে জেল তৈরি করে চুলে লাগান অথবা সেবন করতে পারেন।",
+      origin: "যশোর, বাংলাদেশ"
     },
     {
       id: "prod-curry-leaf-dry",
-      name: "শুকনো কারি পাতা (Dry Curry Leaves)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "শুকনো কারি পাতা (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২৫০",
       originalPrice: "৳৩১৫",
       weight: "১০০ গ্রাম",
@@ -183,8 +582,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-curry-leaf-powder",
-      name: "কারি পাতার পাউডার (Curry Leaf Powder)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
+      name: "কারি পাতার পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২০০",
       originalPrice: "৳২৫২",
       weight: "১০০ গ্রাম",
@@ -197,59 +596,9 @@ export default function ShopPage() {
       origin: "শ্রীমঙ্গল, বাংলাদেশ"
     },
     {
-      id: "prod-rosemary-dry-25",
-      name: "শুকনো রোজমেরি (Dry Rosemary - 25g)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
-      price: "৳৯০",
-      originalPrice: "৳১১৩",
-      weight: "২৫ গ্রাম",
-      rating: 4.9,
-      emoji: "🪴",
-      image: "https://images.unsplash.com/photo-1600692592396-04c4da3a4267?q=80&w=500",
-      desc: "চুল লম্বা ও ঘন করার জন্য বিশ্বজুড়ে সমাদৃত। এই শুকনো রোজমেরি দিয়ে সহজেই ঘরে হেয়ার টোনার বা চা তৈরি করতে পারবেন।",
-      benefits: "নতুন চুল গজাতে অত্যন্ত সাহায্য করে, স্ক্যাল্পের রক্তসঞ্চালন বাড়ায়, খুশকি কমায়।",
-      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
-      origin: "আমদানিকৃত (ইতালি)",
-      isHot: true
-    },
-    {
-      id: "prod-rosemary-dry-50",
-      name: "শুকনো রোজমেরি (Dry Rosemary - 50g)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
-      price: "৳১৬০",
-      originalPrice: "৳২০২",
-      weight: "৫০ গ্রাম",
-      rating: 4.9,
-      emoji: "🪴",
-      image: "https://images.unsplash.com/photo-1600692592396-04c4da3a4267?q=80&w=500",
-      desc: "প্রিমিয়াম শুকনো রোজমেরি পাতা। এটি চুলে প্রাকৃতিক জেল্লা এনে দেয় এবং চুল পড়া দ্রুত কমায়।",
-      benefits: "চুলের গোড়া শক্ত করে, নতুন চুল গজাতে অত্যন্ত সাহায্য করে, খুশকি কমায়।",
-      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
-      origin: "আমদানিকৃত (ইতালি)",
-      isHot: true
-    },
-    {
-      id: "prod-rosemary-dry-100",
-      name: "শুকনো রোজমেরি (Dry Rosemary - 100g)",
-      category: "ফল ও গাছের পাওয়ার হাউস",
-      price: "৳২৫০",
-      originalPrice: "৳৩১৫",
-      weight: "১০০ গ্রাম",
-      rating: 5.0,
-      emoji: "🪴",
-      image: "https://images.unsplash.com/photo-1600692592396-04c4da3a4267?q=80&w=500",
-      desc: "আমাদের বেস্ট সেলিং শুকনো রোজমেরি পাতা। চুলের দ্রুত বৃদ্ধিতে এটি একটি শক্তিশালী প্রাকৃতিক উপাদান।",
-      benefits: "চুল পড়া দ্রুত কমায়, চুলের গোড়া মজবুত করে, নতুন চুল গজায়।",
-      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
-      origin: "আমদানিকৃত (ইতালি)",
-      isHot: true
-    },
-
-    // --- Category: ফ্লোরাল বিউটি বুস্টারস (Floral Beauty Boosters) ---
-    {
       id: "prod-henna",
-      name: "হেনা পাউডার (Premium Henna Powder)",
-      category: "ফ্লোরাল বিউটি বুস্টারস",
+      name: "হেনা পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১৩০",
       originalPrice: "৳১৬৪",
       weight: "১০০ গ্রাম",
@@ -263,14 +612,14 @@ export default function ShopPage() {
     },
     {
       id: "prod-hibiscus-powder",
-      name: "জবা পাউডার (Hibiscus Powder)",
-      category: "ফ্লোরাল বিউটি বুস্টারস",
+      name: "জবা পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২২০",
       originalPrice: "৳২৭৭",
       weight: "১০০ গ্রাম",
       rating: 4.9,
       emoji: "🌺",
-      image: "https://images.unsplash.com/photo-1567892737950-30c4db0b8f73?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=500",
       desc: "জবা ফুলে রয়েছে প্রাকৃতিক অ্যামিনো এসিড ও ভিটামিন সি, যা চুলের অকালপক্বতা রোধে দারুণ সাহায্য করে।",
       benefits: "চুল পড়া রোধ করে, খুশকি দূর করে, চুল মসৃণ ও রেশমি করে।",
       usage: "টক দই বা মধুর সাথে মিশিয়ে হেয়ার মাস্ক তৈরি করে সপ্তাহে ১ দিন ব্যবহার করুন।",
@@ -278,8 +627,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-hibiscus-dry",
-      name: "শুকনো জবা ফুল (Dry Hibiscus Flowers)",
-      category: "ফ্লোরাল বিউটি বুস্টারস",
+      name: "শুকনো জবা ফুল (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২০০",
       originalPrice: "৳২৫২",
       weight: "১০০ গ্রাম",
@@ -293,8 +642,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-rose-dry",
-      name: "শুকনো গোলাপ (Dry Rose Petals)",
-      category: "ফ্লোরাল বিউটি বুস্টারস",
+      name: "শুকনো গোলাপ (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১২০",
       originalPrice: "৳১৫১",
       weight: "১০০ গ্রাম",
@@ -308,8 +657,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-rose-powder",
-      name: "গোলাপ পাউডার (Organic Rose Powder)",
-      category: "ফ্লোরাল বিউটি বুস্টারস",
+      name: "গোলাপ পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২০০",
       originalPrice: "৳২৫২",
       weight: "১০০ গ্রাম",
@@ -321,33 +670,31 @@ export default function ShopPage() {
       usage: "দুধ বা গোলাপ জলের সাথে মিশিয়ে ফেসপ্যাক হিসেবে মুখে ১০-১৫ মিনিট লাগিয়ে রাখুন।",
       origin: "সাভার, বাংলাদেশ"
     },
-
-    // --- Category: হোলিস্টিক হার্বাল হিরোজ (Holistic Herbal Heroes) ---
     {
       id: "prod-multani",
-      name: "মুলতানি মাটি (Multani Mitti Clay)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "মুলতানি মাটি (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১০০",
       originalPrice: "৳১২৬",
       weight: "১০০ গ্রাম",
       rating: 4.8,
       emoji: "🪨",
-      image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=500",
       desc: "তৈলাক্ত ও ব্রন প্রবণ ত্বকের জন্য অত্যন্ত উপকারী। এটি ত্বক গভীর থেকে ডিটক্স ও পরিষ্কার করে।",
       benefits: "অতিরিক্ত তেল নিয়ন্ত্রণ করে, ব্রন দূর করে, ত্বকের কালো দাগ কমায়।",
       usage: "গোলাপ জলের সাথে মিশিয়ে পেস্ট করে মুখে ১০-১৫ মিনিট রাখুন, শুকিয়ে গেলে ধুয়ে ফেলুন।",
-      origin: "আমদানিকৃত (পাকিস্তান)"
+      origin: "আমদানিকৃত (پاکستان)"
     },
     {
       id: "prod-bhringraj",
-      name: "ভৃঙ্গরাজ পাউডার (Bhringraj Powder)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "ভৃঙ্গরাজ পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১০০",
       originalPrice: "৳১২৬",
       weight: "১০০ গ্রাম",
       rating: 4.9,
       emoji: "🌿",
-      image: "https://images.unsplash.com/photo-1626271189894-a5c0a23b37f0?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=500",
       desc: "ভৃঙ্গরাজ বা কেশরাজ চুলের জন্য সঞ্জীবনী বুটি। এটি চুলের অকালপক্বতা রোধে সবচেয়ে সেরা উপাদান।",
       benefits: "চুলের অকালপক্বতা দূর করে, দ্রুত চুল লম্বা করে, চুলের উজ্জ্বলতা ফেরায়।",
       usage: "নারকেল তেল বা আমলকির রসের সাথে মিশিয়ে মাথায় ব্যবহার করুন।",
@@ -355,8 +702,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-neem",
-      name: "নিম পাউডার (Pure Neem Powder)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "নিম পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১০০",
       originalPrice: "৳১২৬",
       weight: "১০০ গ্রাম",
@@ -369,24 +716,24 @@ export default function ShopPage() {
       origin: "নাটোর, বাংলাদেশ"
     },
     {
-      id: "prod-moringa",
-      name: "মোরিঙ্গা পাউডার (Organic Moringa Powder)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      id: "prod-moringa-powder-wellness",
+      name: "মোরিঙ্গা পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳১৮০",
       originalPrice: "৳২২৭",
       weight: "১০০ গ্রাম",
       rating: 4.9,
       emoji: "🥬",
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500",
-      desc: "সুপারফুড সজনে পাতা বা মোরিঙ্গা ভিটামিন, ক্যালসিয়াম ও আয়রনের পাওয়ার হাউস। এটি সার্বিক স্বাস্থ্যের উন্নতি ঘটায়।",
-      benefits: "শরীরের রোগ প্রতিরোধ ক্ষমতা বাড়ায়, রক্তস্বল্পতা কমায়, এনার্জি বুস্ট করে।",
-      usage: "১ চা চামচ পাউডার পানিতে গুলিয়ে সকালে খালি পেটে পান করুন অথবা স্যুপ ও তরকারিতে দিন।",
+      image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=500",
+      desc: "সুপারফুড সজনে পাতা বা মোরিঙ্গা ভিটামিন, ক্যালসিয়াম ও আয়রনের পাওয়ার হাউস।",
+      benefits: "রোগ প্রতিরোধ ক্ষমতা বাড়ায়, রক্তস্বল্পতা কমায়, এনার্জি বুস্ট করে।",
+      usage: "১ চা চামচ পাউডার পানিতে গুলিয়ে সকালে খালি পেটে পান করুন।",
       origin: "কুষ্টিয়া, বাংলাদেশ"
     },
     {
       id: "prod-indigo",
-      name: "ইন্ডিগো পাউডার (Organic Indigo Powder)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "ইন্ডিগো পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৩০০",
       originalPrice: "৳৩৭৮",
       weight: "১০০ গ্রাম",
@@ -394,29 +741,29 @@ export default function ShopPage() {
       emoji: "🔵",
       image: "https://images.unsplash.com/photo-1600852435959-83f7eba2a6e1?q=80&w=500",
       desc: "চুল প্রাকৃতিক উপায়ে কালো করার সেরা উপায় ইন্ডিগো বা নীল পাতা পাউডার। এটি কেমিক্যাল ডাই-এর উত্তম বিকল্প।",
-      benefits: "কেমিক্যাল ছাড়াই চুল কালো করে, মেহেন্দি ব্যবহারের পর লাগালে সুন্দর কালো রঙ আসে।",
+      benefits: "মিক্যাল ছাড়াই চুল কালো করে, মেহেন্দি ব্যবহারের পর লাগালে সুন্দর কালো রঙ আসে।",
       usage: "মেহেদি লাগানোর পর, ইন্ডিগো পাউডার হালকা গরম পানিতে গুলিয়ে চুলে ১ ঘণ্টা লাগিয়ে ধুয়ে ফেলুন।",
       origin: "কুষ্টিয়া, বাংলাদেশ"
     },
     {
       id: "prod-wild-turmeric",
-      name: "বন হলুদ (Kasturi Turmeric)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "বন হলুদ পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳২৩০",
       originalPrice: "৳২৯০",
       weight: "১০০ গ্রাম",
       rating: 4.8,
       emoji: "🌼",
       image: "https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?q=80&w=500",
-      desc: "ত্বকের উজ্জ্বলতা ফিরিয়ে আনতে কস্তুরী হলুদ বা বন হলুদ অতুলনীয়। এটি মুখে অনাকাঙ্ক্ষিত লোম গজানো রোধ করে।",
+      desc: "ত্বকের উজ্জ্বলতা ফিরিয়ে আনতে কস্তুরী হলুদ বা বন হলুদ অতুলনীয়।",
       benefits: "ত্বক উজ্জ্বল করে, ব্রনের জীবাণু মারে, ত্বকের কালো ছোপ ছোপ দাগ দূর করে।",
       usage: "দুধ বা মধুর সাথে মিশিয়ে মুখে লাগিয়ে ১৫ মিনিট পর কুসুম গরম পানি দিয়ে ধুয়ে ফেলুন।",
       origin: "বান্দরবান, বাংলাদেশ"
     },
     {
       id: "prod-beetroot",
-      name: "বিটরুট পাউডার (Pure Beetroot Powder)",
-      category: "হোলিস্টিক হার্বাল হিরোজ",
+      name: "বিটরুট পাউডার (১০০ গ্রাম)",
+      category: "Herbal Wellness",
       price: "৳৩০০",
       originalPrice: "৳৩৭৮",
       weight: "১০০ গ্রাম",
@@ -428,18 +775,66 @@ export default function ShopPage() {
       usage: "ঠোঁটের জন্য ভেসলিনের সাথে মিশিয়ে স্ক্রাব করুন অথবা ফেসপ্যাকে ব্যবহার করুন।",
       origin: "আমদানিকৃত (ভারত)"
     },
+    {
+      id: "prod-rosemary-dry-25",
+      name: "শুকনো রোজমেরি (Dry Rosemary - 25g)",
+      category: "Herbal Wellness",
+      price: "৳৯০",
+      originalPrice: "৳১১৩",
+      weight: "২৫ গ্রাম",
+      rating: 4.9,
+      emoji: "🪴",
+      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=500",
+      desc: "চুল লম্বা ও ঘন করার জন্য বিশ্বজুড়ে সমাদৃত শুকনো রোজমেরি পাতা।",
+      benefits: "নতুন চুল গজাতে অত্যন্ত সাহায্য করে, স্ক্যাল্পের রক্তসঞ্চালন বাড়ায়, খুশকি কমায়।",
+      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
+      origin: "আমদানিকৃত (ইতালি)",
+      isHot: true
+    },
+    {
+      id: "prod-rosemary-dry-50",
+      name: "শুকনো রোজমেরি (Dry Rosemary - 50g)",
+      category: "Herbal Wellness",
+      price: "৳১৬০",
+      originalPrice: "৳২০২",
+      weight: "৫০ গ্রাম",
+      rating: 4.9,
+      emoji: "🪴",
+      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=500",
+      desc: "প্রিমিয়াম শুকনো রোজমেরি পাতা। এটি চুলে প্রাকৃতিক জেল্লা এনে দেয় এবং চুল পড়া দ্রুত কমায়।",
+      benefits: "চুলের গোড়া শক্ত করে, নতুন চুল গজাতে অত্যন্ত সাহায্য করে, খুশকি কমায়।",
+      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
+      origin: "আমদানিকৃত (ইতালি)",
+      isHot: true
+    },
+    {
+      id: "prod-rosemary-dry-100",
+      name: "শুকনো রোজমেরি (Dry Rosemary - 100g)",
+      category: "Herbal Wellness",
+      price: "৳২৫০",
+      originalPrice: "৳৩১৫",
+      weight: "১০০ গ্রাম",
+      rating: 5.0,
+      emoji: "🪴",
+      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=500",
+      desc: "আমাদের বেস্ট সেলিং শুকনো রোজমেরি পাতা। চুলের দ্রুত বৃদ্ধিতে এটি একটি শক্তিশালী প্রাকৃতিক উপাদান।",
+      benefits: "চুল পড়া দ্রুত কমায়, চুলের গোড়া মজবুত করে, নতুন চুল গজায়।",
+      usage: "১০-১৫ মিনিট পানিতে ফুটিয়ে ছেঁকে নিয়ে হেয়ার স্প্রে বা টোনার হিসেবে ব্যবহার করুন।",
+      origin: "আমদানিকৃত (ইতালি)",
+      isHot: true
+    },
 
-    // --- Category: নতুন ঘরোয়া কেয়ার পণ্য (New Homemade Care Products) ---
+    // --- Category: Organic and Hand Made Products ---
     {
       id: "prod-facial-cleanser",
-      name: "ফেসিয়াল ক্লিনজার (Organic Facial Cleanser)",
-      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      name: "ফেসিয়াল ক্লিনজার (১০০ গ্রাম)",
+      category: "Organic and Hand Made Products",
       price: "৳১৮০",
       originalPrice: "৳২২৭",
       weight: "১০০ গ্রাম",
       rating: 4.8,
       emoji: "🧼",
-      image: "https://images.unsplash.com/photo-1556228841-a3c527ebefe5?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=500",
       desc: "সম্পূর্ণ ঘরোয়া ও প্রাকৃতিক উপাদানে তৈরি ফেস ক্লিনজার। এটি ত্বকের প্রাকৃতিক পিএইচ ঠিক রেখে গভীর থেকে ত্বক পরিষ্কার করে।",
       benefits: "ত্বকের ময়লা ও টক্সিন দূর করে, ত্বক শুষ্ক করে না, সম্পূর্ণ কেমিক্যাল-মুক্ত।",
       usage: "সামান্য পানি দিয়ে মুখে ম্যাসাজ করে ফেনা তৈরি করুন এবং ভালো করে ধুয়ে ফেলুন।",
@@ -447,8 +842,8 @@ export default function ShopPage() {
     },
     {
       id: "prod-herbal-shampoo",
-      name: "হারবাল শ্যাম্পু (Homemade Herbal Shampoo)",
-      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      name: "হারবাল শ্যাম্পু (১০০ মি.লি.)",
+      category: "Organic and Hand Made Products",
       price: "৳৩০০",
       originalPrice: "৳৩৭৮",
       weight: "১০০ মি.লি.",
@@ -462,14 +857,14 @@ export default function ShopPage() {
     },
     {
       id: "prod-flaxseed-toner",
-      name: "তিসি হেয়ার টোনার (Flaxseed Hair Toner)",
-      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      name: "তিসি হেয়ার টোনার (১০০ মি.লি.)",
+      category: "Organic and Hand Made Products",
       price: "৳১৫০",
       originalPrice: "৳১৮৯",
       weight: "১০০ মি.লি.",
       rating: 4.8,
       emoji: "💧",
-      image: "https://images.unsplash.com/photo-1597733336794-12d05021d510?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=500",
       desc: "তিসি থেকে তৈরি পানি সমৃদ্ধ লাইটওয়েট হেয়ার টোনার। এটি চুলকে ঘন ও নরম করতে এবং রুক্ষতা দূর করতে অত্যন্ত উপযোগী।",
       benefits: "চুল সিল্কি ও মসৃণ করে, চুলের রুক্ষতা দূর করে, গোড়া মজবুত করে।",
       usage: "গোসলের পর বা রাতে ঘুমানোর আগে শুকনো স্ক্যাল্প ও চুলে স্প্রে করে হালকা ম্যাসাজ করুন।",
@@ -477,14 +872,14 @@ export default function ShopPage() {
     },
     {
       id: "prod-rosemary-toner",
-      name: "রোজমেরি হেয়ার টোনার (Rosemary Hair Toner)",
-      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      name: "রোজমেরি হেয়ার টোনার (১০০ মি.লি.)",
+      category: "Organic and Hand Made Products",
       price: "৳২০০",
       originalPrice: "৳২৫২",
       weight: "১০০ মি.লি.",
       rating: 4.9,
       emoji: "💧",
-      image: "https://images.unsplash.com/photo-1600692592396-04c4da3a4267?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=500",
       desc: "বিশুদ্ধ রোজমেরি পাতার নির্যাস থেকে প্রস্তুত আমাদের জনপ্রিয় হেয়ার টোনার। এটি নতুন চুল গজাতে বিশ্বব্যাপী সর্বাধিক প্রশংসিত।",
       benefits: "নতুন চুল দ্রুত গজাতে সাহায্য করে, চুল পড়া অবিলম্বে বন্ধ করে, স্ক্যাল্প রিফ্রেশ করে।",
       usage: "প্রতিদিন স্ক্যাল্পে স্প্রে করুন (ধোয়ার প্রয়োজন নেই) এবং আঙুল দিয়ে হালকা ম্যাসাজ করুন।",
@@ -493,14 +888,14 @@ export default function ShopPage() {
     },
     {
       id: "prod-rosemary-oil",
-      name: "রোজমেরি অয়েল (Premium Rosemary Oil)",
-      category: "নতুন ঘরোয়া কেয়ার পণ্য",
+      name: "রোজমেরি অয়েল (১০০ মি.লি.)",
+      category: "Organic and Hand Made Products",
       price: "৳৩০০",
       originalPrice: "৳৩৭৮",
       weight: "১০০ মি.লি.",
       rating: 5.0,
       emoji: "🪔",
-      image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?q=80&w=500",
+      image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=500",
       desc: "অত্যন্ত শক্তিশালী এবং বিশুদ্ধ রোজমেরি অয়েল যা নারকেল বা অলিভ অয়েলের সাথে ক্যারিয়ার অয়েল হিসেবে চুলে পুষ্টি যোগায়।",
       benefits: "চুলের বৃদ্ধি দ্রুত ত্বরান্বিত করে, গোড়াকে অতিশক্তিশালী করে, খুশকি ও চুলকানি নিরাময় করে।",
       usage: "যেকোনো ক্যারিয়ার অয়েলের সাথে মিশিয়ে সপ্তাহে ২-৩ বার চুলে ও স্ক্যাল্পে আলতো করে মালিশ করুন।",
@@ -508,6 +903,20 @@ export default function ShopPage() {
       isHot: true
     }
   ];
+
+export default function ShopPage() {
+  const { cart, addToCart, updateCartQty, createOrder, orders, confirmOrderReceived } = useApp();
+
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [activeOrderTab, setActiveOrderTab] = useState("All");
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [activeView, setActiveView] = useState("products"); // "products", "cart", "orders"
 
   const filteredProducts = products.filter(p => {
     const matchesCategory = activeCategory === "All" || p.category === activeCategory;
@@ -636,13 +1045,13 @@ export default function ShopPage() {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                     placeholder="Search prophetic medicines & wellness items..."
                     className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-10 pr-10 py-2.5 text-slate-800 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all shadow-inner font-semibold"
                   />
                   {searchQuery && (
                     <button 
-                      onClick={() => setSearchQuery("")}
+                      onClick={() => { setSearchQuery(""); setCurrentPage(1); }}
                       className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-655 transition-colors"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -657,7 +1066,7 @@ export default function ShopPage() {
                   {categories.map((cat) => (
                     <button
                       key={cat}
-                      onClick={() => setActiveCategory(cat)}
+                      onClick={() => { setActiveCategory(cat); setCurrentPage(1); }}
                       className={`px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all shrink-0 snap-align-start border ${
                         activeCategory === cat
                           ? "bg-emerald-800 border-emerald-800 text-white shadow-[0_4px_12px_rgba(6,95,70,0.15)] scale-[1.02]"
@@ -1123,10 +1532,13 @@ export default function ShopPage() {
               {/* Left Column: Premium Image showcase & metadata */}
               <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
                 <div className="w-full h-56 md:h-64 rounded-2xl overflow-hidden mb-4 border border-slate-200 shadow-md relative group">
-                  <img 
+                  <Image 
                     src={selectedProduct.image} 
                     alt={selectedProduct.name} 
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 500px"
+                    className="object-cover"
+                    priority
                   />
                   <div className="absolute top-3 left-3 w-9 h-9 rounded-xl bg-white/95 backdrop-blur-sm shadow flex items-center justify-center text-lg">
                     {selectedProduct.emoji}
@@ -1193,7 +1605,7 @@ export default function ShopPage() {
                           <span>📖</span> Sunnah & Hadith Reference
                         </h4>
                         <p className="text-xs sm:text-sm text-amber-950 italic leading-relaxed font-medium">
-                          "{selectedProduct.sunnahRef}"
+                          &ldquo;{selectedProduct.sunnahRef}&rdquo;
                         </p>
                       </div>
                     )}

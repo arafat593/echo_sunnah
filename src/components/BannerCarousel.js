@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+
 
 export default function BannerCarousel({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -83,14 +85,13 @@ export default function BannerCarousel({ slides }) {
               }`}
           >
             {/* Slide Background Image */}
-            <img
+            <Image
               src={slide.image}
-              alt=""
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-              className={`w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${index === activeIndex ? "scale-105" : "scale-100"
-                }`}
+              alt={slide.title || "Banner Image"}
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className={`object-cover transition-transform duration-[6000ms] ease-out ${index === activeIndex ? "scale-105" : "scale-100"}`}
             />
 
             {/* Gradient Overlay for Text Contrast */}
