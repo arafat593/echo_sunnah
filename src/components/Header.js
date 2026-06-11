@@ -49,7 +49,7 @@ export default function Header() {
   const [otpCode, setOtpCode] = useState(["1", "2", "3", "4", "5", "6"]);
 
   const menuItems = [
-    { name: "Home", href: "/home" },
+    { name: "Home", href: "/" },
     { name: "Ruqyah", href: "/ruqyah" },
     { name: "Hijama", href: "/hijama" },
     { name: "Shop", href: "/shop" },
@@ -65,7 +65,7 @@ export default function Header() {
   ];
 
   const mobileMenuItems = [
-    { name: "Home", href: "/home" },
+    { name: "Home", href: "/" },
     { name: "Ruqyah", href: "/ruqyah" },
     { name: "Hijama", href: "/hijama" },
     { name: "Shop", href: "/shop" },
@@ -235,7 +235,7 @@ export default function Header() {
 
               {/* Brand Logo & Name */}
               <Link
-                href="/home"
+                href="/"
                 className="flex-shrink-0 flex items-center gap-1.5 sm:gap-3 group z-10"
               >
                 <div className={`bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-amber-400 p-0 rounded-[10px] sm:rounded-[18px] xl:rounded-[18px] shadow-md shadow-emerald-950/15 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-emerald-600/20 transition-all duration-300 ${isScrolled ? "scale-90" : "scale-100"
@@ -552,7 +552,7 @@ export default function Header() {
                 </button>
 
                 <p className="text-center text-xs text-slate-500 mt-4">
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <button
                     type="button"
                     onClick={() => setAuthMode("register")}
@@ -707,7 +707,7 @@ export default function Header() {
                 </button>
 
                 <p className="text-center text-xs text-slate-500">
-                  Didn't receive code?{" "}
+                  Didn&apos;t receive code?{" "}
                   <button
                     type="button"
                     onClick={() => alert("Verification code resent successfully to " + otpSentEmail + "!")}

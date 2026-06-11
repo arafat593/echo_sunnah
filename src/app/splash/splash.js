@@ -1,16 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-export default function SplashScreen() {
-  const router = useRouter();
+export default function SplashScreen({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    // Increment loading progress bar (reach 100% in 1 second)
+    // Increment loading progress bar (reach 100% in 500ms for faster initial experience)
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -19,24 +17,26 @@ export default function SplashScreen() {
         }
         return prev + 10;
       });
-    }, 100);
+    }, 50);
 
-    // Trigger fade-out animation right before redirecting
+    // Trigger fade-out animation right before unmounting
     const fadeTimeout = setTimeout(() => {
       setFade(true);
-    }, 700);
+    }, 600);
 
-    // Redirect to home screen after exactly 1.0 second
+    // Unmount and call completion callback after fade completes
     const redirectTimeout = setTimeout(() => {
-      router.push("/home");
-    }, 1000);
+      if (onComplete) {
+        onComplete();
+      }
+    }, 1100);
 
     return () => {
       clearInterval(progressInterval);
       clearTimeout(fadeTimeout);
       clearTimeout(redirectTimeout);
     };
-  }, [router]);
+  }, [onComplete]);
 
   return (
     <div
@@ -78,7 +78,7 @@ export default function SplashScreen() {
               width={72}
               height={72}
               className="object-contain animate-spin-slow"
-              style={{ height: "auto" }}
+              style={{ width: "auto", height: "auto" }}
             />
           </div>
         </div>

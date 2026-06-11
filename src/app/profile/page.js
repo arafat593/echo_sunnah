@@ -55,15 +55,20 @@ function PhoneCodeSelect({ value, iso2, onChange }) {
     function handleClickOutside(event) {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsOpen(false);
+        setSearch("");
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) setSearch("");
-  }, [isOpen]);
+  const handleToggle = () => {
+    setIsOpen((prev) => {
+      const next = !prev;
+      if (!next) setSearch("");
+      return next;
+    });
+  };
 
   const selectedCountry = allCountries.find(
     (c) => c.iso2 === iso2 || `+${c.dialCode}` === value
@@ -80,7 +85,7 @@ function PhoneCodeSelect({ value, iso2, onChange }) {
   return (
     <div className="relative shrink-0" ref={containerRef}>
       <div
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={`bg-slate-50 border rounded-xl px-3 py-3 text-xs sm:text-sm text-slate-800 flex items-center gap-1.5 cursor-pointer select-none transition-all hover:border-emerald-300 min-w-[105px] justify-between h-[46px] ${
           isOpen ? "border-emerald-500 ring-1 ring-emerald-500/20 font-semibold" : "border-slate-200"
         }`}
@@ -122,6 +127,7 @@ function PhoneCodeSelect({ value, iso2, onChange }) {
                     onClick={() => {
                       onChange(`+${c.dialCode}`, c.iso2);
                       setIsOpen(false);
+                      setSearch("");
                     }}
                     className={`px-3 py-2 text-xs sm:text-sm cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-800 transition-colors flex items-center gap-2 ${
                       isSelected ? "bg-emerald-50 text-emerald-800 font-bold" : "text-slate-700"
@@ -278,25 +284,30 @@ export default function ProfilePage() {
 
   const [editing, setEditing] = useState(false);
   const [errors, setErrors] = useState({});
-  const [avatarPreview, setAvatarPreview] = useState(user.avatar || "");
+  const [avatarPreview, setAvatarPreview] = useState(() => user.avatar || "");
   const fileInputRef = useRef(null);
 
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    phoneCode: "+880",
-    phoneCountry: "bd",
-    email: "",
-    birthDate: "",
-    gender: "",
-    address: "",
-    area: "",
-    district: "",
-    division: "",
-    country: "Bangladesh",
+  const [form, setForm] = useState(() => {
+    const { code, iso2, number } = parsePhone(user.phone);
+    return {
+      name: user.name || "",
+      phone: number,
+      phoneCode: code,
+      phoneCountry: iso2,
+      email: user.email || "",
+      birthDate: user.birthDate || "",
+      gender: user.gender || "",
+      address: user.address || "",
+      area: user.area || "",
+      district: user.district || "",
+      division: user.division || "",
+      country: user.country || "Bangladesh",
+    };
   });
 
-  useEffect(() => {
+  const [prevUser, setPrevUser] = useState(user);
+  if (user !== prevUser) {
+    setPrevUser(user);
     const { code, iso2, number } = parsePhone(user.phone);
     setForm({
       name: user.name || "",
@@ -313,7 +324,7 @@ export default function ProfilePage() {
       country: user.country || "Bangladesh",
     });
     setAvatarPreview(user.avatar || "");
-  }, [user]);
+  }
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

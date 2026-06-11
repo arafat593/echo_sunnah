@@ -108,7 +108,7 @@ export default function AcademyPage() {
           </div>
           <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-800 rounded-full flex items-center justify-center font-black mx-auto text-lg mb-3">🤲</div>
-            <h3 className="font-bold text-slate-850">Daily Du'a & Azkar</h3>
+            <h3 className="font-bold text-slate-850">Daily Du&apos;a & Azkar</h3>
             <p className="text-xs text-slate-550 leading-relaxed mt-2">
               Fortress of the Muslim (Hisnul Muslim) daily morning/evening supplications, and self-protection prayers.
             </p>

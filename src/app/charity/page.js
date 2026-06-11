@@ -20,7 +20,7 @@ const charitySlides = [
     desc: "Install clean water wells in remote drought-hit regions of Bangladesh. Provide daily clean water to thousands of thirsty families."
   },
   {
-    image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb8?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1600",
     badge: "Protecting Generations",
     title: "Sponsor Orphan Children Education",
     desc: "Change the destiny of a child. Provide clothing, school books, healthy meals, and basic living shelter for just ৳২,০০০ a month."

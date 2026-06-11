@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export default function HijamaCard({ pkg, onCardClick, onBookClick, className = "", ...props }) {
   return (
@@ -10,11 +11,13 @@ export default function HijamaCard({ pkg, onCardClick, onBookClick, className = 
       <div>
         {/* Package Cover Image with badges */}
         <div className="h-28 sm:h-44 w-full overflow-hidden rounded-2xl relative mb-3 sm:mb-5 border border-slate-100 shadow-inner">
-          <img
+          <Image
             src={pkg.image}
             alt={pkg.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 350px"
             draggable="false"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
+            className="object-cover group-hover:scale-105 transition-transform duration-500 select-none"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
 

@@ -17,7 +17,7 @@ const parsePrice = (priceStr) => {
 
 const ruqyahSlides = [
   {
-    image: "https://images.unsplash.com/photo-1609599006353-e629f1d29718?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?q=80&w=1600",
     badge: "ECHO SUNNAH RUQYAH (রুকইয়াহ শারইয়াহ)",
     title: "Quranic Healing & Spiritual Wellness",
     desc: "Heal Jinn affliction, evil eye, Sihr, and anxiety through authentic, strictly Sunnah-compliant Quranic recitations performed by trained theologians."
@@ -266,7 +266,7 @@ export default function RuqyahPage() {
             <div className="lg:col-span-7">
               <h2 className="text-2xl font-bold text-emerald-850">What is Ruqyah Shariah? (রুকইয়াহ কি?)</h2>
               <p className="mt-4 text-sm text-slate-650 leading-relaxed">
-                Ruqyah Shariah refers to the recitation of specific verses from the Holy Quran and authentic supplications (Du'as) taught by Prophet Muhammad (ﷺ). It is a spiritual remedy against various evils, diseases, and psychological illnesses. 
+                Ruqyah Shariah refers to the recitation of specific verses from the Holy Quran and authentic supplications (Du&apos;as) taught by Prophet Muhammad (ﷺ). It is a spiritual remedy against various evils, diseases, and psychological illnesses. 
               </p>
               <p className="mt-3 text-sm text-slate-650 leading-relaxed">
                 Our team ensures absolute theological safety—we strictly avoid any forms of shirk, amulets (taweez), or unIslamic methods, bringing you pure healing grounded in Tawheed.
@@ -372,12 +372,12 @@ export default function RuqyahPage() {
               <h3 className="text-xl font-bold text-amber-400">Self-Ruqyah Guide</h3>
               <h4 className="text-sm font-semibold mt-1">নিজে নিজে রুকইয়াহ করার সুন্নাহ গাইডলাইন</h4>
               <p className="mt-4 text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                The best healer is yourself. Reciting protection Du'as and Surahs daily strengthens your spiritual shield (Hisn) against all spiritual harm.
+                The best healer is yourself. Reciting protection Du&apos;as and Surahs daily strengthens your spiritual shield (Hisn) against all spiritual harm.
               </p>
               <div className="mt-6 space-y-3 text-xs sm:text-sm">
                 <p><strong>1. Intention (নিয়ত):</strong> Purely seeking Shifa from Allah alone.</p>
                 <p><strong>2. Perform Wudu (ওযু):</strong> Remain in pure state.</p>
-                <p><strong>3. Morning & Evening Azkar:</strong> Daily Al-Mu'awwidhat (Surah Ikhlas, Falaq, Naas) 3 times.</p>
+                <p><strong>3. Morning &amp; Evening Azkar:</strong> Daily Al-Mu&apos;awwidhat (Surah Ikhlas, Falaq, Naas) 3 times.</p>
                 <p><strong>4. Ayat al-Kursi:</strong> Recited after every obligatory prayer and before sleeping.</p>
               </div>
             </div>

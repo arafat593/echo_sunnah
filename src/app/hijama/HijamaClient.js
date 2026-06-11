@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { useApp } from "@/context/AppContext";
 import BannerCarousel from "@/components/BannerCarousel";
 import HijamaCard from "@/components/HijamaCard";
+import Image from "next/image";
 
 const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
@@ -90,7 +91,7 @@ export default function HijamaPage() {
           originalPrice: "৳৮০০",
           desc: "5 cups, 10 min session focusing on pain and muscle tension relief.",
           badge: "Budget Tier",
-          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
           features: ["5 Dry Cups", "10 Minutes Session", "1–2 Target Points", "Pain/Tension Focus", "Surgical Grade Sterilization"],
           cups: 5,
           whyTake: "Ideal for quick relief from localized muscle stiffness and mild backaches.",
@@ -104,7 +105,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,২০৯",
           desc: "8 cups, 15 min session focusing on Neck and Shoulder pain relief.",
           badge: "Mid Low Tier",
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
           features: ["8 Dry Cups", "15 Minutes Session", "Neck + Shoulder Focus", "Basic Pain Relief Massage", "Muscle Tone Reset"],
           cups: 8,
           whyTake: "Designed specifically for desk workers dealing with chronic neck stiffness and shoulder fatigue.",
@@ -167,7 +168,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,৫০০",
           desc: "3–5 Sunnah points, minimal blood letting with 100% sterile disposable blades. 15 mins.",
           badge: "Entry Level",
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
           features: ["3–5 Sunnah Points", "Minimal Blood Letting", "100% Sterile Disposable Blades", "15 Minutes Session", "Al-Kahil Point Coverage"],
           cups: 5,
           whyTake: "Perfect for beginners who want to fulfill the blessed prophetic Sunnah with minimal discomfort.",
@@ -181,7 +182,7 @@ export default function HijamaPage() {
           originalPrice: "৳২,২০০",
           desc: "6–8 points on back and shoulder. Controlled blood removal for systemic detoxification.",
           badge: "Standard",
-          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
           features: ["6–8 Detox Points", "Back + Shoulder Focus", "Controlled Sterile Blood Removal", "20 Minutes Session", "Prophetic Herb Sanitization"],
           cups: 8,
           whyTake: "Highly recommended for relieving chronic upper back spasms, high blood pressure symptoms, and brain fog.",
@@ -244,7 +245,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,০০০",
           desc: "15 min back-only session. Light organic oil massage and smooth cup sliding.",
           badge: "Budget",
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
           features: ["15 Minutes Session", "Back Only Coverage", "Light Organic Olive Oil Massage", "Smooth Cup Sliding Motion", "Stress Buster Focus"],
           cups: 2,
           whyTake: "A quick, soothing session to relieve immediate stiffness in the lower and upper back after long sits.",
@@ -258,7 +259,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,৫০০",
           desc: "20 min neck and shoulder session. Moderate pressure therapy for heavy stress relief.",
           badge: "Low Mid",
-          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
           features: ["20 Minutes Session", "Neck + Shoulder Focus", "Moderate Pressure Moving Cups", "Organic Black Seed Oil Blend", "Tension Node Targeting"],
           cups: 3,
           whyTake: "Ideal for people experiencing severe shoulder knots, desk fatigue, and stress-related tension headaches.",
@@ -321,7 +322,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,০০০",
           desc: "5–6 traditional thick glass cups, 10–15 min session to experience the heat therapy.",
           badge: "Low",
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
           features: ["5–6 Traditional Glass Cups", "10–15 Minutes Session", "Basic Thermal Vacuum Placement", "Mild Muscle Warm-up", "Certified Safety Standards"],
           cups: 6,
           whyTake: "A perfect introduction to traditional fire cupping therapy. Highly safe and relaxing.",
@@ -335,7 +336,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,৮০০",
           desc: "8 cups focusing on shoulder and back. Combines heat with vacuum pressure to release pain.",
           badge: "Mid Low",
-          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
           features: ["8 Heavy Duty Glass Cups", "Shoulder + Back Special Focus", "Thermal Pain Relief Placement", "15 Minutes Session", "Herbal Oil Base Application"],
           cups: 8,
           whyTake: "Specifically designed for acute shoulder and thoracic back pains, expelling cold from the body.",
@@ -398,7 +399,7 @@ export default function HijamaPage() {
           originalPrice: "৳৭০০",
           desc: "5 cups kept static for 10 minutes hold. Excellent for localized trigger points.",
           badge: "Budget",
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600",
           features: ["5 Stationary Cups", "10 Minutes Static Hold", "Localized Trigger Point Target", "Clinical Grade Suction", "Disposable Sanitized Set"],
           cups: 5,
           whyTake: "An economical option to target a specific sore spot or localized muscle spasm.",
@@ -412,7 +413,7 @@ export default function HijamaPage() {
           originalPrice: "৳১,২০০",
           desc: "8 cups kept static for 15 minutes hold. Addresses mid-back and shoulder tension.",
           badge: "Low Mid",
-          image: "https://images.unsplash.com/photo-1519823551278-64ac928349d2?q=80&w=600",
+          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=600",
           features: ["8 Stationary Cups", "15 Minutes Static Hold", "Mid-Back + Shoulder Target", "Systematic Suction Mapping", "Pre-Therapy Muscle Warm-up"],
           cups: 8,
           whyTake: "Ideal for relieving everyday fatigue, posture fatigue, and tension accumulated at the shoulder blades.",
@@ -564,8 +565,8 @@ export default function HijamaPage() {
               <p className="mt-4 text-sm text-slate-650 leading-relaxed">
                 Hijama, or wet cupping, is a healing therapy where vacuum pressure is created using sterile cups on specific biological reflex points on the skin. A tiny, painless superficial scratch is made to draw out stagnant, waste-filled capillary blood.
               </p>
-              <p className="mt-3 text-sm text-slate-650 leading-relaxed">
-                The Prophet Muhammad (ﷺ) said: <em>"Indeed the best of remedies you have is cupping (Hijama)..."</em> [Sahih al-Bukhari 5371]. It serves as a dual-mechanism healing for both metabolic body toxins and general biological wellness.
+              <p className="mt-3 text-sm text-slate-655 leading-relaxed">
+                The Prophet Muhammad (ﷺ) said: <em>&quot;Indeed the best of remedies you have is cupping (Hijama)...&quot;</em> [Sahih al-Bukhari 5371]. It serves as a dual-mechanism healing for both metabolic body toxins and general biological wellness.
               </p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
@@ -1026,10 +1027,12 @@ export default function HijamaPage() {
 
             {/* Image Header */}
             <div className="h-56 sm:h-64 w-full relative shrink-0">
-              <img
+              <Image
                 src={selectedDetailItem.image}
                 alt={selectedDetailItem.title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 500px"
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
               <div className="absolute bottom-5 left-6 right-6 text-white">
@@ -1075,7 +1078,7 @@ export default function HijamaPage() {
               {/* Hijama Specific Features */}
               {selectedDetailItem.features && (
                 <div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What's Included</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What&apos;s Included</span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {selectedDetailItem.features.map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-xs text-slate-655 font-bold">

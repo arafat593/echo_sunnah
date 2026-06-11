@@ -7,7 +7,7 @@ import BannerCarousel from "@/components/BannerCarousel";
 
 const healthSlides = [
   {
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb059e0b?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1600",
     badge: "ECHO SUNNAH HEALTH (সুন্নাহ স্বাস্থ্য ও পুষ্টি)",
     title: "Prophetic Lifestyle & Wellness Science",
     desc: "Reviving Sunnah routines, sleeping guidelines, nutritional frameworks, and interactive clinical calculators for family health."
@@ -100,14 +100,14 @@ export default function HealthPage() {
               <span className="text-3xl">🌙</span>
               <h3 className="font-bold text-slate-850 mt-3 text-base">Sleeping Etiquette (ঘুমের সুন্নাহ)</h3>
               <p className="text-xs text-slate-550 leading-relaxed mt-2">
-                Sleep early after Isha prayer and wake up early for Tahajjud and Fajr. Always sleep on your right side with your right hand under your cheek, and recite daily protection Du'as.
+                Sleep early after Isha prayer and wake up early for Tahajjud and Fajr. Always sleep on your right side with your right hand under your cheek, and recite daily protection Du&apos;as.
               </p>
             </div>
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
               <span className="text-3xl">🥣</span>
               <h3 className="font-bold text-slate-850 mt-3 text-base">Diet & Eating (খাদ্যাভ্যাস)</h3>
               <p className="text-xs text-slate-550 leading-relaxed mt-2">
-                Avoid overeating. The Prophet (ﷺ) said: "A human fills no vessel worse than his stomach. A few morsels are enough... 1/3 food, 1/3 drink, 1/3 breath." [Sunan at-Tirmidhi].
+                Avoid overeating. The Prophet (ﷺ) said: &quot;A human fills no vessel worse than his stomach. A few morsels are enough... 1/3 food, 1/3 drink, 1/3 breath.&quot; [Sunan at-Tirmidhi].
               </p>
             </div>
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">

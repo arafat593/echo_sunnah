@@ -26,13 +26,13 @@ const communitySlides = [
     desc: "Post your questions about spiritual treatment, symptoms of Ayn or Sihr, and get theological counseling from qualified scholars."
   },
   {
-    image: "https://images.unsplash.com/photo-1559027615-cd44874e9638?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600",
     badge: "Charity Operations",
     title: "Become a Volunteer Today",
     desc: "Register to participate in organizing medical camps, digging tube wells, and delivering winter clothing to underprivileged villages."
   },
   {
-    image: "https://images.unsplash.com/photo-1461280360983-bd93eccb051b?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1513001900722-370f803f498d?q=80&w=1600",
     badge: "Islamic Studies circle",
     title: "Theology & Academy Study Groups",
     desc: "Coordinate studies with other students on Tajweed masterclasses, Tibb An-Nabawi basics, and daily practical Fiqh."

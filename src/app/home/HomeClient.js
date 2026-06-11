@@ -9,6 +9,7 @@ import BannerCarousel from "@/components/BannerCarousel";
 import HijamaCard from "@/components/HijamaCard";
 import RuqyahCard from "@/components/RuqyahCard";
 import ProductCard from "@/components/ProductCard";
+import Image from "next/image";
 
 const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
@@ -20,13 +21,13 @@ const parsePrice = (priceStr) => {
 
 const homeSlides = [
   {
-    image: "https://images.unsplash.com/photo-1519823551278-64ac9283ca48?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=1200&q=70",
     badge: "Reviving Prophetic Wellness",
     title: "Echo Sunnah (একো সুন্নাহ)",
     desc: "A premium medical theology center dedicated to authentic wet cupping (Hijama) therapies, Quranic Ruqyah Shariah treatment, and certified wellness training programs.",
   },
   {
-    image: "https://images.unsplash.com/photo-1609599006353-e629dbacfeae?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=1200&q=70",
     badge: "Strict Sunnah Principles",
     title: "Quranic Ruqyah Shariah",
     desc: "Seek complete spiritual healing from Sihr, evil eye, Jinn afflictions, and somatic panic blocks through authentic Quranic recitation by verified Raqis.",
@@ -34,7 +35,7 @@ const homeSlides = [
     buttonLink: "/ruqyah"
   },
   {
-    image: "https://www.tadawi.me/wp-content/uploads/2022/09/hijama-cupping.jpg",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=70",
     badge: "Hygienic & Certified Therapy",
     title: "Clinical Wet Cupping",
     desc: "Hijama therapy carried out under strict clinical hygiene protocols using premium single-use disposable kits to cleanse blood toxins and ease muscle tension.",
@@ -42,7 +43,7 @@ const homeSlides = [
     buttonLink: "/hijama"
   },
   {
-    image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=1200&q=70",
     badge: "100% Pure Organic Shifa",
     title: "Natural Prophetic Remedies",
     desc: "Order organic raw Sidr honey, premium cold-pressed black seed oil, pure Palestinian extra virgin olive oil, and premium dates directly from our shop.",
@@ -50,7 +51,7 @@ const homeSlides = [
     buttonLink: "/shop"
   },
   {
-    image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=70",
     badge: "Study & Prophetic Diploma",
     title: "Sunnah Wellness Academy",
     desc: "Enroll in our certified diploma and training programs to learn the prophetic science of cupping therapy, organic medicine, and holistic clinical anatomy.",
@@ -892,10 +893,12 @@ export default function HomePage() {
 
             {/* Image Header */}
             <div className="h-56 sm:h-64 w-full relative shrink-0">
-              <img
+              <Image
                 src={selectedDetailItem.image}
                 alt={selectedDetailItem.title || selectedDetailItem.name}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 500px"
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
               <div className="absolute bottom-5 left-6 right-6 text-white">
@@ -923,7 +926,7 @@ export default function HomePage() {
               {/* Hijama Specific Features */}
               {selectedDetailItem.type === 'package' && selectedDetailItem.features && (
                 <div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What's Included</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">What&apos;s Included</span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {selectedDetailItem.features.map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-xs text-slate-650 font-bold">
