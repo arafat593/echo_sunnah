@@ -1,6 +1,8 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /profile
 
 # Host
 Host: https://echosunnah.com

@@ -8,13 +8,20 @@ module.exports = {
     '/icon0.svg',
     '/icon1.png',
     '/manifest.json',
+    '/dashboard',
+    '/profile',
   ],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: '*',
         allow: '/',
+        disallow: [
+          '/dashboard',
+          '/profile',
+        ],
       },
     ],
   },
 };
+

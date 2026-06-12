@@ -88,6 +88,24 @@ export default function Header() {
   const notificationsRef = useRef(null);
   const userProfileRef = useRef(null);
   const moreMenuRef = useRef(null);
+  const moreMenuTimeoutRef = useRef(null);
+
+  const handleMoreMouseEnter = () => {
+    if (moreMenuTimeoutRef.current) {
+      clearTimeout(moreMenuTimeoutRef.current);
+      moreMenuTimeoutRef.current = null;
+    }
+    setMoreMenuOpen(true);
+  };
+
+  const handleMoreMouseLeave = () => {
+    if (moreMenuTimeoutRef.current) {
+      clearTimeout(moreMenuTimeoutRef.current);
+    }
+    moreMenuTimeoutRef.current = setTimeout(() => {
+      setMoreMenuOpen(false);
+    }, 800); // 800ms keep-open delay
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -106,6 +124,9 @@ export default function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
+      if (moreMenuTimeoutRef.current) {
+        clearTimeout(moreMenuTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -297,11 +318,16 @@ export default function Header() {
                 <div
                   className="relative"
                   ref={moreMenuRef}
-                  onMouseEnter={() => setMoreMenuOpen(true)}
-                  onMouseLeave={() => setMoreMenuOpen(false)}
+                  onMouseEnter={handleMoreMouseEnter}
+                  onMouseLeave={handleMoreMouseLeave}
                 >
                   <button
-                    onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                    onClick={() => {
+                      if (moreMenuTimeoutRef.current) {
+                        clearTimeout(moreMenuTimeoutRef.current);
+                      }
+                      setMoreMenuOpen(!moreMenuOpen);
+                    }}
                     className={`relative py-2.5 px-4 rounded-2xl transition-all duration-300 flex items-center gap-1 hover:bg-emerald-500/5 ${moreMenuOpen ? "bg-emerald-500/5" : ""
                       }`}
                   >
@@ -322,7 +348,12 @@ export default function Header() {
                           <Link
                             key={item.name}
                             href={item.href}
-                            onClick={() => setMoreMenuOpen(false)}
+                            onClick={() => {
+                              if (moreMenuTimeoutRef.current) {
+                                clearTimeout(moreMenuTimeoutRef.current);
+                              }
+                              setMoreMenuOpen(false);
+                            }}
                             className={`flex items-center px-4 py-2.5 mx-1.5 rounded-xl transition-all duration-205 group ${active ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50/60 text-slate-700"
                               }`}
                           >
