@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -62,6 +63,7 @@ const homeSlides = [
 
 export default function HomePage() {
   const { addToCart, createBooking, addNotification } = useApp();
+  const router = useRouter();
 
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -70,6 +72,7 @@ export default function HomePage() {
   // Detail Modal state
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedDetailItem, setSelectedDetailItem] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
 
   // Slider ref for Hijama cards scroll
   const sliderRef = useRef(null);
@@ -339,33 +342,8 @@ export default function HomePage() {
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    const date = e.target.date.value;
-    const slot = e.target.slot.value;
-    const name = e.target.name.value;
-    const address = e.target.address.value;
-    const serviceOption = e.target.serviceOption.value;
-
-    const basePrice = selectedService?.price ? parsePrice(selectedService.price) : 0;
-    const finalPrice = serviceOption === "Home" ? basePrice + 2000 : basePrice;
-
-    if (selectedService) {
-      createBooking({
-        serviceName: selectedService?.title || "",
-        serviceType: selectedService?.id?.startsWith("hj") ? "hijama" : "ruqyah",
-        date,
-        timeSlot: slot,
-        serviceOption: serviceOption === "Home" ? "Home Service" : "Center Service",
-        totalPrice: finalPrice,
-        paymentOption: "Pay in Center",
-        landmark: ""
-      });
-    }
-
-    setBookingSuccess(true);
-    setTimeout(() => {
-      setBookingModalOpen(false);
-      setBookingSuccess(false);
-    }, 2000);
+    setToastMessage("Online booking system is coming soon! (অনলাইন বুকিং সিস্টেম খুব শীঘ্রই আসছে!)");
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   return (
@@ -479,30 +457,16 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Dot Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
-            {[0, 1, 2].map((i) => {
-              const targetIndex = i === 0 ? 0 : i === 1 ? 2 : 4;
-              const isActive = i === 0
-                ? shopIndex <= 1
-                : i === 1
-                  ? shopIndex === 2 || shopIndex === 3
-                  : shopIndex >= 4;
-              return (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setShopIndex(targetIndex);
-                    scrollSlider(targetIndex);
-                  }}
-                  className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
-                    ? "w-6 h-2 bg-emerald-700"
-                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
-                    }`}
-                  aria-label={`Go to position ${i + 1}`}
-                />
-              );
-            })}
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => router.push("/hijama")}
+              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-8 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all duration-200 active:scale-[0.98] flex items-center gap-2"
+            >
+              Show All Packages (সকল হিজামা প্যাকেজ দেখুন)
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
           </div>
         </section>
 
@@ -644,30 +608,16 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Dot Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
-              {[0, 1, 2].map((i) => {
-                const targetIndex = i === 0 ? 0 : i === 1 ? 1 : 2;
-                const isActive = i === 0
-                  ? ruqyahIndex === 0
-                  : i === 1
-                    ? ruqyahIndex === 1
-                    : ruqyahIndex >= 2;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      setRuqyahIndex(targetIndex);
-                      scrollRuqyahSlider(targetIndex);
-                    }}
-                    className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
-                      ? "w-6 h-2 bg-emerald-700"
-                      : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
-                      }`}
-                    aria-label={`Go to position ${i + 1}`}
-                  />
-                );
-              })}
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => router.push("/ruqyah")}
+                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-8 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all duration-200 active:scale-[0.98] flex items-center gap-2"
+              >
+                Show All Sessions (সকল রুকইয়াহ সেশন দেখুন)
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </button>
             </div>
           </div>
         </section>
@@ -722,6 +672,10 @@ export default function HomePage() {
                       addToCart({ id: prod.id, name: prod.name, price: prod.price, unit: prod.weight });
                       addNotification(`Added ${prod.name} to cart.`);
                     }}
+                    onBuyNow={(prod) => {
+                      addToCart({ id: prod.id, name: prod.name, price: prod.price, unit: prod.weight });
+                      router.push("/shop?view=cart");
+                    }}
                   />
                 ))}
               </div>
@@ -743,30 +697,16 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Dot Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
-            {[0, 1, 2].map((i) => {
-              const targetIndex = i === 0 ? 0 : i === 1 ? 2 : 4;
-              const isActive = i === 0
-                ? shopScrollIndex <= 1
-                : i === 1
-                  ? shopScrollIndex === 2 || shopScrollIndex === 3
-                  : shopScrollIndex >= 4;
-              return (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setShopScrollIndex(targetIndex);
-                    scrollShopSlider(targetIndex);
-                  }}
-                  className={`rounded-full transition-all duration-300 cursor-pointer ${isActive
-                    ? "w-6 h-2 bg-emerald-700"
-                    : "w-2 h-2 bg-slate-300 hover:bg-emerald-450"
-                    }`}
-                  aria-label={`Go to position ${i + 1}`}
-                />
-              );
-            })}
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => router.push("/shop")}
+              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-8 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all duration-200 active:scale-[0.98] flex items-center gap-2"
+            >
+              Show All Products (সকল প্রোডাক্ট দেখুন)
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
           </div>
         </section>
 
@@ -1024,21 +964,38 @@ export default function HomePage() {
                   Book Appointment
                 </button>
               ) : (
-                <button
-                  onClick={() => {
-                    addToCart({
-                      id: selectedDetailItem.id,
-                      name: selectedDetailItem.name,
-                      price: selectedDetailItem.price,
-                      unit: selectedDetailItem.weight
-                    });
-                    addNotification(`Added ${selectedDetailItem.name} to cart.`);
-                    setDetailModalOpen(false);
-                  }}
-                  className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all duration-300 shadow-md active:scale-[0.97] uppercase tracking-wider"
-                >
-                  + Add to Cart
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      addToCart({
+                        id: selectedDetailItem.id,
+                        name: selectedDetailItem.name,
+                        price: selectedDetailItem.price,
+                        unit: selectedDetailItem.weight
+                      });
+                      addNotification(`Added ${selectedDetailItem.name} to cart.`);
+                      setDetailModalOpen(false);
+                    }}
+                    className="border border-emerald-700 text-emerald-800 hover:bg-emerald-50 font-bold text-xs px-4 py-3.5 rounded-xl transition-all duration-300 active:scale-[0.97] uppercase tracking-wider"
+                  >
+                    + Add to Cart
+                  </button>
+                  <button
+                    onClick={() => {
+                      addToCart({
+                        id: selectedDetailItem.id,
+                        name: selectedDetailItem.name,
+                        price: selectedDetailItem.price,
+                        unit: selectedDetailItem.weight
+                      });
+                      setDetailModalOpen(false);
+                      router.push("/shop?view=cart");
+                    }}
+                    className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white font-bold text-xs px-4 py-3.5 rounded-xl transition-all duration-300 shadow-md active:scale-[0.97] uppercase tracking-wider"
+                  >
+                    Buy Now (কিনুন)
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -1046,6 +1003,27 @@ export default function HomePage() {
       )}
 
       <Footer />
+
+      {toastMessage && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 max-w-sm w-full text-center shadow-2xl relative text-slate-800 animate-scaleIn">
+            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-emerald-100">
+              ⏳
+            </div>
+            <h3 className="text-lg font-black text-emerald-900 uppercase tracking-wider">Coming Soon!</h3>
+            <p className="text-xs text-emerald-700 font-semibold mt-0.5">খুব শীঘ্রই আসছে!</p>
+            <p className="text-xs text-slate-500 leading-relaxed mt-4 font-medium">
+              {toastMessage}
+            </p>
+            <button
+              onClick={() => setToastMessage(null)}
+              className="mt-6 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-[0.98]"
+            >
+              Okay (ঠিক আছে)
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -917,6 +917,17 @@ export default function ShopPage() {
   const [activeOrderTab, setActiveOrderTab] = useState("All");
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeView, setActiveView] = useState("products"); // "products", "cart", "orders"
+  const [toastMessage, setToastMessage] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get("view");
+      if (view === "cart") {
+        setActiveView("cart");
+      }
+    }
+  }, []);
 
   const filteredProducts = products.filter(p => {
     const matchesCategory = activeCategory === "All" || p.category === activeCategory;
@@ -937,32 +948,8 @@ export default function ShopPage() {
 
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
-    const name = e.target.name.value;
-    const phone = e.target.phone.value;
-    const address = e.target.address.value;
-    const payment = e.target.payment.value;
-
-    const orderItems = cart.map(item => ({
-      name: item.name,
-      qty: item.qty,
-      price: parsePrice(item.price)
-    }));
-
-    const newOrder = createOrder({
-      items: orderItems,
-      total: cartTotal,
-      address,
-      paymentOption: payment
-    });
-
-    setCheckoutSuccess(true);
-    setTimeout(() => {
-      setCheckoutSuccess(false);
-      setActiveView("orders");
-      if (newOrder && newOrder.id) {
-        setSelectedOrderId(newOrder.id);
-      }
-    }, 2000);
+    setToastMessage("Online order confirmation is coming soon! (অনলাইন অর্ডার নিশ্চিতকরণ সিস্টেম খুব শীঘ্রই আসছে!)");
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   return (
@@ -1090,6 +1077,10 @@ export default function ShopPage() {
                       product={p}
                       onCardClick={() => setSelectedProduct(p)}
                       onAddToCart={(prod) => addToCart({ id: prod.id, name: prod.name, price: prod.price, unit: prod.weight })}
+                      onBuyNow={(prod) => {
+                        addToCart({ id: prod.id, name: prod.name, price: prod.price, unit: prod.weight });
+                        setActiveView("cart");
+                      }}
                     />
                   ))
                 ) : (
@@ -1635,15 +1626,27 @@ export default function ShopPage() {
                       )}
                     </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      addToCart({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, unit: selectedProduct.weight });
-                      setSelectedProduct(null);
-                    }}
-                    className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white text-xs sm:text-sm font-black px-6 py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(4,120,87,0.15)] hover:shadow-[0_6px_20px_rgba(4,120,87,0.25)] active:scale-[0.97]"
-                  >
-                    Add To Cart
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        addToCart({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, unit: selectedProduct.weight });
+                        setSelectedProduct(null);
+                      }}
+                      className="border border-emerald-700 text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-black px-4 sm:px-6 py-3 rounded-xl transition-all active:scale-[0.97]"
+                    >
+                      Add To Cart
+                    </button>
+                    <button
+                      onClick={() => {
+                        addToCart({ id: selectedProduct.id, name: selectedProduct.name, price: selectedProduct.price, unit: selectedProduct.weight });
+                        setSelectedProduct(null);
+                        setActiveView("cart");
+                      }}
+                      className="bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-650 hover:to-teal-700 text-white text-xs sm:text-sm font-black px-4 sm:px-6 py-3 rounded-xl transition-all shadow-[0_4px_14px_rgba(4,120,87,0.15)] hover:shadow-[0_6px_20px_rgba(4,120,87,0.25)] active:scale-[0.97]"
+                    >
+                      Buy Now (কিনুন)
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1654,6 +1657,27 @@ export default function ShopPage() {
       )}
 
       <Footer />
+
+      {toastMessage && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 max-w-sm w-full text-center shadow-2xl relative text-slate-800 animate-scaleIn">
+            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-emerald-100">
+              ⏳
+            </div>
+            <h3 className="text-lg font-black text-emerald-900 uppercase tracking-wider">Coming Soon!</h3>
+            <p className="text-xs text-emerald-700 font-semibold mt-0.5">খুব শীঘ্রই আসছে!</p>
+            <p className="text-xs text-slate-500 leading-relaxed mt-4 font-medium">
+              {toastMessage}
+            </p>
+            <button
+              onClick={() => setToastMessage(null)}
+              className="mt-6 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-[0.98]"
+            >
+              Okay (ঠিক আছে)
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

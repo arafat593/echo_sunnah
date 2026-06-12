@@ -60,6 +60,7 @@ export default function HijamaPage() {
   // Detail Modal state
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedDetailItem, setSelectedDetailItem] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
 
   // Points Guide State
   const [activePoint, setActivePoint] = useState("kahil");
@@ -506,35 +507,8 @@ export default function HijamaPage() {
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    const date = e.target.date.value;
-    const slot = e.target.slot.value;
-    const name = e.target.name.value;
-    const address = e.target.address.value;
-    const landmark = e.target.landmark.value;
-    const serviceOption = e.target.serviceOption.value;
-    const paymentOption = e.target.paymentOption.value;
-
-    const basePrice = selectedPackage?.price ? parsePrice(selectedPackage.price) : 0;
-    const finalPrice = serviceOption === "Home" ? basePrice + 2000 : basePrice;
-
-    if (selectedPackage) {
-      createBooking({
-        serviceName: selectedPackage?.title || "",
-        serviceType: "hijama",
-        date,
-        timeSlot: slot,
-        serviceOption: serviceOption === "Home" ? "Home Service" : "Center Service",
-        totalPrice: finalPrice,
-        paymentOption,
-        landmark
-      });
-    }
-
-    setBookingSuccess(true);
-    setTimeout(() => {
-      setBookingModalOpen(false);
-      setBookingSuccess(false);
-    }, 2500);
+    setToastMessage("Online booking system is coming soon! (অনলাইন বুকিং সিস্টেম খুব শীঘ্রই আসছে!)");
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   const handleBookingSearch = (e) => {
@@ -1117,6 +1091,27 @@ export default function HijamaPage() {
       )}
 
       <Footer />
+
+      {toastMessage && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 max-w-sm w-full text-center shadow-2xl relative text-slate-800 animate-scaleIn">
+            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-emerald-100">
+              ⏳
+            </div>
+            <h3 className="text-lg font-black text-emerald-900 uppercase tracking-wider">Coming Soon!</h3>
+            <p className="text-xs text-emerald-700 font-semibold mt-0.5">খুব শীঘ্রই আসছে!</p>
+            <p className="text-xs text-slate-500 leading-relaxed mt-4 font-medium">
+              {toastMessage}
+            </p>
+            <button
+              onClick={() => setToastMessage(null)}
+              className="mt-6 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-[0.98]"
+            >
+              Okay (ঠিক আছে)
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
